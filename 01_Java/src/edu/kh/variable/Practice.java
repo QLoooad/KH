@@ -21,7 +21,8 @@ public class Practice {
 		System.out.println(iNum1/iNum2);
 		System.out.println((int)ch); //65
 		System.out.println(iNum1 + ch); //75
-		System.out.println((char)(ch+10));
+		System.out.println((char)(ch+10)); //K
+		//sadfdfsaf
 	}
 
 }
