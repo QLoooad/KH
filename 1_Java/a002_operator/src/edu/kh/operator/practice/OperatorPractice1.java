@@ -14,7 +14,7 @@ public class OperatorPractice1 {
 		System.out.println("사탕 개수 입력 : ");
 		int candy = sc.nextInt();
 		
-		System.out.println("1인당 사탕 개수 : " + (candy / human));
+		System.out.println("\n1인당 사탕 개수 : " + (candy / human));
 		System.out.println("남은 사탕 개수 : " + (candy % human));
 		
 	}

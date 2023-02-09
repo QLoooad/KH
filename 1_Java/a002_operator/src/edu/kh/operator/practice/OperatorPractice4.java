@@ -18,7 +18,7 @@ public class OperatorPractice4 {
 		int num3 = sc.nextInt();
 		
 		int sum = num1 + num2 + num3;
-		double average = (num1 + num2 + num3)/3;
+		double average = sum/3.0;
 		
 		System.out.println("합계 : " + sum);
 		System.out.println("평균 : " + average);
