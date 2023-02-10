@@ -158,7 +158,67 @@ public class ForEx {
 			}else {
 				System.out.println(num + " x " + i + " = " + num*i);
 			}
-			
+		}
+	}
+	public void ex15(){
+		for(int i = 1; i <= 4; i++) {
+			for(int j = 1; j <= 5; j++) {
+				System.out.print(j);
+			}
+			System.out.println();
+		}
+	}
+	public void ex16(){
+		for(int i = 1; i <= 5; i++) {
+			for(int j = 1; j <= 5; j++) {
+				System.out.printf("%3d",i*j);
+			}
+			System.out.println();
+		}
+	}
+	public void ex17(){
+		for(int i = 2; i <= 9; i++) {
+			for(int j = 1; j <= 9; j++) {
+				System.out.printf(" [%d * %d = %d]", i, j, i*j);
+			}
+			System.out.println();
+		}
+	}
+	public void ex18(){
+		for(int i = 1; i <= 4; i++) {
+			for(int j = 1; j <= i; j++) {
+				System.out.print(j);
+			}
+			System.out.println();
+		}
+	}
+	public void ex19(){
+		for(int i = 4; i >= 1; i--) {
+			for(int j = 4; j >= i; j--) {
+				System.out.print(j);
+			}
+			System.out.println();
+		}
+	}
+	public void ex20(){
+		Scanner sc = new Scanner(System.in);
+		int num = sc.nextInt();
+		
+		for(int i = num; i >= 1; i--) {
+			for(int j = i; j >= 1; j--) {
+				System.out.print(j);
+			}
+			System.out.println();
+		}
+	}
+	public void ex21(){
+		int count = 1;
+		for(int i = 1; i <= 3; i++) {
+			for(int j = 1; j <= 4; j++) {
+				System.out.printf("%3d",count);
+				count++;
+			}
+			System.out.println();
 		}
 	}
 }

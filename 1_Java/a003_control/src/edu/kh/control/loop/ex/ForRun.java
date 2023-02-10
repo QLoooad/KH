@@ -6,7 +6,7 @@ public class ForRun {
 
 		ForEx fEx = new ForEx();
 		
-		fEx.ex14();
+		fEx.ex21();
 		
 	}
 
