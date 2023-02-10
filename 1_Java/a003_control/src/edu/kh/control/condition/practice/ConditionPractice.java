@@ -94,35 +94,30 @@ public class ConditionPractice {
 		
 		Scanner sc = new Scanner(System.in);
 		
-		System.out.print("중간 고사 점수 : ");
-		int num1 = sc.nextInt();
-		System.out.print("기말 고사 점수 : ");
-		int num2 = sc.nextInt();
-		System.out.print("과제 점수 : ");
-		int num3 = sc.nextInt();
-		System.out.print("출석 점수 : ");
-		int num4 = sc.nextInt();
+		System.out.print("중간 고사 점수 : ");	//점수(20 %)
+		double num1 = sc.nextDouble() * 0.2;
+		System.out.print("기말 고사 점수 : ");	//점수(30 %)
+		double num2 = sc.nextDouble() * 0.3;
+		System.out.print("과제 점수 : ");		//점수(30 %)
+		double num3 = sc.nextDouble() * 0.3;
+		System.out.print("출석 점수 : ");		//점수(20 %) 최소 15점
+		double num4 = sc.nextDouble();
 		
-		if(num4 < 14) { // 출석 30이상 fail
-			
+		double totalSro = num1 + num2 + num3 + num4;
+		
+		String printForm = "중간 고사 점수(20) : " + String.format("%.1f", num1)
+						 + "\n기말 고사 점수(30) : " + String.format("%.1f", num2)
+						 + "\n과제 점수 (30) : " + String.format("%.1f", num3)
+						 + "\n출석 점수(20) : " + String.format("%.1f", num4)
+						 + "\n총점 : " + String.format("%.1f", totalSro);
+		
+		System.out.println("================= 결과 =================");
+		if(num4 < 15) {				// 출석 30이상 fail
+			System.out.println("Fail [출석 횟수 부족" + " (" + num4 + "/20)]");
+		}else if(totalSro < 70){	//점수미달
+			System.out.println(printForm + "\nFail [점수 미달]");
+		}else {
+			System.out.println(printForm + "\nPASS");
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	}
 }
