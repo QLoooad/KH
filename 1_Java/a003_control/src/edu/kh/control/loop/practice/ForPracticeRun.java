@@ -8,7 +8,7 @@ public class ForPracticeRun {
 
 		ForPractice forP = new ForPractice();
 		
-		forP.practice13();
+		forP.practice11();
 		
 	}
 
