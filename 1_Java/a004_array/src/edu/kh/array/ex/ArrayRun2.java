@@ -1,13 +1,13 @@
 package edu.kh.array.ex;
 
-public class ArrayRun {
+public class ArrayRun2 {
 
 	public static void main(String[] args) {
+		
+		ArrayEx2 aE2 = new ArrayEx2();
+		
+		aE2.ex3();
 
-		ArrayEx1 aE = new ArrayEx1();
-		
-		aE.ex8();
-		
 	}
 
 }
