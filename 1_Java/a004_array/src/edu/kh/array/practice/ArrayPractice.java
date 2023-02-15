@@ -329,44 +329,109 @@ public class ArrayPractice {
 		}
 	}
 
-	public void practice21() {
+	public void practice21() {//
 		String[] students = {"강건강", "남나나", "도대담", "류라라", "문미미", "박보배", 
 				"송성실", "윤예의", "진재주", "차천축", "피풍표", "홍하하"};
-		int studentsLength = students.length;
-		int studentsLengthCount = 0;
+		int studentsLengthCount1 = 0;
+		int studentsLengthCount2 = 6;
 		
 		String[][] fDivision = new String[3][2];
 		String[][] sDivision = new String[3][2];
 		
 		for(int i = 0; i < fDivision.length; i++) {
-			if(studentsLengthCount < 6) {
 				for(int j = 0; j < fDivision[i].length; j++) {
-					fDivision[i][j] = students[studentsLengthCount];
+					fDivision[i][j] = students[studentsLengthCount1];
+					studentsLengthCount1++;
+				}
+				for(int j = 0; j < fDivision[i].length; j++) {
+					sDivision[i][j] = students[studentsLengthCount2];
+					studentsLengthCount2++;
 				}
 			}
-			if(studentsLengthCount > 5) {
-				for(int j = 0; j < fDivision[i].length; j++) {
-					i = 0;
-					sDivision[i][j] = students[studentsLengthCount];
-				}
-			}
+		System.out.println("== 1분단 ==");
+		for(int i = 0; i < fDivision.length; i++) {
 			for(int j = 0; j < fDivision[i].length; j++) {
-				if(studentsLengthCount > 5) {
-					i = 0;
-					sDivision[i][j] = students[studentsLengthCount];
-				}
+				System.out.printf(fDivision[i][j] + " ");
 			}
-			studentsLengthCount++;
-			System.out.println(studentsLengthCount);
+			System.out.println();
 		}
-		System.out.println(Arrays.deepToString(fDivision));
-		System.out.println(Arrays.deepToString(sDivision));
-		
-
+		System.out.println("== 2분단 ==");
+		for(int i = 0; i < sDivision.length; i++) {
+			for(int j = 0; j < sDivision[i].length; j++) {
+				System.out.printf(sDivision[i][j] + " ");
+			}
+			System.out.println();
+		}
 	}
 
-	public void practice22() {
-
+	public void practice22() {//
+		String[] students = {"강건강", "남나나", "도대담", "류라라", "문미미", "박보배", 
+				"송성실", "윤예의", "진재주", "차천축", "피풍표", "홍하하"};
+		int studentsLengthCount1 = 0;
+		int studentsLengthCount2 = 6;
+		
+		String[][] fDivision = new String[3][2];
+		String[][] sDivision = new String[3][2];
+		
+		for(int i = 0; i < fDivision.length; i++) {
+				for(int j = 0; j < fDivision[i].length; j++) {
+					fDivision[i][j] = students[studentsLengthCount1];
+					studentsLengthCount1++;
+				}
+				for(int j = 0; j < fDivision[i].length; j++) {
+					sDivision[i][j] = students[studentsLengthCount2];
+					studentsLengthCount2++;
+				}
+			}
+		System.out.println("== 1분단 ==");
+		for(int i = 0; i < fDivision.length; i++) {
+			for(int j = 0; j < fDivision[i].length; j++) {
+				System.out.printf(fDivision[i][j] + " ");
+			}
+			System.out.println();
+		}
+		System.out.println("== 2분단 ==");
+		for(int i = 0; i < sDivision.length; i++) {
+			for(int j = 0; j < sDivision[i].length; j++) {
+				System.out.printf(sDivision[i][j] + " ");
+			}
+			System.out.println();
+		}
+		System.out.println("============================");
+		Scanner sc = new Scanner(System.in);
+		System.out.print("검색할 학생 이름을 입력하세요. : ");
+		String findName = sc.next();
+		
+		for(int i = 0; i < fDivision.length; i++) {
+			for(int j = 0; j < fDivision[i].length; j++) {
+				String fDivName = fDivision[i][j];
+				if(fDivName.equals(findName)) {
+					if(j % 2 == 0) {
+						System.out.printf("\n검색하신 %s 학생은 "
+								+ "1분단 %d번째 줄 왼쪽에 있습니다.", findName, i+1);
+					}
+					if(j % 2 == 1) {
+						System.out.printf("\n검색하신 %s 학생은 "
+								+ "1분단 %d번째 줄 오른쪽에 있습니다.", findName, i+1);
+					}
+				}
+			}
+		}
+		for(int i = 0; i < sDivision.length; i++) {
+			for(int j = 0; j < sDivision[i].length; j++) {
+				String sDivName = sDivision[i][j];
+				if(sDivName.equals(findName)) {
+					if(j % 2 == 0) {
+						System.out.printf("\n검색하신 %s 학생은 "
+								+ "2분단 %d번째 줄 왼쪽에 있습니다.", findName, i+1);
+					}
+					if(j % 2 == 1) {
+						System.out.printf("\n검색하신 %s 학생은 "
+								+ "2분단 %d번째 줄 오른쪽에 있습니다.", findName, i+1);
+					}
+				}
+			}
+		}
 	}
 
 	public void practice23() {
