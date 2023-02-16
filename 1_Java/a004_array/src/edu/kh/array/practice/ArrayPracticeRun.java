@@ -6,7 +6,7 @@ public class ArrayPracticeRun {
 
 		ArrayPractice aP = new ArrayPractice();
 		
-		aP.practice22();
+		aP.practice14();
 	}
 
 }

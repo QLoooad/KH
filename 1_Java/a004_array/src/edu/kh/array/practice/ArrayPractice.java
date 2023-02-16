@@ -221,10 +221,28 @@ public class ArrayPractice {
 
 	}
 
-	public void practice14() {//////////////////////////////////////////
-		ArrayList<Integer> array = new ArrayList<Integer>();
+	public void practice14() {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("배열의 크기를 입력하세요 : ");
+		int arrSize1 = sc.nextInt();
+		String[] array1 = new String[arrSize1];
+		
+		int arraySize2;
+		String[] array2;
+		int count = 0;
+		
+		for(int i = 0; i < array1.length; i++) {
+			System.out.print(i+1 + "번째 문자열 : ");
+			array1[i] = sc.next();
+			count++;
+		}
+		System.out.print("더 값을 입력하시겠습니까?(Y/N) : ");
+		char yesOrNo = sc.next().charAt(0);
+
 		
 		
+		
+//		Arrays.toString(totalArray)
 //		System.arraycopy(array1, 0, totalArray, 0, array1.length);
 //		System.arraycopy(array2, 0, totalArray, array1.length, array2.length);
 	}
@@ -434,24 +452,84 @@ public class ArrayPractice {
 		}
 	}
 
-	public void practice23() {
-//		String[][] array = new String[6][6];
-//		Scanner sc = new Scanner(System.in);
-//		System.out.print("행 인덱스 입력 : ");
-//		int row = sc.nextInt();
-//		System.out.print("열 인덱스 입력 : ");
-//		int col = sc.nextInt();
-//		for (int i = 0; i < array.length; i++) { // 0.1 ~ 0.5 1.0 ~ 5.0
-//			for (int j = 0; j < array[i].length; j++) {
-//
-//			}
-//
-//		}
-
+	public void practice23() {//
+		String[][] array = new String[6][6];
+		Scanner sc = new Scanner(System.in);
+		System.out.print("행 인덱스 입력 : ");
+		int row = sc.nextInt();
+		System.out.print("열 인덱스 입력 : ");
+		int col = sc.nextInt();
+		for (int i = 0; i < array.length; i++) { // " ", 0, 1, 2, 3, 4 row col입력
+			for (int j = 0; j < array[i].length; j++) { //공백 만들기
+				if(i == row+1 && j == col+1) {
+					array[i][j] = "X";
+				}else {
+					array[i][j] = " ";
+				}
+			}
+			if(i == 0) {//행 인덱스
+				for (int j = 0; j < array.length; j++) {
+					array[i][j] = Integer.toString(j-1);
+				}
+			}
+			if(i > 0 || i <=5 ) {// 열 인덱스
+				for (int j = 0; j < 1; j++) {
+					array[i][j] = Integer.toString(i-1);
+				}
+			}
+		}
+		array[0][0] = " "; // 0.0 == " "
+		for (int i = 0; i < array.length; i++) {
+			for (int j = 0; j < array[i].length; j++) {
+				System.out.print(array[i][j] + " ");
+			}
+			System.out.println();
+		}
 	}
 
 	public void practice24() {
-
+		String[][] array = new String[6][6];
+		Scanner sc = new Scanner(System.in);
+		
+		
+		int row = 0;
+		
+		while(row != 99) {
+			System.out.print("행 인덱스 입력 : ");
+			row = sc.nextInt();
+			if(row == 99) {
+				System.out.println("프로그램 종료");
+				break;
+			}
+			System.out.print("열 인덱스 입력 : ");
+			int col = sc.nextInt();
+			
+			for (int i = 0; i < array.length; i++) { // " ", 0, 1, 2, 3, 4 row col입력
+				for (int j = 0; j < array[i].length; j++) { //공백 && "X" 입력
+					if(i == row+1 && j == col+1) {
+						array[i][j] = "X";
+					}else {
+						array[i][j] = " ";
+					}
+				}
+				if(i == 0) {//행 인덱스
+					for (int j = 0; j < array.length; j++) {
+						array[i][j] = Integer.toString(j-1);
+					}
+				}
+				if(i > 0 || i <=5 ) {// 열 인덱스
+					for (int j = 0; j < 1; j++) {
+						array[i][j] = Integer.toString(i-1);
+					}
+				}
+			}
+			array[0][0] = " "; // 0.0 == " "
+			for (int i = 0; i < array.length; i++) {
+				for (int j = 0; j < array[i].length; j++) {
+					System.out.print(array[i][j] + " ");
+				}
+				System.out.println();
+			}
+		}
 	}
-
 }
