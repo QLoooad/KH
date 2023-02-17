@@ -222,29 +222,50 @@ public class ArrayPractice {
 	}
 
 	public void practice14() {
+		
 		Scanner sc = new Scanner(System.in);
 		System.out.print("배열의 크기를 입력하세요 : ");
-		int arrSize1 = sc.nextInt();
-		String[] array1 = new String[arrSize1];
+		int arrSize = sc.nextInt();
+		int arrSize2;
+		String[] strArr = new String[arrSize];
 		
-		int arraySize2;
-		String[] array2;
-		int count = 0;
+		int strCount = 1;
 		
-		for(int i = 0; i < array1.length; i++) {
-			System.out.print(i+1 + "번째 문자열 : ");
-			array1[i] = sc.next();
-			count++;
+		for(int i = 0; i < strArr.length; i++) {
+			System.out.print(strCount + "번째 문자열 : ");
+			strArr[i] = sc.next();
+			strCount++;
 		}
+		
+		String[] totalArray;
+		
 		System.out.print("더 값을 입력하시겠습니까?(Y/N) : ");
-		char yesOrNo = sc.next().charAt(0);
-
+		String yesOrNo = sc.next();
 		
+		while(yesOrNo.equals("y")) {
+			
+			System.out.print("더 입력하고 싶은 개수 : ");
+			arrSize2 = sc.nextInt();
+			
+			
+			arrSize = arrSize+arrSize2;
+			totalArray = new String[arrSize];
+			
+			System.arraycopy(strArr, 0, totalArray, 0, strArr.length);
+			
+			for(int i = strArr.length; i < totalArray.length; i++) {  
+	              System.out.print(strCount + "번째 문자열 : ");
+	              totalArray[i] = sc.next();
+	              strCount++;
+	           }
+			
+			strArr = totalArray.clone();
+			
+			System.out.print("더 값을 입력하시겠습니까?(Y/N) : ");
+			yesOrNo = sc.next();
+		}
+		System.out.println(Arrays.toString(strArr));
 		
-		
-//		Arrays.toString(totalArray)
-//		System.arraycopy(array1, 0, totalArray, 0, array1.length);
-//		System.arraycopy(array2, 0, totalArray, array1.length, array2.length);
 	}
 
 	public void practice15() {//
@@ -487,14 +508,30 @@ public class ArrayPractice {
 		}
 	}
 
-	public void practice24() {
+	public void practice24() {//
 		String[][] array = new String[6][6];
 		Scanner sc = new Scanner(System.in);
 		
-		
 		int row = 0;
-		
+		//기본 틀
+		for (int i = 0; i < array.length; i++) { // " ", 0, 1, 2, 3, 4 row col입력
+			for (int j = 0; j < array[i].length; j++) { //공백입력
+				array[i][j] = " ";
+			}
+			if(i == 0) {//행 인덱스
+				for (int j = 0; j < array.length; j++) {
+					array[i][j] = Integer.toString(j-1);
+				}
+			}
+			if(i > 0 || i <=5 ) {// 열 인덱스
+				for (int j = 0; j < 1; j++) {
+					array[i][j] = Integer.toString(i-1);
+				}
+			}
+		}
+		array[0][0] = " "; // 0.0 == " "
 		while(row != 99) {
+			
 			System.out.print("행 인덱스 입력 : ");
 			row = sc.nextInt();
 			if(row == 99) {
@@ -504,31 +541,120 @@ public class ArrayPractice {
 			System.out.print("열 인덱스 입력 : ");
 			int col = sc.nextInt();
 			
-			for (int i = 0; i < array.length; i++) { // " ", 0, 1, 2, 3, 4 row col입력
-				for (int j = 0; j < array[i].length; j++) { //공백 && "X" 입력
+			for (int i = 0; i < array.length; i++) { 
+				for (int j = 0; j < array[i].length; j++) { // "X" 입력
 					if(i == row+1 && j == col+1) {
 						array[i][j] = "X";
-					}else {
-						array[i][j] = " ";
-					}
-				}
-				if(i == 0) {//행 인덱스
-					for (int j = 0; j < array.length; j++) {
-						array[i][j] = Integer.toString(j-1);
-					}
-				}
-				if(i > 0 || i <=5 ) {// 열 인덱스
-					for (int j = 0; j < 1; j++) {
-						array[i][j] = Integer.toString(i-1);
 					}
 				}
 			}
-			array[0][0] = " "; // 0.0 == " "
+			
 			for (int i = 0; i < array.length; i++) {
 				for (int j = 0; j < array[i].length; j++) {
 					System.out.print(array[i][j] + " ");
 				}
 				System.out.println();
+			}
+		}
+	}
+	public void bingoGame() {
+		System.out.println((char)9733);
+		Scanner sc = new Scanner(System.in);
+		System.out.print("빙고판 크기 지정 : ");
+		int bingoSize = sc.nextInt();
+		String[] array1 = new String[bingoSize*bingoSize];//중복제거용
+		String[][] array2 = new String[bingoSize][bingoSize];
+		int duplicateCount = 0;
+		
+		
+		for (int i = 0; i < array1.length; i++) { //bingoSize*bingoSize 중복 없는 난수 생성
+			array1[i] = Integer.toString((int)((Math.random() * (bingoSize*bingoSize)) + 1));
+			for (int j = 0; j < i; j++) {
+				if (array1[i].equals(array1[j])) {
+					i--;
+				}
+			}
+		}
+		for (int i = 0; i < array2.length; i++) {// 난수 기입
+			for (int j = 0; j < array2[i].length; j++) {
+				array2[i][j] = array1[duplicateCount];
+				duplicateCount++;
+				System.out.printf("%3s ",array2[i][j]);
+			}
+			System.out.println();
+		}
+		
+		System.out.println("========================= 빙고게임 시작 =========================");
+		while(true) {
+			System.out.print("정수를 입력하시오 : ");
+			String bingoNum = sc.next();
+			int bingoCount = 0;
+			
+			int DiagonalLeftStarCount = 0;
+			int DiagonalRightStarCount = 0;
+			
+			for (int i = 0; i < array2.length; i++) {// ★과 숫자 비교 후 변환
+				for (int j = 0; j < array2[i].length; j++) {
+					if(bingoNum.equals(array2[i][j])) {
+						array2[i][j] = String.valueOf((char)9733);
+					}
+				}
+			}
+			for (int i = 0; i < array2.length; i++) {// 별 출력
+				for (int j = 0; j < array2[i].length; j++) {
+					System.out.printf("%3s ",array2[i][j]);
+				}
+				System.out.println();
+			}
+			
+			for (int i = 0; i < array2.length; i++) {//빙고 판별
+				int rowStarCount = 0;
+				int colStarCount = 0;
+				
+
+				for (int j = 0; j < array2[i].length; j++) {
+					if(array2[i][j].equals("★")) {
+						rowStarCount++;
+						if(rowStarCount==bingoSize) {
+							bingoCount++;
+							rowStarCount = 0;
+						}
+					}
+				}
+				for (int j = 0; j < array2[i].length; j++) {
+					if(array2[j][i].equals("★")) {
+						colStarCount++;
+						if(colStarCount==bingoSize) {
+							bingoCount++;
+							colStarCount = 0;
+						}
+					}
+				}
+				
+				if(array2[i][i].equals("★")) {
+					DiagonalLeftStarCount++;
+				}if(DiagonalLeftStarCount==bingoSize) {
+					bingoCount++;
+				}
+				
+				for (int j = 0; j < array2[i].length; j++) {
+					if((i + j + 1) == bingoSize) {
+						if(array2[i][j].equals("★")) {
+							DiagonalRightStarCount++;
+						}
+					}if(DiagonalRightStarCount==bingoSize) {
+						bingoCount++;
+						DiagonalRightStarCount = 0;
+					}
+				}
+				System.out.println(DiagonalRightStarCount);
+			}
+			System.out.println("현재 " + bingoCount + "빙고");
+			if(bingoCount == 3) {
+				System.out.println("************************************************");
+				System.out.println("*************** ! ! ! BINGO ! ! !***************");
+				System.out.println("************************************************");
+				break;
 			}
 		}
 	}
