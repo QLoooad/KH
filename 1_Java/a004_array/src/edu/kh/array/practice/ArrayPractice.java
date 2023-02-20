@@ -594,73 +594,80 @@ public class ArrayPractice {
 			System.out.print("정수를 입력하시오 : ");
 			String bingoNum = sc.next();
 			
-			int bingoCount = 0;
-			int DiagonalLeftStarCount = 0;
-			int DiagonalRightStarCount = 0;
-			
-			for (int i = 0; i < array2.length; i++) {// 별과 숫자 비교 후 변환
-				for (int j = 0; j < array2[i].length; j++) {
-					if(bingoNum.equals(array2[i][j])) {
-						array2[i][j] = star;
+			if(Integer.parseInt(bingoNum) > bingoSize*bingoSize || Integer.parseInt(bingoNum) < 1) {
+				System.out.println("\"다시 입력해주세요.\"");
+			}else {
+				
+				int bingoCount = 0;
+				int DiagonalLeftStarCount = 0;
+				int DiagonalRightStarCount = 0;
+				
+				for (int i = 0; i < array2.length; i++) {// 별과 숫자 비교 후 변환
+					for (int j = 0; j < array2[i].length; j++) {
+						if(bingoNum.equals(array2[i][j])) {
+							array2[i][j] = star;
+						}
 					}
 				}
-			}
-			for (int i = 0; i < array2.length; i++) {// 별 출력
-				for (int j = 0; j < array2[i].length; j++) {
-					System.out.printf("%3s ",array2[i][j]);
+				for (int i = 0; i < array2.length; i++) {// 별 출력
+					for (int j = 0; j < array2[i].length; j++) {
+						System.out.printf("%3s ",array2[i][j]);
+					}
+					System.out.println();
 				}
-				System.out.println();
-			}
-			
-			for (int i = 0; i < array2.length; i++) {//빙고 판별
-				int rowStarCount = 0;
-				int colStarCount = 0;
 				
+				for (int i = 0; i < array2.length; i++) {//빙고 판별
+					int rowStarCount = 0;
+					int colStarCount = 0;
+					
 
-				for (int j = 0; j < array2[i].length; j++) {//row 빙고
-					if(array2[i][j].equals(star)) {
-						rowStarCount++;
-						if(rowStarCount==bingoSize) {
-							bingoCount++;
-							rowStarCount = 0;
-						}
-					}
-				}
-				for (int j = 0; j < array2[i].length; j++) {//col 빙고
-					if(array2[j][i].equals(star)) {
-						colStarCount++;
-						if(colStarCount==bingoSize) {
-							bingoCount++;
-							colStarCount = 0;
-						}
-					}
-				}
-				
-				if(array2[i][i].equals(star)) {//왼 대각 시작 빙고
-					DiagonalLeftStarCount++;
-				}if(DiagonalLeftStarCount==bingoSize) {
-					bingoCount++;
-				}
-				
-				for (int j = 0; j < array2[i].length; j++) {//오른 대각 시작 빙고
-					if((i + j + 1) == bingoSize) {
+					for (int j = 0; j < array2[i].length; j++) {//row 빙고
 						if(array2[i][j].equals(star)) {
-							DiagonalRightStarCount++;
+							rowStarCount++;
+							if(rowStarCount==bingoSize) {
+								bingoCount++;
+								rowStarCount = 0;
+							}
 						}
-					}if(DiagonalRightStarCount==bingoSize) {
-						bingoCount++;
-						DiagonalRightStarCount = 0;
 					}
+					for (int j = 0; j < array2[i].length; j++) {//col 빙고
+						if(array2[j][i].equals(star)) {
+							colStarCount++;
+							if(colStarCount==bingoSize) {
+								bingoCount++;
+								colStarCount = 0;
+							}
+						}
+					}
+					
+					if(array2[i][i].equals(star)) {//왼 대각 시작 빙고
+						DiagonalLeftStarCount++;
+					}if(DiagonalLeftStarCount==bingoSize) {
+						bingoCount++;
+					}
+					
+					for (int j = 0; j < array2[i].length; j++) {//오른 대각 시작 빙고
+						if((i + j + 1) == bingoSize) {
+							if(array2[i][j].equals(star)) {
+								DiagonalRightStarCount++;
+							}
+						}if(DiagonalRightStarCount==bingoSize) {
+							bingoCount++;
+							DiagonalRightStarCount = 0;
+						}
+					}
+					
 				}
+				System.out.println("현재 " + bingoCount + "빙고");
+				if(bingoCount >= 3) { 
+					System.out.println("************************************************");
+					System.out.println("*************** ! ! ! BINGO ! ! !***************");
+					System.out.println("************************************************");
+					break;
+				}
+			}
 				
 			}
-			System.out.println("현재 " + bingoCount + "빙고");
-			if(bingoCount >= 3) { 
-				System.out.println("************************************************");
-				System.out.println("*************** ! ! ! BINGO ! ! !***************");
-				System.out.println("************************************************");
-				break;
-			}
-		}
+			
 	}
 }
