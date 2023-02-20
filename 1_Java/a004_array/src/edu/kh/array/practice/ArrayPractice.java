@@ -558,14 +558,19 @@ public class ArrayPractice {
 		}
 	}
 	public void bingoGame() {
-		System.out.println((char)9733);
+		String star = String.valueOf((char)9733);
 		Scanner sc = new Scanner(System.in);
 		System.out.print("빙고판 크기 지정 : ");
 		int bingoSize = sc.nextInt();
+		if(bingoSize <= 0) {
+			System.out.println("잘못 입력하셧습니다.\n빙고를 종료합니다.");
+			System.exit(0);
+		}
+		
 		String[] array1 = new String[bingoSize*bingoSize];//중복제거용
 		String[][] array2 = new String[bingoSize][bingoSize];
-		int duplicateCount = 0;
 		
+		int duplicateCount = 0;
 		
 		for (int i = 0; i < array1.length; i++) { //bingoSize*bingoSize 중복 없는 난수 생성
 			array1[i] = Integer.toString((int)((Math.random() * (bingoSize*bingoSize)) + 1));
@@ -575,7 +580,7 @@ public class ArrayPractice {
 				}
 			}
 		}
-		for (int i = 0; i < array2.length; i++) {// 난수 기입
+		for (int i = 0; i < array2.length; i++) {// 난수 기입 && 빙고 출력
 			for (int j = 0; j < array2[i].length; j++) {
 				array2[i][j] = array1[duplicateCount];
 				duplicateCount++;
@@ -588,15 +593,15 @@ public class ArrayPractice {
 		while(true) {
 			System.out.print("정수를 입력하시오 : ");
 			String bingoNum = sc.next();
-			int bingoCount = 0;
 			
+			int bingoCount = 0;
 			int DiagonalLeftStarCount = 0;
 			int DiagonalRightStarCount = 0;
 			
-			for (int i = 0; i < array2.length; i++) {// ★과 숫자 비교 후 변환
+			for (int i = 0; i < array2.length; i++) {// 별과 숫자 비교 후 변환
 				for (int j = 0; j < array2[i].length; j++) {
 					if(bingoNum.equals(array2[i][j])) {
-						array2[i][j] = String.valueOf((char)9733);
+						array2[i][j] = star;
 					}
 				}
 			}
@@ -612,8 +617,8 @@ public class ArrayPractice {
 				int colStarCount = 0;
 				
 
-				for (int j = 0; j < array2[i].length; j++) {
-					if(array2[i][j].equals("★")) {
+				for (int j = 0; j < array2[i].length; j++) {//row 빙고
+					if(array2[i][j].equals(star)) {
 						rowStarCount++;
 						if(rowStarCount==bingoSize) {
 							bingoCount++;
@@ -621,8 +626,8 @@ public class ArrayPractice {
 						}
 					}
 				}
-				for (int j = 0; j < array2[i].length; j++) {
-					if(array2[j][i].equals("★")) {
+				for (int j = 0; j < array2[i].length; j++) {//col 빙고
+					if(array2[j][i].equals(star)) {
 						colStarCount++;
 						if(colStarCount==bingoSize) {
 							bingoCount++;
@@ -631,15 +636,15 @@ public class ArrayPractice {
 					}
 				}
 				
-				if(array2[i][i].equals("★")) {
+				if(array2[i][i].equals(star)) {//왼 대각 시작 빙고
 					DiagonalLeftStarCount++;
 				}if(DiagonalLeftStarCount==bingoSize) {
 					bingoCount++;
 				}
 				
-				for (int j = 0; j < array2[i].length; j++) {
+				for (int j = 0; j < array2[i].length; j++) {//오른 대각 시작 빙고
 					if((i + j + 1) == bingoSize) {
-						if(array2[i][j].equals("★")) {
+						if(array2[i][j].equals(star)) {
 							DiagonalRightStarCount++;
 						}
 					}if(DiagonalRightStarCount==bingoSize) {
@@ -647,10 +652,10 @@ public class ArrayPractice {
 						DiagonalRightStarCount = 0;
 					}
 				}
-				System.out.println(DiagonalRightStarCount);
+				
 			}
 			System.out.println("현재 " + bingoCount + "빙고");
-			if(bingoCount == 3) {
+			if(bingoCount >= 3) { 
 				System.out.println("************************************************");
 				System.out.println("*************** ! ! ! BINGO ! ! !***************");
 				System.out.println("************************************************");
