@@ -226,6 +226,7 @@ public class ArrayPractice {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("배열의 크기를 입력하세요 : ");
 		int arrSize = sc.nextInt();
+		sc.nextLine();
 		int arrSize2;
 		String[] strArr = new String[arrSize];
 		
@@ -233,20 +234,20 @@ public class ArrayPractice {
 		
 		for(int i = 0; i < strArr.length; i++) {
 			System.out.print(strCount + "번째 문자열 : ");
-			strArr[i] = sc.next();
+			strArr[i] = sc.nextLine();
 			strCount++;
 		}
 		
 		String[] totalArray;
 		
 		System.out.print("더 값을 입력하시겠습니까?(Y/N) : ");
-		String yesOrNo = sc.next();
+		String yesOrNo = sc.nextLine();
 		
 		while(yesOrNo.equals("y")) {
 			
 			System.out.print("더 입력하고 싶은 개수 : ");
 			arrSize2 = sc.nextInt();
-			
+			sc.nextLine();
 			
 			arrSize = arrSize+arrSize2;
 			totalArray = new String[arrSize];
@@ -255,14 +256,14 @@ public class ArrayPractice {
 			
 			for(int i = strArr.length; i < totalArray.length; i++) {  
 	              System.out.print(strCount + "번째 문자열 : ");
-	              totalArray[i] = sc.next();
+	              totalArray[i] = sc.nextLine();
 	              strCount++;
 	           }
 			
 			strArr = totalArray.clone();
 			
 			System.out.print("더 값을 입력하시겠습니까?(Y/N) : ");
-			yesOrNo = sc.next();
+			yesOrNo = sc.nextLine();
 		}
 		System.out.println(Arrays.toString(strArr));
 		
