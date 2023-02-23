@@ -73,7 +73,7 @@ public class Child1 extends Parent {
 	 */
 	//자식이 상속 받은 getMoney()를 다시 작성(재정의)
 	
-	//@Override
+	////@Override
 	//컴파일러에게 해당메서드는 재정의 되었다는 것을 알려주는 컴퓨터용 주석
 	//> 오버라이딩 형식이 맞는지 검사 진행
 	

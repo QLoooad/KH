@@ -563,6 +563,7 @@ public class ArrayPractice {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("빙고판 크기 지정 : ");
 		int bingoSize = sc.nextInt();
+		
 		if(bingoSize <= 0) {
 			System.out.println("잘못 입력하셧습니다.\n빙고를 종료합니다.");
 			System.exit(0);
