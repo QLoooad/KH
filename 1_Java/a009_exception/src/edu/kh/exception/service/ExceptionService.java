@@ -202,7 +202,7 @@ public class ExceptionService {
 			ex5();	//ScoreInputException이 던져질 가능성이 있음
 		}catch(ScoreInputException e) {
 			e.printStackTrace();
-			System.out.println("예외 내용 : " + e.getMessage());
+			System.out.println("예외 내용 : " + e.getMessage());  //빨간글씨 안나옴
 			System.out.println("예외처리 진행");
 		}finally {
 			System.out.println("프로그램 종료");
