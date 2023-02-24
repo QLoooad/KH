@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import edu.kh.exception.user.exception.ScoreInputException;
+
 public class ExceptionService {
 						//해당 메서드 내에서 IOException이 발생할 것을 대비
 	public void ex1 () throws IOException {
@@ -101,8 +103,6 @@ public class ExceptionService {
 			System.out.printf("%d / %d = ", num1, num2, num1 / num2);
 //		}catch(Exception e) {
 			
-		
-			
 		}catch(ArithmeticException e) {
 			//ArithmeticException 산술적 예외 잡아 처리
 			e.printStackTrace();
@@ -131,13 +131,85 @@ public class ExceptionService {
 			//예외 발생 여부에 상관없이 무조껀 실행
 			System.out.println("프로그램 종료");
 		}
+	}
+	public void ex4(){
+		
+		//throw : 예외 강제 발생
+		//		  ex) throw new IOException();
+		
+		//throws : 해당 메서드에서 발생한 예외를 호출한 메서드로 전지는 예외 처리 방법
+		
+		System.out.println("ex4() 실행 ");
+		
+		try {
+			methodA();
+		} catch (IOException e) {
+//			e.getMessage();
+			e.printStackTrace();
+			//예외가 발생한 지점까지의 stack메모리를 추적하여 출력
+			System.out.println("catch문 처리");
+		} finally {
+			System.out.println("프로그램 종료");
+		}
+
+		
+	}
+	public void methodA() throws IOException{
+		System.out.println("methodA() 실행");
+		methodB();
+	}
+	public void methodB() throws IOException{
+		System.out.println("methodB() 실행");
+		methodC();
+		//methodC() 는 IOException을 던질수도 있기에
+		//호출 시 예외처리 구문을 작성해야한다
+		
+	}
+	public void methodC() throws IOException{
+		System.out.println("methodC() 실행");
+		throw new IOException();
+		
+	}
+	
+	public void ex5() throws ScoreInputException{
+		
+		//사용자 정의 예외
+		//Java에서 제공하지 않는 예외 상황이 있을 경우
+		//이를 처리하기 위한 예외 클래스를 사용자가 직접 작성
+		
+		Scanner sc = new Scanner(System.in);
 		
 		
+		System.out.println("점수 입력(0~100) : ");
+		int score = sc.nextInt();
+		
+		if(score < 0 || score > 100) {
+			//사용자 정의 예외 강제 발생
+//			throw new ScoreInputException(); //기본생성자
+			throw new ScoreInputException("0~100 사이 범위 초과");
+		}
+		
+		System.out.println("입력한 점수는 : " + score);
 		
 		
 		
 		
 	}
 	
+	public void startEx5(){
+
+		try {
+			ex5();	//ScoreInputException이 던져질 가능성이 있음
+		}catch(ScoreInputException e) {
+			e.printStackTrace();
+			System.out.println("예외 내용 : " + e.getMessage());
+			System.out.println("예외처리 진행");
+		}finally {
+			System.out.println("프로그램 종료");
+		}
+		
+		
+		
+	}
 	
 }
