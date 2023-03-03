@@ -14,10 +14,10 @@ public class GameView {
 	public void displayMenu() {
 		int input = 0;
 		String straight = "┃";
-		addItem(1, "컵라면");
-		System.out.println(gameService.getItem(0));
+//		addItem(1, "컵라면");
+//		System.out.println(gameService.getItem(0));
 		gameService.useItem(0);
-		System.out.println(gameService.getItem(0));
+//		System.out.println(gameService.getItem(0));
 		gameService.moveFloor(true);
 		System.out.println("viewFloor1 : " + viewFloor());
 		gameService.moveFloor(true);
@@ -97,9 +97,9 @@ public class GameView {
 		return gameService.hitPlayer(damage);
 	}
 	
-	private void addItem(int index, String itemName) {	//원하는 빈칸에 입력 가능
-		gameService.addItem(index-1, itemName);//사용자 편의 array[index-1]
-	}
+//	private void addItem(int index, String itemName) {	//원하는 빈칸에 입력 가능
+//		gameService.addItem(index-1, itemName);//사용자 편의 array[index-1]
+//	}
 	
 	public void useItem(int index) {	//사용하면 삭제"null"로 변경
 		gameService.useItem(index-1);

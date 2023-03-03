@@ -11,7 +11,7 @@ public class Player {
 	private int power;
 	private int stamina;
 	private int floor;
-	private String[] item = new String[5];
+	private String[] item;
 	
 	
 	public Player() {
@@ -95,17 +95,25 @@ public class Player {
 	}
 
 
-	public String getItem(int index) {//아이템 로드
-		return item[index];
+//	public String getItem(int index) {//아이템 로드
+//	return item[index];
+//}
+//
+//
+//public void setItem(int index, String item) {//아이템 획득
+//	this.item[index] = item;
+//}
+//
+//public void setItem2(int index) {//아이템 사용
+//	this.item[index] = null;
+//}
+
+	public String[] getItem() {
+		return item;
 	}
 
-
-	public void setItem(int index, String item) {//아이템 획득
-		this.item[index] = item;
-	}
-
-	public void setItem2(int index) {//아이템 사용
-		this.item[index] = null;
+	public void setItem(String[] item) {
+		this.item = item;
 	}
 
 	@Override
