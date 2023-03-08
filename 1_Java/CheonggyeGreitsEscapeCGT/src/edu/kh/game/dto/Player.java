@@ -12,13 +12,15 @@ public class Player {
 	private int stamina;
 	private int floor;
 	private String[] item;
+	private boolean key;
 	
 	
 	public Player() {
 		super();
 	}
 
-	public Player(String name, int hp, int defense, int power, int stamina, int floor) {
+
+	public Player(String name, int hp, int defense, int power, int stamina, int floor, boolean key) {
 		super();
 		this.name = name;
 		this.hp = hp;
@@ -26,14 +28,9 @@ public class Player {
 		this.power = power;
 		this.stamina = stamina;
 		this.floor = floor;
+		this.key = key;
 	}
-	
-	
 
-	public Player(String[] item) {
-		super();
-		this.item = item;
-	}
 
 	public String getName() {
 		return name;
@@ -95,33 +92,32 @@ public class Player {
 	}
 
 
-//	public String getItem(int index) {//아이템 로드
-//	return item[index];
-//}
-//
-//
-//public void setItem(int index, String item) {//아이템 획득
-//	this.item[index] = item;
-//}
-//
-//public void setItem2(int index) {//아이템 사용
-//	this.item[index] = null;
-//}
-
 	public String[] getItem() {
 		return item;
 	}
 
+
 	public void setItem(String[] item) {
 		this.item = item;
 	}
+
+
+	public boolean isKey() {
+		return key;
+	}
+
+
+	public void setKey(boolean key) {
+		this.key = key;
+	}
+
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + Arrays.hashCode(item);
-		result = prime * result + Objects.hash(defense, floor, hp, name, power, stamina);
+		result = prime * result + Objects.hash(defense, floor, hp, key, name, power, stamina);
 		return result;
 	}
 
@@ -136,9 +132,18 @@ public class Player {
 			return false;
 		Player other = (Player) obj;
 		return defense == other.defense && floor == other.floor && hp == other.hp && Arrays.equals(item, other.item)
-				&& Objects.equals(name, other.name) && power == other.power && stamina == other.stamina;
+				&& key == other.key && Objects.equals(name, other.name) && power == other.power
+				&& stamina == other.stamina;
 	}
 
+
+	@Override
+	public String toString() {
+		return "Player [name=" + name + ", hp=" + hp + ", defense=" + defense + ", power=" + power + ", stamina="
+				+ stamina + ", floor=" + floor + ", item=" + Arrays.toString(item) + ", key=" + key + "]";
+	}
+
+	
 
 
 

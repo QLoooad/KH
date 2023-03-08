@@ -5,16 +5,16 @@ import edu.kh.game.dto.Player;
 
 public class Service {
 	
-	private Player p1 = new Player("당신", 5, 0, 1, 5, 7);
-	private String[] p1Item = new String[6];
+	private Player p1 = new Player("당신", 5, 0, 1, 5, 7, false);
+	private String[] p1Item = new String[5];
 	//name, hp, defense, power, stamina, floor, item1, item2, item3, item4, item5
 	
-	public int viewHp() {
+	public int viewHp() {//현재 HP
 		int hp = p1.getHp();
 		return hp;
 	}
 	
-	public int viewStamina() {
+	public int viewStamina() {//현재 스테미나
 		int stamina = p1.getStamina();
 		return stamina;
 	}
@@ -24,7 +24,7 @@ public class Service {
 		return floor;
 	}
 	
-	public void moveFloor(boolean move) {	//층 이동
+	public void moveFloor(boolean move) {	//층 이동 아래로
 		p1.setFloor(p1.getFloor()-1);
 	}
 	
@@ -72,19 +72,24 @@ public class Service {
 		if(itemNum == 3) item = "빵";
 		if(itemNum == 4) item = "컵라면";
 		if(itemNum == 5) item = "커피";
-		if(itemNum == 6) item = "헬멧";
-		if(itemNum == 7) item = "신발";
+		if(itemNum == 6) {
+			item = "열쇠";
+			p1.setKey(true);
+		}
 		
-		for(int i = 0; i < p1Item.length; i++) {
-			if(p1Item[i] == null){
-				p1Item[i] = item;
-				break;
+		if(itemNum >= 1 && itemNum <= 5) {
+			for(int i = 0; i < p1Item.length-1; i++) {
+				if(p1Item[i] == null){
+					p1Item[i] = item;
+					break;
+				}
 			}
 		}
+		
 		System.out.printf("%d을/를 얻었습니다.", item);
 	}
 	
-	public void useItem(int itemNum) {//해당인덱스 1~6까지 고르면 사용
+	public void useItem(int itemNum) {//해당인덱스 1~5까지 고르면 사용
 		itemNum -= 1;
 		if(p1Item[itemNum].equals("의료상자")) {
 			int nowHp = p1.getHp()+1;
@@ -118,30 +123,13 @@ public class Service {
 			System.out.println("스테미나 +1");
 			p1Item[itemNum] = null;
 		}
-		if(p1Item[itemNum].equals("헬멧")) {//장비템 내구도 있으니 수정 가능성 있음
-			int nowDefense = p1.getDefense()+1;
-			p1.setDefense(nowDefense);
-			System.out.println("스테미나 +1");
-			p1Item[itemNum] = null;
-		}
-		if(p1Item[itemNum].equals("신발")) {//장비템 내구도 있으니 수정 가능성 있음
-			int nowDefense = p1.getDefense()+1;
-			p1.setDefense(nowDefense);
-			System.out.println("스테미나 +1");
-			p1Item[itemNum] = null;
-		}
+
+		
 	}
 	 
-//	public void useItem(int index) {	//사용하면 삭제"null"로 변경
-//		p1.getItem(index);
-//		p1.setItem2(index);
-//	}
-//	
-//	public String getItem(int index) {//아이템 로드
-//		return p1.getItem(index);
-//	}
-	
-	
+	public void useKey() { //키 사용
+		p1.setKey(false);
+	}
 	
 	
 }
