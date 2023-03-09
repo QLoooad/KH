@@ -18,7 +18,7 @@ public class MoveService extends Building {
 	 * 좀비 확률 70% 대회의실: 좀비 확률 80% - 회의실 상속 회장실: 좀비 확률 100% 로비: 경비좀비 100% 출현
 	 */
 
-	int ZombieRandom;
+	int ZombieRandomSpawnSpawn;
 	int KeyGen;
 
 	// 탕비실
@@ -26,41 +26,42 @@ public class MoveService extends Building {
 
 	// 화장실
 	public void toilet() {
-      ZombieRandom = random.nextInt(100)+1;
-      if(ZombieRandom>=1 && ZombieRandom<=10); // 좀비 발생
-      else // 좀비를 마주치지 못함
+		ZombieRandomSpawnSpawn = random.nextInt(100)+1;
+      if(ZombieRandomSpawnSpawn>=1 && ZombieRandomSpawnSpawn<=10) {// 좀비 발생
+    	  
+      }else // 좀비를 마주치지 못함
+      
          
-      gameService.whatItem();
-      if(whatItem>=1 && whatItem<=30); // 붕대 syso 붕대 얻었습니다
+      gameService.addItem(gameService.whatItem());//방 입장 시 확률로 아이템 획득
    }
 
 	// 강의실
 	public void classRoom() {
-      ZombieRandom = random.nextInt(100)+1;
-      if(ZombieRandom>=1 && ZombieRandom<=30); // 좀비 발생
+      ZombieRandomSpawn = random.nextInt(100)+1;
+      if(ZombieRandomSpawn>=1 && ZombieRandomSpawn<=30); // 좀비 발생
       else // 좀비를 마주치지 못함
       
    }
 
 	// 회의실(대회의실)
 	public void conference() {
-      ZombieRandom = random.nextInt(100)+1;
-      if(ZombieRandom>=1 && ZombieRandom<=50); // 좀비 발생
+      ZombieRandomSpawn = random.nextInt(100)+1;
+      if(ZombieRandomSpawn>=1 && ZombieRandomSpawn<=50); // 좀비 발생
       else // 좀비를 마주치지 못함
       
    }
 
 	// 강당
 	public void auditorium() {
-      ZombieRandom = random.nextInt(100)+1;
-      if(ZombieRandom>=1 && ZombieRandom<=80); // 좀비 발생
+      ZombieRandomSpawn = random.nextInt(100)+1;
+      if(ZombieRandomSpawn>=1 && ZombieRandomSpawn<=80); // 좀비 발생
       else // 좀비를 마주치지 못함
    }
 
 	// 회장실
 	public void chiefRoom() {
-		ZombieRandom = random.nextInt(100) + 1;
-		if (ZombieRandom >= 1 && ZombieRandom <= 100)
+		ZombieRandomSpawn = random.nextInt(100) + 1;
+		if (ZombieRandomSpawn >= 1 && ZombieRandomSpawn <= 100)
 			; // 무조건 좀비 발생
 	}
 
