@@ -4,7 +4,10 @@ import edu.kh.game.dto.*;
 import java.util.*;
 
 public class MoveService extends Building {
-
+	
+	private Service gameService = new Service();
+	private Building Building = new Building();
+	
 	Random random = new Random();
 
 	/*
@@ -27,7 +30,7 @@ public class MoveService extends Building {
       if(ZombieRandom>=1 && ZombieRandom<=10); // 좀비 발생
       else // 좀비를 마주치지 못함
          
-      int whatItem = random.nextInt(100)+1;
+      gameService.whatItem();
       if(whatItem>=1 && whatItem<=30); // 붕대 syso 붕대 얻었습니다
    }
 
@@ -50,7 +53,7 @@ public class MoveService extends Building {
 	// 강당
 	public void auditorium() {
       ZombieRandom = random.nextInt(100)+1;
-      if(ZombieRandom>=1 && ZombieRandom<=70); // 좀비 발생
+      if(ZombieRandom>=1 && ZombieRandom<=80); // 좀비 발생
       else // 좀비를 마주치지 못함
    }
 
