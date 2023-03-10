@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
@@ -88,34 +89,62 @@ public class Service {
 	}
 
 	// 아이템 랜덤값 들어오면 해당 아이템을 null배열 or "" 에 넣어주기
-	public void addItem(int itemNum) {
-		String item = "";
-		if (itemNum == 1)
-			item = "의료상자";
-		if (itemNum == 2)
-			item = "붕대";
-		if (itemNum == 3)
-			item = "빵";
-		if (itemNum == 4)
-			item = "컵라면";
-		if (itemNum == 5)
-			item = "커피";
-		if (itemNum == 6) {
-			item = "열쇠";
-			p1.setKey(true);
-		}
+	
+	Random random = new Random();
+	   
+	   public int whatItem() {
+	      int whatItem = random.nextInt(100) + 1;
+	      int getItemRandom = random.nextInt(100) + 1;
+	      
+	      
+	         if(getItemRandom >= 1 && getItemRandom <= 40) {//40퍼 확률 아이템 얻기
+	            
+	            if(whatItem >= 1 && whatItem <= 15) {//의료상자
+	               return 1;
+	            }else if(whatItem >= 16 && whatItem <= 35) {//붕대
+	               return 2;
+	            }else if(whatItem >= 36 && whatItem <= 55) {//커피
+	               return 3;
+	            }else if(whatItem >= 56 && whatItem <= 77) {//빵
+	               return 4;
+	            }else {//컵라면
+	               return 5;
+	            }
+	         }else {
+	            return 0;
+	         }
+	      
+	   }
+	   
+	   //아이템 랜덤값 들어오면 해당 아이템을 null배열 or "" 에 넣어주기
+	   public void addItem(int itemNum) {
+	      String item = "";
+	      if(itemNum == 1) item = "의료상자";
+	      if(itemNum == 2) item = "붕대";
+	      if(itemNum == 3) item = "빵";
+	      if(itemNum == 4) item = "컵라면";
+	      if(itemNum == 5) item = "커피";
+	      if(itemNum == 6) {
+	         item = "열쇠";
+	         p1.setKey(true);
+	      }
+	      
+	      if(itemNum >= 1 && itemNum <= 5) {
+	         for(int i = 0; i < p1Item.length-1; i++) {
+	            if(p1Item[i] == null){
+	               p1Item[i] = item;
+	               break;
+	            }
+	         }
+	      }
+	      if(itemNum != 0) {
+	         System.out.printf("[%s 을/를 얻었습니다.]", item);
+	      }else {
+	         System.out.println("[아이템을 찾지 못했습니다.]");
+	      }
+	      
+	   }
 
-		if (itemNum >= 1 && itemNum <= 5) {
-			for (int i = 0; i < p1Item.length - 1; i++) {
-				if (p1Item[i] == null) {
-					p1Item[i] = item;
-					break;
-				}
-			}
-		}
-
-		System.out.printf("%d을/를 얻었습니다.", item);
-	}
 
 	public void useItem(int itemNum) {// 해당인덱스 1~5까지 고르면 사용
 		itemNum -= 1;
@@ -153,6 +182,20 @@ public class Service {
 		}
 
 	}
+	public void itemView() {
+		System.out.println("[현재 소지 중인 아이템 목록]");
+		for(int i = 0; i < p1Item.length; i++) {
+			if(!p1Item[i].equals(null)) {
+				System.out.println(i+1 + ". " +  "\"" + p1Item[i] + "\"");
+			}
+		}
+	}
+	
+	 
+	public void useKey() { //키 사용
+		p1.setKey(false);
+	}
+	
 
 	public boolean isKey() { 
 		if(p1.getKey()==true) {
@@ -161,6 +204,10 @@ public class Service {
 		}
 		
 		return false; 
+	}
+	public void getKey() { 
+		p1.setKey(true);
+		
 	}
 
 	// 플레이어 행동 관련

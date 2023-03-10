@@ -28,7 +28,7 @@ public class GameRun {
 		Service gameService = new Service();
 		
 		
-		for(String s : p1Item) {
+		for(String s : gameService.p1Item) {
 			System.out.println(s);
 		}
 		

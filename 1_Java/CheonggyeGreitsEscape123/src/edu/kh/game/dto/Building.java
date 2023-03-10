@@ -108,19 +108,24 @@ public class Building {
    
    
    public String getRoom(int j) {
-      ArrayList<String> roomList = new ArrayList<String>();
-      for (int i=0; i<list.get(j).size(); i++) {
-        if(list.get(j).get(i).equals("")) {
-           System.out.println();
-        }else {
-        System.out.println("    "+(i+1)+"." + list.get(j).get(i));
-        }
-         roomList.add(list.get(j).get(i));
-         
-      }return " ";
-    
-      
-   }
+	      ArrayList<String> roomList = new ArrayList<String>();
+	      for (int i = 0; i < list.get(j).size(); i++) {
+	         if (list.get(j).get(i).equals("")) {
+	            System.out.println();
+	         } else if (list.get(j).get(i).equals("로비")) {
+	            System.out.println("        " + list.get(j).get(i));
+	            System.out.println(" 탈출 하였습니다. ");
+	         } else if (list.get(j).get(i).equals("옥상정원")) {
+	            System.out.println("        " + list.get(j).get(i));
+	         } else {
+	            System.out.println("    " + (i + 1) + "." + list.get(j).get(i));
+	         }
+	         roomList.add(list.get(j).get(i));
+
+	      }
+	      return " ";
+
+	   }
    /* 7 옥상정원
     * 6 회의실1  회의실2  강당  화장실  탕비실
     * 5 회의실1  회의실2  강당  화장실  탕비실
