@@ -114,6 +114,17 @@ public class Service {
 	   
 	   //아이템 랜덤값 들어오면 해당 아이템을 null배열 or "" 에 넣어주기
 	   public void addItem(int itemNum) {
+		  int count = 0;
+		  for(int i = 0; i < p1Item.length; i++) {
+			  if(p1Item[i] != null) {
+				  count++;
+			  }
+		  }
+		  if(count == 5) {
+			  System.out.println("[아이템 획득에 실패했습니다.]");
+			  System.out.println("[가방에 빈칸이 없습니다.]");
+			  System.exit(0);
+		  }
 	      String item = "";
 	      if(itemNum == 1) item = "의료상자";
 	      if(itemNum == 2) item = "붕대";
@@ -126,7 +137,7 @@ public class Service {
 	      }
 	      
 	      if(itemNum >= 1 && itemNum <= 5) {
-	         for(int i = 0; i < p1Item.length-1; i++) {
+	         for(int i = 0; i < p1Item.length; i++) {
 	            if(p1Item[i] == null){
 	               p1Item[i] = item;
 	               break;
@@ -144,6 +155,10 @@ public class Service {
 
 	public void useItem(int itemNum) {// 해당인덱스 1~5까지 고르면 사용
 		itemNum -= 1;
+		if(p1Item[itemNum] == null){
+			System.out.println("[해당 번호에는 아이템이 존재하지 않습니다.\n"
+					+ "			번호를 다시 입력해주세요]");
+		}
 		if (p1Item[itemNum].equals("의료상자")) {
 			int nowHp = p1.getHp() + 1;
 			p1.setHp(nowHp);
@@ -176,17 +191,20 @@ public class Service {
 			System.out.println("스테미나 +1");
 			p1Item[itemNum] = null;
 		}
+			
+		
 
 	}
 	public void itemView() {
 		System.out.println("[현재 소지 중인 아이템 목록]");
 		for(int i = 0; i < p1Item.length; i++) {
-			if(!p1Item[i].equals(null)) {
+			if(p1Item[i] != (null)) {
 				System.out.println(i+1 + ". " +  "\"" + p1Item[i] + "\"");
+			}else {
+				System.out.println(i+1 + ". " +  "-----");
 			}
 		}
 	}
-	
 	 
 	public void useKey() { //키 사용
 		p1.setKey(false);

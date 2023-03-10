@@ -31,7 +31,6 @@ public class MoveService extends Building {
     	  
       }else // 좀비를 마주치지 못함
       
-         
       gameService.addItem(gameService.whatItem());//방 입장 시 확률로 아이템 획득
    }
 
