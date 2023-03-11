@@ -29,7 +29,7 @@ public class GameRun {
 		p1Item[1] = "컵라면";
 		p1Item[2] = "빵";
 		p1Item[4] = "커피";
-		
+		System.out.println("테스트");
 		System.out.println("[현재 소지 중인 아이템 목록]");
 		for(int i = 0; i < p1Item.length; i++) {
 			if(p1Item[i] != (null)) {
