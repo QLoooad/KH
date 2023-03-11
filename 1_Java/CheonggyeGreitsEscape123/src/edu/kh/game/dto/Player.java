@@ -14,6 +14,7 @@ public class Player implements Serializable {
 	private int floor;
 	private String[] item;
 	private boolean key;
+	
 
 	public Player() {
 		super();
@@ -29,6 +30,9 @@ public class Player implements Serializable {
 		this.floor = floor;
 		this.key = key;
 	}
+	 public Player(String name) { /* 플레이어 이름 짓기 */
+	      this.name = name;
+	   }
 
 	public String getName() {
 		return name;
