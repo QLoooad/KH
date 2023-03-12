@@ -1284,6 +1284,7 @@ public class GameView {
 				} else {
 					gameService.addItem(gameService.whatItem());
 					gameService.tang();
+					floor.setFloor(viewFloor() - 1, i, floor.getFloor(viewFloor() - 1, i));
 					tang();
 					if (floor.keyCheck(viewFloor() - 1, i).equals("열쇠를 발견하였습니다.")) {
 						gameService.getKey();
