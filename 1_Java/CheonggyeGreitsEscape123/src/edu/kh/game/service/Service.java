@@ -18,32 +18,38 @@ import edu.kh.game.dto.Zombie;
 import edu.kh.game.view.GameView;
 
 public class Service {
-	
+
 	Equipment equipment = new Equipment("신발", 0, 0);
 	Zombie zom = new Zombie("qkr", 2, 1);
-	private Player p1 = new Player("당신", 5, 0, 1, 3, 7, true);
+	private Player p1 = new Player("당신", 3, 0, 1, 3, 7, true);
 	private String[] p1Item = new String[5];
-	// name, hp, defense, power, stamina, floor, item1, item2, item3, item4, item5
+	// name, hp, defense, power, stamina, floor, item[5], key
 	private boolean runCheck = false;
-	
-	
+
+	public String getName() {
+		return p1.getName();
+	}
+
+	public void setName(String name) {
+		p1.setName(name);
+	}
 
 	public boolean runCheck() {
-		if(runCheck = true) {
+		if (runCheck = true) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public boolean viewKey() {
 		return p1.getKey();
 	}
-	
+
 	public void tang() {
 		getPlayerHp(1);
 		getStamina(1);
 	}
-	
+
 	public int viewHp() {// 현재 HP
 		int hp = p1.getHp();
 		return hp;
@@ -65,13 +71,13 @@ public class Service {
 
 	public int getPlayerHp(int getPlayerHp) { // 플레이어 힐
 		int nowHp = p1.getHp() + getPlayerHp;
-		if(nowHp>=6) {
-		}else {
-			p1.setHp(nowHp);	
+		if (nowHp > 3) {
+			p1.setHp(3);
+		} else {
+			p1.setHp(nowHp);
 		}
 		return p1.getHp();
 	}
-	
 
 	public int hitPlayer(int damage) { // 플레이어 맞음
 		int nowHp = p1.getHp() - damage;
@@ -81,9 +87,9 @@ public class Service {
 
 	public int getStamina(int getStamina) { // 스테미나 획득
 		int nowStamina = p1.getStamina() + getStamina;
-		if(nowStamina>=4) {
-		}else {
-			p1.setStamina(nowStamina);	
+		if (nowStamina >= 4) {
+		} else {
+			p1.setStamina(nowStamina);
 		}
 		return p1.getStamina();
 	}
@@ -107,110 +113,114 @@ public class Service {
 	}
 
 	// 아이템 랜덤값 들어오면 해당 아이템을 null배열 or "" 에 넣어주기
-	
-	Random random = new Random();
-	   
-	   public int whatItem() {
-	      int whatItem = random.nextInt(100) + 1;
-	      int getItemRandom = random.nextInt(100) + 1;
-	      
-	      
-	         if(getItemRandom >= 1 && getItemRandom <= 40) {//40퍼 확률 아이템 얻기
-	            
-	            if(whatItem >= 1 && whatItem <= 15) {//의료상자
-	               return 1;
-	            }else if(whatItem >= 16 && whatItem <= 35) {//붕대
-	               return 2;
-	            }else if(whatItem >= 36 && whatItem <= 55) {//커피
-	               return 3;
-	            }else if(whatItem >= 56 && whatItem <= 77) {//빵
-	               return 4;
-	            }else {//컵라면
-	               return 5;
-	            }
-	         }else {
-	            return 0;
-	         }
-	      
-	   }
-	   
-	   //아이템 랜덤값 들어오면 해당 아이템을 null배열 or "" 에 넣어주기
-	   public void addItem(int itemNum) {
-	        int count = 0;
-	        for(int i = 0; i < p1Item.length; i++) {
-	           if(p1Item[i] != null) {
-	              count++;
-	           }
-	        }
-	        if(count == 5) {
-	           System.out.println("[아이템 획득에 실패했습니다.]");
-	           System.out.println("[가방에 빈칸이 없습니다.]");
-	           System.exit(0);
-	        }
-	         String item = "";
-	         if(itemNum == 1) item = "의료상자";
-	         if(itemNum == 2) item = "붕대";
-	         if(itemNum == 3) item = "빵";
-	         if(itemNum == 4) item = "컵라면";
-	         if(itemNum == 5) item = "커피";
-	         
-	         
-	         if(itemNum >= 1 && itemNum <= 5) {
-	            for(int i = 0; i < p1Item.length; i++) {
-	               if(p1Item[i] == null){
-	                  p1Item[i] = item;
-	                  break;
-	               }
-	            }
-	         }
-	         if(itemNum != 0) {
-	            System.out.printf("[%s 을/를 얻었습니다.]", item);
-	         }else {
-	            System.out.println("[아이템을 찾지 못했습니다.]");
-	         }
-	         
-	      }
-	   public void itemView() {
-		      System.out.println("[현재 소지 중인 아이템 목록]");
-		      for(int i = 0; i < p1Item.length; i++) {
-		         if(p1Item[i] != (null)) {
-		            System.out.println(i+1 + ". " +  "\"" + p1Item[i] + "\"");
-		         }else {
-		            System.out.println(i+1 + ". " +  "-----");
-		         }
-		      }
-		   }
 
+	Random random = new Random();
+
+	public int whatItem() {
+		int whatItem = random.nextInt(100) + 1;
+		int getItemRandom = random.nextInt(100) + 1;
+
+		if (getItemRandom >= 1 && getItemRandom <= 40) {// 40퍼 확률 아이템 얻기
+
+			if (whatItem >= 1 && whatItem <= 15) {// 의료상자
+				return 1;
+			} else if (whatItem >= 16 && whatItem <= 35) {// 붕대
+				return 2;
+			} else if (whatItem >= 36 && whatItem <= 55) {// 커피
+				return 3;
+			} else if (whatItem >= 56 && whatItem <= 77) {// 빵
+				return 4;
+			} else {// 컵라면
+				return 5;
+			}
+		} else {
+			return 0;
+		}
+
+	}
+
+	// 아이템 랜덤값 들어오면 해당 아이템을 null배열 or "" 에 넣어주기
+	public void addItem(int itemNum) {
+		int count = 0;
+
+		String item = "";
+		if (itemNum == 1)
+			item = "의료상자";
+		if (itemNum == 2)
+			item = "붕대";
+		if (itemNum == 3)
+			item = "빵";
+		if (itemNum == 4)
+			item = "컵라면";
+		if (itemNum == 5)
+			item = "커피";
+
+		for (int i = 0; i < p1Item.length; i++) {
+			if (p1Item[i] != null) {
+				count++;
+			}
+		}
+		if (count == 5) {
+			System.out.println("[아이템 획득에 실패했습니다.]");
+			System.out.println("[가방에 빈칸이 없습니다.]");
+		}else
+		if (itemNum >= 1 && itemNum <= 5) {
+			for (int i = 0; i < p1Item.length; i++) {
+				if (p1Item[i] == null) {
+					p1Item[i] = item;
+					break;
+				}
+			}
+		}
+		if (itemNum != 0) {
+			System.out.println("\n\n\n\n\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+			System.out.printf("        %s 을/를 얻었습니다.\n", item);
+			System.out.println("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+		} else {
+			System.out.println("[아이템을 찾지 못했습니다.]");
+		}
+
+	}
+
+	public void itemView() {
+		System.out.println("[현재 소지 중인 아이템 목록]");
+		for (int i = 0; i < p1Item.length; i++) {
+			if (p1Item[i] != (null)) {
+				System.out.println(i + 1 + ". " + "\"" + p1Item[i] + "\"");
+			} else {
+				System.out.println(i + 1 + ". " + "-----");
+			}
+		}
+	}
 
 	public void useItem(int itemNum) {// 해당인덱스 1~5까지 고르면 사용
 		itemNum -= 1;
-		if (p1Item[itemNum].equals("의료상자")) {
+		if (p1Item[itemNum] == null) {
+			System.out.println("[해당 위치에는 아이템이 없습니다.]\n" + "[다시 선택해주시길 바랍니다.]");
+
+		} else if (p1Item[itemNum].equals("의료상자")) {
 			int nowHp = p1.getHp() + 1;
 			p1.setHp(nowHp);
 			int nowStamina = p1.getStamina() + 1;
 			p1.setStamina(nowStamina);
 			System.out.println("체력 +1\n스테미나 +1");
 			p1Item[itemNum] = null;
-		}
-		if (p1Item[itemNum].equals("붕대")) {
+		} else if (p1Item[itemNum].equals("붕대")) {
 			int nowHp = p1.getHp() + 1;
 			p1.setHp(nowHp);
 			System.out.println("체력 +1");
 			p1Item[itemNum] = null;
-		}
-		if (p1Item[itemNum].equals("빵")) {
+		} else if (p1Item[itemNum].equals("빵")) {
 			int nowHp = p1.getHp() + 1;
 			p1.setHp(nowHp);
 			System.out.println("체력 +1");
 			p1Item[itemNum] = null;
-		}
-		if (p1Item[itemNum].equals("컵라면")) {
+		} else if (p1Item[itemNum].equals("컵라면")) {
 			int nowHp = p1.getHp() + 1;
 			p1.setHp(nowHp);
 			System.out.println("체력 +1");
 			p1Item[itemNum] = null;
-		}
-		if (p1Item[itemNum].equals("커피")) {
+		} else if (p1Item[itemNum].equals("커피")) {
 			int nowStamina = p1.getStamina() + 1;
 			p1.setStamina(nowStamina);
 			System.out.println("스테미나 +1");
@@ -218,19 +228,19 @@ public class Service {
 		}
 
 	}
-	
 
-	public boolean isKey() { 
-		if(p1.getKey()==true) {
+	public boolean isKey() {
+		if (p1.getKey() == true) {
 			p1.setKey(false);
 			return true;
 		}
-		
-		return false; 
+
+		return false;
 	}
-	public void getKey() { 
+
+	public void getKey() {
 		p1.setKey(true);
-		
+
 	}
 
 	// 플레이어 행동 관련
@@ -244,7 +254,6 @@ public class Service {
 	public int random() {
 		int random = (int) (Math.random() * 100) + 1;
 
-		
 		return random;
 	}
 
@@ -258,13 +267,11 @@ public class Service {
 				broken(equipment);
 				return true;
 			}
-			
 
 		} else {
 			System.out.println("공격을 당했지만 좀비를 처리했습니다.");
 			p1.setHp(p1.getHp() - zom.getPower());
-			
-			
+
 		}
 		return false;
 	}
@@ -272,10 +279,10 @@ public class Service {
 	public boolean run() {
 		if (p1.getStamina() == 3) {
 			System.out.println("도망에 성공하였습니다.");
-			p1.setStamina(p1.getStamina()-1);
-			return true; 
+			p1.setStamina(p1.getStamina() - 1);
+			return true;
 		} else if (p1.getStamina() == 2) {
-			p1.setStamina(p1.getStamina()-1);
+			p1.setStamina(p1.getStamina() - 1);
 			if (random() > 25) {
 				System.out.println("도망에 성공하였습니다.");
 				return true;
@@ -298,10 +305,10 @@ public class Service {
 		} else {
 			System.out.println("스태미너가 부족하여 도망칠 수 없습니다.");
 			p1.setHp(p1.getHp() - 1);
-			
+
 			return false;
 		}
-		
+
 	}
 
 	public void broken(Equipment i) {
