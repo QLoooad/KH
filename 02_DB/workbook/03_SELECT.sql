@@ -1,0 +1,184 @@
+
+-- 1. 학생 이름 주소지
+SELECT STUDENT_NAME "학생 이름", STUDENT_ADDRESS "주소지"
+FROM TB_STUDENT
+ORDER BY 1;
+
+
+-- 2. 휴학중 학생 이름, 주민번호, 나이 오름차순
+
+SELECT STUDENT_NAME "학생 이름", STUDENT_SSN 
+FROM TB_STUDENT
+WHERE ABSENCE_YN = 'Y'
+ORDER BY 2 DESC;
+
+
+-- 3. 주소지 강원도, 경기도 학번 1900년대 
+--		이름 학번 주소   이름 오름차순
+
+SELECT STUDENT_NAME "학생 이름", STUDENT_NO, STUDENT_ADDRESS
+FROM TB_STUDENT
+WHERE STUDENT_NO LIKE '9%' AND (STUDENT_ADDRESS LIKE '%강원도%'OR STUDENT_ADDRESS LIKE '%경기도%')
+ORDER BY 1 ;
+
+
+-- 4. 법학과 교수 나이 많은사람 순
+
+SELECT PROFESSOR_NAME, PROFESSOR_SSN
+FROM TB_PROFESSOR 
+JOIN TB_DEPARTMENT USING(DEPARTMENT_NO)
+WHERE DEPARTMENT_NAME = '법학과'
+ORDER BY 2;
+
+
+-- 5. 2004/2학기 'C3118100' 과목 수강한 학생들의 학점 조회.   학점이 높은 학생부터
+-- 		학점 같으면 학번 낮은 학생부터   TO_CHAR(NUMBER, 'FM9.00')
+
+SELECT STUDENT_NO , TO_CHAR(POINT, 'FM9.00') 학점
+FROM TB_GRADE
+WHERE CLASS_NO = 'C3118100'
+AND SUBSTR(TERM_NO, 1, 4) = 2004
+AND SUBSTR(TERM_NO, 6, 1) = 2
+ORDER BY 2 DESC, 1;
+
+
+-- 6. 학생 번호, 학생 이름, 학과 이름을 학생 이름으로 오름차순 출력
+SELECT STUDENT_NO , STUDENT_NAME , DEPARTMENT_NAME 
+FROM TB_STUDENT
+LEFT JOIN TB_DEPARTMENT USING(DEPARTMENT_NO)
+ORDER BY 2;
+
+
+-- 7. 춘 대학교 과목 이름, 과목 학과 이름 출력
+SELECT CLASS_NAME ,DEPARTMENT_NAME
+FROM TB_CLASS
+LEFT JOIN TB_DEPARTMENT USING(DEPARTMENT_NO);
+
+
+-- 8. 과목별 교수 이름 (과목이름, 교수이름) 출력
+SELECT CLASS_NAME ,PROFESSOR_NAME
+FROM TB_PROFESSOR
+JOIN TB_CLASS_PROFESSOR USING(PROFESSOR_NO)
+JOIN TB_CLASS USING(CLASS_NO);
+
+
+-- 9. 8번 결과 중 '인문 사회'계열에 속한 과목의 교수 이름 출력
+SELECT CLASS_NAME ,PROFESSOR_NAME
+FROM TB_PROFESSOR
+JOIN TB_DEPARTMENT USING(DEPARTMENT_NO)
+JOIN TB_CLASS_PROFESSOR USING(PROFESSOR_NO)
+JOIN TB_CLASS USING(CLASS_NO)
+WHERE CATEGORY = '인문사회';
+
+
+-- 10. 음악학과 학생들의 평점
+--		학번, 학생이름, 전체 평점 (소수점 1자리  반올림)
+SELECT STUDENT_NAME, ROUND(AVG(POINT),1) 
+FROM TB_STUDENT
+JOIN TB_DEPARTMENT USING(DEPARTMENT_NO)
+JOIN TB_GRADE USING(STUDENT_NO)
+WHERE DEPARTMENT_NAME = '음악학과'
+GROUP BY STUDENT_NAME;
+
+
+-- 11. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

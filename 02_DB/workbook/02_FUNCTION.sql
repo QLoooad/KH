@@ -80,161 +80,33 @@ WHERE COACH_PROFESSOR_NO IS NULL;
 -- 12. 학번 A112113 의 년도 별 평점
 -- 헤더 "년도" "년도 별 평점"  점수 반올림, 소수점 이하 한자리
 
---SELECT TERM_NO  
---FROM TB_STUDENT
---JOIN TB_GRADE USING(STUDENT_NO)
---WHERE STUDENT_NO = 'A112113'
---GROUP BY  ;
-
+SELECT SUBSTR(TERM_NO, 1, 4) AS 년도, ROUND(AVG(POINT),1) AS "년도 별 평점"
+FROM TB_STUDENT
+JOIN TB_GRADE USING(STUDENT_NO)
+WHERE STUDENT_NO = 'A112113'
+GROUP BY SUBSTR(TERM_NO, 1, 4)
+ORDER BY 년도;
 
 -- 13. 학과별 휴학생 수
 
-SELECT DEPARTMENT_NO, NVL(COUNT(DEPARTMENT_NO),'0') 
+SELECT DEPARTMENT_NO "학과코드명", COUNT(CASE WHEN ABSENCE_YN = 'Y' THEN 1 ELSE NULL END) as "휴학생 수"
 FROM TB_STUDENT
-WHERE ABSENCE_YN = 'Y'
 GROUP BY DEPARTMENT_NO
 ORDER BY 1;
 						
-
-
 -- 14. 동명이인 수
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+SELECT STUDENT_NAME, COUNT(*) AS "동명인 수"
+FROM TB_STUDENT
+GROUP BY STUDENT_NAME
+HAVING COUNT(*) > 1
+ORDER BY 1;
+
+
+-- 15. 
+
+SELECT SUBSTR(TERM_NO, 1, 4)"년도", SUBSTR(TERM_NO, 5, 2) AS "학기", ROUND(AVG(POINT),1) AS "평점"
+FROM TB_GRADE
+WHERE STUDENT_NO = 'A112113'
+GROUP BY ROLLUP(SUBSTR(TERM_NO, 1, 4),SUBSTR(TERM_NO, 5, 2))
+ORDER BY 1,2;

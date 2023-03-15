@@ -43,11 +43,13 @@ FROM EMPLOYEE;
 -- 2) 직원들중 급여가 3047663원 이상인 사원들의 사번, 이름, 직급코드, 급여 조회
 SELECT EMP_ID, EMP_NAME, JOB_CODE, SALARY 
 FROM EMPLOYEE
-WHERE SALARY  >= (SELECT AVG(SALARY) FROM EMPLOYEE);
+WHERE SALARY  >= 3047663;
 
 -- 3) 전 직원의 평균 급여보다 많은 급여를 받고 있는 직원 조회
 --> 위의 2단계를 하나의 쿼리로 가능하다!! --> 1) 쿼리문을 서브쿼리로!!
-
+SELECT EMP_ID, EMP_NAME, JOB_CODE, SALARY 
+FROM EMPLOYEE
+WHERE SALARY  >= (SELECT AVG(SALARY) FROM EMPLOYEE);
                  
 
 
