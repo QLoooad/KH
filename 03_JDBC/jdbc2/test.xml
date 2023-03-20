@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+	<!-- 마크업 언어 주석-->
+	<!-- ctrl + shift + /-->
+	
+	<comment>test.xml file</comment>
+	
+	<!-- entry = map 에 저장되는 한쌍의 key value 를 묶어부르는 용어 -->
+
+	<entry key = "name">홍길동</entry>
+	<entry key = "age">25</entry>
+	
+	
+	
+</properties>
