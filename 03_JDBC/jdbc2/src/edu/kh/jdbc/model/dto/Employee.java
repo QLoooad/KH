@@ -24,7 +24,22 @@ public class Employee {
 		super();
 	}
 	
-	
+	public Employee(String empName, String empNo, String email, String phone, int salary, String deptCode,
+			String jobCode, String salLevel, double bonus, int managerId) {
+		super();
+		this.empName = empName;
+		this.empNo = empNo;
+		this.email = email;
+		this.phone = phone;
+		this.salary = salary;
+		this.deptCode = deptCode;
+		this.jobCode = jobCode;
+		this.salLevel = salLevel;
+		this.bonus = bonus;
+		this.managerId = managerId;
+	}
+
+
 
 	public Employee(int empId, String empName, String phone, String departmentTitle, String jobName) {
 		super();
@@ -35,11 +50,11 @@ public class Employee {
 		this.jobName = jobName;
 	}
 
-	public Employee(int empId, String empName, String departmentTitle, int salary) {
+	public Employee(int empId, String empName, String jobName, int salary) {
 		super();
 		this.empId = empId;
 		this.empName = empName;
-		this.departmentTitle = departmentTitle;
+		this.jobName = jobName;
 		this.salary = salary;
 	}
 

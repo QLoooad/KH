@@ -106,7 +106,7 @@ FROM EMPLOYEE
 ORDER BY SALARY;
 
 -- ROWNUM : 행 번호 출력하는 가상 컬럼
--- (주의사항) ORDER BY 절 해석 전에 행번호 부여
+-- (주의사항) ORDER BY 절 해석 전에 행번호 부여됨
 -- 
 SELECT /*ROWNUM*/ EMP_ID
 FROM (SELECT EMP_ID FROM EMPLOYEE ORDER BY SALARY)
@@ -154,7 +154,7 @@ GROUP BY DEPT_TITLE -- 여기에 들어온것만 그룹으로 함 (DEPT_CODE와 
 HAVING SUM(SALARY) =  (SELECT MAX(SUM(SALARY)) FROM EMPLOYEE GROUP BY DEPT_CODE);
                       
 -- SELECT 절에 작성된 그룹 함수 이외의 컬럼을
--- 모두 GROUP BY 저레 작성해야 그룹이 구성된다                
+-- 모두 GROUP BY 절에 작성해야 그룹이 구성된다                
 
 -------------------------------------------------------------------------
 

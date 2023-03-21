@@ -28,7 +28,7 @@ public class JDBCTemplate {
 	// 왜 static 필드?
 	// static 메서드가 참조 가능한 필드는static 필드 밖에 없기에
 	
-	public static Connection  getConnection() {
+	public static Connection getConnection() {
 		
 		try {
 			
@@ -122,7 +122,7 @@ public class JDBCTemplate {
 	/** 트랜잭션 Rollback 메서드
 	 * @param conn
 	 */
-	public static void Rollback(Connection conn) {
+	public static void rollback(Connection conn) {
 		try {
 			if(conn != null && !conn.isClosed()) conn.rollback();
 		} catch (SQLException e) {

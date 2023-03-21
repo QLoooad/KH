@@ -7,6 +7,7 @@ FROM EMPLOYEE;
 -- 부서별 급여 합 조회
 SELECT DEPT_CODE, SUM(SALARY)
 FROM EMPLOYEE;
+
 --  ORA-00937: 단일 그룹의 그룹 함수가 아닙니다
 
 SELECT DEPT_CODE, SUM(SALARY) -- 3. 그룹별 SALARY 합계를 조회
@@ -161,8 +162,7 @@ ORDER BY DEPT_CODE DESC;
 -- ROLLUP, CUBE 가 있음
 
 -- ROLLUP : 그룹별로 중간 집계와 전체 합계를 처리하는 함수
---CUBE : 그룹으로 지정된 모든 그룹에 대한 중간 집계와 총 합계를 처리하는 함수
-
+-- CUBE : 그룹으로 지정된 모든 그룹에 대한 중간 집계와 총 합계를 처리하는 함수
 
 -- EMPLOYEE 테이블에서
 -- 각 부서에 소속된 직급 별 급여 합
