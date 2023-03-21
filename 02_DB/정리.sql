@@ -447,7 +447,11 @@ CREATE ALTER DROP
 --                   인덱스(INDEX), 패키지(PACKAGE), 트리거(TRIGGER)
 --                   프로시져(PROCEDURE), 함수(FUNCTION),
 --                   동의어(SYNONYM), 사용자(USER)
------------------------------------------------------------------------------------------------
+/*********************************************************************************************/
+/*********************************************************************************************/
+/*********************************************************************************************/
+/*********************************************************************************************/
+/*********************************************************************************************/
 -- CREATE
 
 -- 테이블이나 인덱스, 뷰 등 다양한 데이터베이스 객체를 생성하는 구문
@@ -492,139 +496,829 @@ CREATE TABLE MEMBER(
 -- COMMENT ON COLUMN 테이블명.컬럼명 IS '주석내용';
 COMMENT ON COLUMN MEMBER.MEMBER_ID IS '회원 아이디';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- MEMBER 테이블에 샘플 데이터 삽입
+INSERT INTO MEMBER
+VALUES('MEM01', '123ASD', '홍길동', '990123-1234567', SYSDATE);
+
+-- 주민번호, 전화번호와 같은 숫자로만 이루어진 데이터를
+-- NUMBER 타입으로 지정할 경우의 문제점
+
+INSERT INTO MEMBER2 VALUES('고길동', 9001011234567, 01012345678);
+INSERT INTO MEMBER2 VALUES('김길동', 0001013456789, 01012345678);
+
+-- 9001011234567	1012345678
+-- 1013456789	1012345678
+
+-- NUMBER 타입의 컬럼은 값 제일 앞 0을 유지하지 않는 문제 발생
+-- 문제 해결 방법 : NUMBER 타입 하지 않고 CHAR, VARCHAR2 타입으로 컬럼 타입 지정
+
+/*********************************************************************************************/
+/*********************************************************************************************/
+-- 제약 조건(CONSTRAINTS)
+/*
+    사용자가 원하는 조건의 데이터만 유지하기 위해서 특정 컬럼에 설정하는 제약.
+    ******************
+    *****데이터 무결성**** 보장을 목적으로 함.
+	******************
+	--> 데이터 무결성 : 중복, NULL X
+	
+    + 입력 데이터에 문제가 없는지 자동으로 검사하는 목적
+    + 데이터의 수정/삭제 가능여부 검사등을 목적으로 함 
+        --> 제약조건을 위배하는 DML 구문은 수행할 수 없음!
+    
+    제약조건 종류(순서대로 중요도)
+    PRIMARY KEY, FOREIGN KEY, NOT NULL, UNIQUE, CHECK 
+    
+/*********************************************************************************************
+	PRIMARY KEY : NULL과 중복 값을 허용하지 않음(컬럼의 고유 식별자로 사용하기 위해)
+	
+	FOREIGN KEY : 참조되는 테이블의 컬럼의 값이 존재하면 허용
+	
+	NOT NULL : 데이터에 NULL을 허용하지 않음
+	
+	UNIQUE : 중복된 값을 허용하지 않음
+	
+	CHECK : 저장 가능한 데이터 값의 범위나 조건을 지정하여 설정한 값만 허용
+*********************************************************************************************/
+
+-- PRIMARY KEY(기본키) 제약조건 
+
+-- 모든 테이블에는 PRIMARY KEY 가 있어야한다
+
+-- 테이블에서 한 행의 정보를 찾기위해 사용할 컬럼을 의미함
+-- 테이블에 대한 식별자(IDENTIFIER) 역할을 함
+-- NOT NULL + UNIQUE 제약조건의 의미만 같음 (이걸 뜻하는건 아님)
+-- 한 테이블당 한 개만 설정할 수 있음
+-- 컬럼레벨, 테이블레벨 둘다 설정 가능함
+-- 한 개 컬럼에 설정할 수도 있고, 여러개의 컬럼을 묶어서 설정할 수 있음 (복합키 가능)
+
+-- 1.	 1   1 	중복없음, 성공
+-- 2.    1   2	아이디 중복이라 실패
+-- 3.	 2   2	값이 중복이라 실패
+-- 4. NULL   3	NULL 들어가면 실패
+
+CREATE TABLE USER_USED_PK(
+	USER_NO NUMBER,
+--    USER_NO NUMBER PRIMARY KEY, -- 컬럼 레벨(제약조건명 X)
+--    USER_NO NUMBER CONSTRAINT USER_NO_PK PRIMARY KEY, -- 컬럼 레벨(제약조건명 O)
+, CONSTRAINT USER_NO_PK PRIMARY KEY(USER_NO) -- 제약조건명 O
+);
+/*********************************************************************************************/
+-- FOREIGN KEY(외부키 / 외래키) 제약조건 
+
+-- 참조(REFERENCES)된 다른 테이블의 컬럼이 제공하는 값만 사용할 수 있음
+-- FOREIGN KEY제약조건에 의해서 테이블간의 관계(RELATIONSHIP)가 형성됨
+-- 제공되는 값 외에는 NULL만 사용할 수 있음
+
+-- 다른 테이블의 PK 값만 사용
+-- 다른 PK가 적용된 테이블.컬럼에 있는 값만을 가져온다(NULL 가능)
+
+-- 컬럼레벨일 경우
+-- 컬럼명 자료형(크기) [CONSTRAINT 이름] REFERENCES 참조할 테이블명 [(참조할컬럼)] [삭제룰]
+
+-- 테이블레벨일 경우
+-- [CONSTRAINT 이름] FOREIGN KEY (적용할컬럼명) REFERENCES 참조할테이블명 [(참조할컬럼)] [삭제룰]
+
+-- * 참조될 수 있는 컬럼은 PRIMARY KEY컬럼과, UNIQUE 지정된 컬럼만 외래키로 사용할 수 있음
+--참조할 테이블의 참조할 컬럼명이 생략이 되면, PRIMARY KEY로 설정된 컬럼이 자동 참조할 컬럼이 됨
+
+-- 테이블1 을 만들고 그 테이블1을 테이블2에서 참조한다
+-- 그때 테이블 2는 1에 있는 값만 참조할수있다 NULL 은 가능
+
+-- 3) ON DELETE CASCADE(종속) : 부모키 삭제시 자식키도 함께 삭제됨
+-- 부모키 삭제시 값을 사용하는 자식 테이블의 컬럼에 해당하는 행이 삭제가 됨
+
+CREATE TABLE USER_GRADE(
+  GRADE_CODE NUMBER PRIMARY KEY,
+  GRADE_NAME VARCHAR2(30) NOT NULL
+);
+INSERT INTO USER_GRADE VALUES (10, '일반회원');
+INSERT INTO USER_GRADE VALUES (20, '우수회원');
+INSERT INTO USER_GRADE VALUES (30, '특별회원');
+
+CREATE TABLE USER_USED_FK(
+  USER_NO NUMBER PRIMARY KEY,
+  USER_ID VARCHAR2(20) UNIQUE,
+  USER_PWD VARCHAR2(30) NOT NULL,
+  -- 컬럼 레벨로 FK 제약조건 설정
+  -- 컬럼명 자료형(크기) [CONSTRAINT 이름] REFERENCES 참조할 테이블명 [(참조할컬럼)] [삭제룰]
+  GRADE_CODE NUMBER CONSTRAINT GRADE_CODE_FK1 REFERENCES USER_GRADE(GRADE_CODE) 
+  
+  /*CONSTRAINT GRADE_CODE_FK2 FOREIGN KEY(GRADE_CODE)
+  REFERENCES USER_GRADE2(GRADE_CODE) ON DELETE SET NULL*/
+  -- [CONSTRAINT 이름] FOREIGN KEY (적용할컬럼명) REFERENCES 참조할테이블명 [(참조할컬럼)] [삭제룰]
+);
+
+/*********************************************************************************************/
+/*********************************************************************************************/
+-- NOT NULL 
+-- 해당 컬럼에 반드시 값이 기록되어야 하는 경우 사용
+-- 삽입/수정시 NULL값을 허용하지 않도록 컬럼레벨에서 제한
+
+
+CREATE TABLE USER_USED_NN(
+    USER_NO NUMBER NOT NULL, -- 컬럼레벨 제약조건 설정(컬럼 만들때 제약조건을 줌) 
+    			-- > NOT NULL 은 컬럼레벨로만 작성가능
+    --> 테이블 레벨 제약조건 설정 (테이블 다 만들고 마지막에 제약조건을 줌)
+);
+
+/*********************************************************************************************/
+/*********************************************************************************************/
+-- UNIQUE 제약조건 
+-- 컬럼에 입력 값에 대해서 중복을 제한하는 제약조건
+-- 컬럼레벨에서 설정 가능, 테이블 레벨에서 설정 가능
+-- 단, UNIQUE 제약 조건이 설정된 컬럼에 NULL 값은 중복 삽입 가능.
+
+--	1.	1 1 중복없음, 성공
+--	2.  1 2	아이디 같지만 이름 다름, 성공
+--	3.  2 2	이름 같지만 아이디 다름, 성공
+--	4.  2 2	이름과 아이디 다 같음, 실패
+
+-- UNIQUE 제약 조건 테이블 생성
+CREATE TABLE USER_USED_UK(
+    USER_NO NUMBER,
+--    USER_ID VARCHAR2(20) UNIQUE, -- 컬럼레벨 제약조건 설정(이름 미지정)
+--    USER_ID VARCHAR2(20) CONSTRAINT USER_ID_UK UNIQUE, 
+    						-- 컬럼레벨 제약조건 설정(이름 지정)
+    
+    -- 테이블 레벨 제약조건 설정
+--    , UNIQUE(USER_ID) -- 제약조건(컬럼명)(이름 미지정)
+    ,CONSTRAINT USER_ID_UK UNIQUE(USER_ID) -- 제약조건(컬럼명)(이름 지정)
+);
+/*********************************************************************************************/
+/*********************************************************************************************/
+
+-- 5. CHECK 제약조건 : 컬럼에 기록되는 값에 조건 설정을 할 수 있음
+-- CHECK (컬럼명 비교연산자 비교값)
+-- 주의 : 비교값은 리터럴만 사용할 수 있음, 변하는 값이나 함수 사용 못함
+CREATE TABLE USER_USED_CHECK(
+  USER_NO NUMBER PRIMARY KEY,
+  USER_ID VARCHAR2(20) UNIQUE,
+  USER_PWD VARCHAR2(30) NOT NULL,
+  USER_NAME VARCHAR2(30),
+  -- 컬럼 레벨
+  GENDER VARCHAR2(10) CONSTRAINT GENDER_CHECK CHECK(GENDER IN ('남', '여')),
+  
+  PHONE VARCHAR2(30),
+  EMAIL VARCHAR2(50)
+);
+
+INSERT INTO USER_USED_CHECK
+VALUES(1, 'user01', 'pass01', '홍길동', '남', '010-1234-5678', 'hong123@kh.or.kr');
+
+INSERT INTO USER_USED_CHECK
+VALUES(2, 'user02', 'pass02', '홍길동', '남자', '010-1234-5678', 'hong123@kh.or.kr');
+-- GENDER 컬럼에 CHECK 제약조건으로 '남' 또는 '여'만 기록 가능한데 
+-- '남자'라는 조건 이외의 값이 들어와 에러 발생
+-- ORA-02290: 체크 제약조건(KH_CGT.GENDER_CHECK)이 위배되었습니다
+
+-- CHECK 제약 조건은 범위로도 설정 가능.
+/*********************************************************************************************/
+/*********************************************************************************************/
+-- ALTER(바꾸다, 변조하다)
+-- 수정 가능한 것 : 컬럼(추가/수정/삭제), 제약조건(추가/삭제)
+--                  이름변경(테이블, 컬럼, 제약조건)
+
+-- [작성법]
+-- 테이블을 수정하는 경우
+-- ALTER TABLE 테이블명 ADD|MODIFY|DROP 수정할 내용;
+
+--------------------------------------------------------------------------------
+-- 1. 제약조건 추가 / 삭제
+-- 제약조건은 수정 불가능
+-- 수정 필요 시 삭제 후 다시 추가
+
+-- * 작성법 중 [] 대괄호 : 생략할 수 도, 안할 수 도 있다.
+
+-- 제약조건 추가 : ALTER TABLE 테이블명 
+--                 ADD [CONSTRAINT 제약조건명] 제약조건(컬럼명) [REFERENCES 테이블명[(컬럼명)]];
+
+-- 제약조건 삭제 : ALTER TABLE 테이블명
+--                 DROP CONSTRAINT 제약조건명;
+
+-- 서브쿼리를 이용해서 DEPARTMENT 테이블 복사 --> NOT NULL 제약조건만 복사됨
+CREATE TABLE DEPT_COPY
+AS SELECT * FROM DEPARTMENT;
+
+SELECT * FROM DEPT_COPY;
+-- NOT NULL만 카피됨
+--> DEPT_ID, LOCATION_ID 에만 NOT NULL 제약조건 설정됨
+
+
+-- DEPT_COPY 테이블에 PK 추가
+ALTER TABLE DEPT_COPY ADD CONSTRAINT PK_DEPT_COPY
+PRIMARY KEY(DEPT_ID);
+
+-- DEPT_COPY 테이블의 DEPT_TITLE 컬럼에 UNIQUE 제약조건 추가
+ALTER TABLE DEPT_COPY ADD CONSTRAINT UK_DEPT_COPY
+UNIQUE(DEPT_TITLE);
+
+-- DEPT_COPY 테이블의 LOCATION_ID 컬럼에 CHECK 제약조건 추가
+-- 컬럼에 작성할 수 있는 값은 L1, L2, L3, L4, L5 
+-- 제약조건명 : LOCATION_ID_CHK
+ALTER TABLE DEPT_COPY ADD CONSTRAINT CK_DEPT_COPY
+CHECK (LOCATION_ID IN ('L1','L2','L3','L4','L5'));
+
+--------------------------------------------------------------------------------
+-- DEPT_COPY 테이블의 DEPT_TITLE 컬럼에 NOT NULL 제약조건 추가
+-- * NOT NULL 제약조건은 다루는 방법이 다름
+-->  NOT NULL을 제외한 제약 조건은 추가적인 조건으로 인식됨.(ADD/DROP)
+-->  NOT NULL은 기존 컬럼의 성질을 변경하는 것으로 인식됨.(MODIFY)
+ALTER TABLE DEPT_COPY MODIFY
+DEPT_TITLE NOT NULL; -- NULL 관련 설정만 MODIFY 사용
+--------------------------------------------------------------------------------
+
+-- DEPT_COPY에 추가한 제약조건 중 PK 빼고 모두 삭제
+ALTER TABLE DEPT_COPY DROP CONSTRAINT CK_DEPT_COPY;
+ALTER TABLE DEPT_COPY DROP CONSTRAINT UK_DEPT_COPY;
+ALTER TABLE DEPT_COPY DROP CONSTRAINT SYS_C007522; -- NOT NULL
+--NOT NULL 제약조건 ADD는 불가능, DROP는 가능
+
+-- NOT NULL 제거 시 MODIFY 사용
+ALTER TABLE DEPT_COPY 
+MODIFY DEPT_TITLE CONSTRAINT SYS_C007522 NULL;
+/*********************************************************************************************/
+/*********************************************************************************************/
+-- 2. 컬럼 추가/수정/삭제
+
+-- 컬럼 추가 : ALTER TABLE 테이블명 ADD(컬럼명 데이터타입 [DEFAULT '값']);
+
+
+-- 컬럼 수정 : ALTER TABLE 테이블명 MOIDFY 컬럼명 데이터타입;   (데이터 타입 변경)
+--             ALTER TABLE 테이블명 MOIDFY 컬럼명 DEFAULT '값'; (기본값 변경)
+
+--> ** 데이터 타입 수정 시 컬럼에 저장된 데이터 크기 미만으로 변경할 수 없다.
+
+
+-- 컬럼 삭제 : ALTER TABLE 테이블명 DROP (삭제할컬럼명);
+--             ALTER TABLE 테이블명 DROP COLUMN 삭제할컬럼명;
+
+--> ** 테이블에는 최소 1개 이상의 컬럼이 존재해야 되기 때문에 모든 컬럼 삭제 X
+
+-- 테이블이란? 행과 열로 이루어진 데이터베이스의 가장 기본적인 객체
+
+
+-- (추가)
+-- DEPT_COPY 컬럼에 CNAME VARCHAR2(20) 컬럼 추가
+-- ALTER TABLE 테이블명 ADD(컬럼명 데이터타입 [DEFAULT '값']);
+ALTER TABLE DEPT_COPY 
+ADD(CNAME VARCHAR2(20));
+
+SELECT * FROM DEPT_COPY;
+
+-- (추가)
+-- DEPT_COPY 테이블에 LNAME VARCHAR2(30) 기본값 '한국' 컬럼 추가
+ALTER TABLE DEPT_COPY 
+ADD(LNAME VARCHAR2(20)DEFAULT '한국');
+--> 샐 추가된 컬럼 LNAME에 기본값 '한국'이 자동 삽입
+
+SELECT * FROM DEPT_COPY;
+
+-- (수정)
+-- DEPT_COPY 테이블의 DEPT_ID 컬럼의 데이터 타입을 CHAR(2) -> VARCHAR2(3)으로 변경
+-- ALTER TABLE 테이블명 MOIDFY 컬럼명 데이터타입;
+ALTER TABLE DEPT_COPY 
+MODIFY DEPT_ID VARCHAR(3);
+
+-- (수정 에러 상황)
+-- DEPT_TITLE 컬럼의 데이터타입을 VARCHAR2(10)으로 변경
+ALTER TABLE DEPT_COPY 
+MODIFY DEPT_TITLE VARCHAR(10);
+-- ORA-01441: 일부 값이 너무 커서 열 길이를 줄일 수 없음
+-- 이미 저장된 값이 수정하는 데이터 타입의 크기보다 크면 수정 불가능
+
+-- (기본값 수정)
+-- LNAME 기본값을 '한국' -> '대한민국' 으로 변경
+-- ALTER TABLE 테이블명 MOIDFY 컬럼명 DEFAULT '값'; 
+ALTER TABLE DEPT_COPY 
+MODIFY LNAME DEFAULT '대한민국';
+
+SELECT * FROM DEPT_COPY;
+
+-- DEPT_COPY의 LNAME 컬럼의 모든 값을 기본값으로 수정
+UPDATE DEPT_COPY
+SET LNAME = DEFAULT;
+
+-- (삭제)
+-- DEPT_COPY에 추가한 컬럼(CNAME, LNAME) 삭제
+-->  ALTER TABLE 테이블명 DROP(삭제할컬럼명);
+ALTER TABLE DEPT_COPY DROP(CNAME);
+
+SELECT * FROM DEPT_COPY;
+
+-->  ALTER TABLE 테이블명 DROP COLUMN 삭제할컬럼명;
+ALTER TABLE DEPT_COPY DROP COLUMN LNAME;
+
+SELECT * FROM DEPT_COPY;
+
+-- 컬럼 삭제의 문제점
+-- 테이블은 최소 1개 이상의 컬럼이 존재해야한다
+ALTER TABLE DEPT_COPY DROP COLUMN DEPT_TITLE;
+ALTER TABLE DEPT_COPY DROP COLUMN LOCATION_ID;
+
+SELECT * FROM DEPT_COPY;
+
+-- 마지막 남은 DEPT_ID 컬럼 삭제 시도
+ALTER TABLE DEPT_COPY DROP COLUMN DEPT_ID;
+-- ORA-12983: 테이블에 모든 열들을 삭제할 수 없습니다
+
+
+-- * DDL / DML을 혼용해서 사용할 경우 발생하는 문제점
+-- DML을 수행하여 트랜잭션에 변경사항이 저장된 상태에서
+-- COMMIT/ROLLBACK 없이 DDL 구문을 수행하게되면
+-- DDL 수행과 동시에 선행 DML이 자동으로 COMMIT 되어버림.
+
+--DML (Data Manipulation Language) 데이터 조작 (테이블의 값을 INSERT, UPDATE, DELETE)
+--DDL (Data Definition Language) 데이터 정의 (객체를 CREATE, DROP, ALTER)
+--DCL (Data Control Language) 데이터 제어 GRANT, REVOKE
+--TCL (Transaction Control Language) 트랜젝션 제어(DML 수행 내용을 COMMIT, ROLLBACK)
+
+
+--> 결론 : DML/DDL 혼용해서 사용하지 말자!!!
+
+INSERT INTO DEPT_COPY VALUES('D0'); -- 'D0' 삽입
+SELECT * FROM DEPT_COPY;
+ROLLBACK; -- 트랜잭션에서 'D0' INSERT 내용을 삭제
+SELECT * FROM DEPT_COPY;
+
+
+INSERT INTO DEPT_COPY VALUES('D0'); -- 'D0' 삽입
+SELECT * FROM DEPT_COPY;
+
+ALTER TABLE DEPT_COPY MODIFY DEPT_ID VARCHAR2(4); -- DDL 수행
+ROLLBACK;
+SELECT * FROM DEPT_COPY; -- 'D0'가 사라지지 않음
+
+-- 결론 : DML 과 DDL 은 혼용해서 작성 금지
+/*********************************************************************************************/
+/*********************************************************************************************/
+-- 3. 테이블 삭제
+
+-- [작성법]
+-- DROP TABLE 테이블명 [CASCADE CONSTRAINTS];
+
+CREATE TABLE TB1(
+    TB1_PK NUMBER PRIMARY KEY,
+    TB1_COL NUMBER
+);
+
+CREATE TABLE TB2(
+    TB2_PK NUMBER PRIMARY KEY,
+    TB2_COL NUMBER REFERENCES TB1 -- TB1 테이블의 PK 값을 참조
+);
+
+-- 일반 삭제(DEPT_COPY)
+DROP TABLE DEPT_COPY; -- Table DEPT_COPY이(가) 삭제되었습니다.
+
+-- ** 관계가 형성된 테이블 중 부모테이블(TB1) 삭제 **
+DROP TABLE TB1;
+-- ORA-02449: 외래 키에 의해 참조되는 고유/기본 키가 테이블에 있습니다 
+--> 다른 테이블이 TB1 테이블을 참조하고 있어서 삭제 불가능.
+
+-- 해결 방법 1 : 자식 -> 부모 테이블 순서로 삭제하기
+-- (참조하는 테이블이 없으면 삭제 가능)
+DROP TABLE TB2;
+DROP TABLE TB1; -- 삭제 성공
+
+-- 해결 방법 2 : CASCADE CONSTRAINTS 옵션 사용
+--> 제약조건까지 모두 삭제 
+-- == FK 제약조건으로 인해 삭제가 원래는 불가능 하지만, 제약조건을 없애버려서 FK 관계를 해제
+DROP TABLE TB1 CASCADE CONSTRAINTS; -- 삭제 성공
+DROP TABLE TB2;     
+/*********************************************************************************************/
+/*********************************************************************************************/
+
+-- 4. 컬럼, 제약조건, 테이블 이름 변경(RENAME)
+
+-- 테이블 복사
+CREATE TABLE DEPT_COPY AS SELECT * FROM DEPARTMENT; 
+
+-- 복사한 테이블에 PK 추가
+ALTER TABLE DEPT_COPY ADD CONSTRAINT PK_DCOPY PRIMARY KEY(DEPT_ID);
+
+-- 1) 컬럼명 변경 : ALTER TABLE 테이블명 RENAME COLUMN 컬럼명 TO 변경명;
+ALTER TABLE DEPT_COPY RENAME COLUMN DEPT_TITLE TO DEPT_NAME;
+SELECT * FROM DEPT_COPY;
+
+-- 2) 제약조건명 변경 : ALTER TABLE 테이블명 RENAME CONSTRAINT 제약조건명 TO 변경명;
+ALTER TABLE DEPT_COPY RENAME CONSTRAINT PK_DCOPY TO DEPT_COPY_PK;
+
+-- 3) 테이블명 변경 : ALTER TABLE 테이블명 RENAME TO 변경명;
+ALTER TABLE DEPT_COPY RENAME TO DCOPY;
+SELECT * FROM DCOPY;
+SELECT * FROM DEPT_COPY; -- 이름이 변경되어 DEPT_COPY 테이블명으로 조회 불가
+/*********************************************************************************************/
+/*********************************************************************************************/
+
+/*	VIEW
+ * 
+ * - 논리적 가상 테이블(행과 열로 이루어진 데이터 저장 장소)
+ * 		-> 테이블 모양을 하고있지만, 실제로 값을 저장하고 있지는 않다.
+ * - SELECT문의 실행 결과(RESULT SET)를 저장하는 객체
+ *
+ * 
+ * ** VIEW 사용 목적 **
+ * 1. 복잡한 SELECT 문을 쉽게 재사용하기 위해
+ * 2. 테이블의 진짜 모습을 감출 수 있어 보안상 유리
+ * 
+ * ** VIEW 사용 시 주의 사항 **
+ * 1. 가상의 테이블(실체X)이기 때문에 ALTER 구문 사용 불가
+ * 2. VIEW를 이용한 DML(INSERT, UPDATE, DELETE)이 가능한 경우도 있지만 
+ * 	  제약이 많이 따르기 때문에 조회(SELECT) 용도로 대부분 사용
+ * 
+ * ** VIEW 작성법 **
+ * CREATE [OR REPLACE] [FORCE | NOFORCE] VIEW 뷰이름[컬럼 별칭]
+ * AS 서브쿼리(SELECT문)
+ * [WITH CHECK OPTION]
+ * [WITH READ ONLY]
+ * 
+ * 1. OR REPLACE : 기존 동일한 이름의 VIEW 존재 시 이를 변경,
+ * 				   없으면 새로 생성
+ * 
+ * 2. FORCE | NOFORCE 
+ * 		FORCE : 서브쿼리에 사용된 테이블이 존재하지 않아도 뷰 생성
+ * 		NOFORCE(기본값) : 서브쿼리에 사용된 테이블이 존재해야만 뷰 생성
+ * 
+ * 3. 컬럼 별칭 옵션 : 조회되는 VIEW의 컬럼명 지정
+ * 
+ * 4. WITH CHECK OPTION : 옵션을 지정한 컬럼의 값을 수정 불가능하게 함
+ * 
+ * 5. WITH READ ONLY : 뷰에 대해 SELECT만 가능하도록 지정
+ * 
+ * */
+
+-- EMPLOYEE 테이블에서 모든사원의
+-- 사번, 이름, 부서명, 직급명 조회
+SELECT EMP_ID ,EMP_NAME ,DEPT_TITLE, JOB_NAME
+FROM EMPLOYEE
+LEFT JOIN DEPARTMENT ON(DEPT_CODE = DEPT_ID)
+JOIN JOB USING (JOB_CODE);
+--> VIEW 생성
+
+CREATE VIEW V_EMP
+AS  SELECT EMP_ID ,EMP_NAME ,DEPT_TITLE, JOB_NAME
+	FROM EMPLOYEE
+	LEFT JOIN DEPARTMENT ON(DEPT_CODE = DEPT_ID)
+	JOIN JOB USING (JOB_CODE);
+
+-- ORA-01031 : 권한이 불충분합니다
+-->SYS 계정으로 접속
+
+ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
+
+--> 각자 계정에 CREATE VIEW 권한 부여
+GRANT CREATE VIEW TO KH_CGT;
+
+-- 생성된 VIEW V_EMP 조회
+SELECT * FROM V_EMP;
+
+-- V_EMP 수정 (OR REPLACE)
+CREATE OR REPLACE VIEW V_EMP
+AS  SELECT EMP_ID 사번,EMP_NAME 이름,DEPT_TITLE 부서명, JOB_NAME 직급명
+	FROM EMPLOYEE
+	LEFT JOIN DEPARTMENT ON(DEPT_CODE = DEPT_ID)
+	JOIN JOB USING (JOB_CODE);
+
+SELECT * FROM V_EMP;
+
+-- V_EMP에서 직급 대리인 사원의 정보 조회
+SELECT * FROM V_EMP
+WHERE 직급명 = '대리 ';
+
+-------------------------------------------------------------------------
+/* VIEW 를 이용한 DML */
+
+--테이블 복사
+CREATE TABLE DEPT_COPY2
+AS SELECT * FROM DEPARTMENT;
+
+SELECT * FROM DEPT_COPY2;
+
+-- DEPT_COPY2에서
+-- DEPT_ID, LOCATION_ID 컬럼만 조회하는
+-- VIEW 생성
+
+CREATE VIEW V_DCOPY2
+AS SELECT DEPT_ID, LOCATION_ID
+	FROM DEPT_COPY2;
+
+SELECT * FROM V_DCOPY2;
+
+-- VIEW 를 이용한 INSERT
+
+INSERT INTO V_DCOPY2
+VALUES('D0', 'L3');
+
+SELECT * FROM V_DCOPY2;
+-- VIEW는 값을 저장하지 않는다(?)
+-- 저장된것처럼 보임
+
+-- 실제 VIEW에 저장된것 아님
+-- VIEW 생성 시 사용한 서브쿼리의 테이블(DEPT_COPY2)에
+-- 값이 삽입되어있다
+
+-- 원본 테이블(DEPT_COPY2) 확인
+SELECT * FROM DEPT_COPY2;
+-- D0	NULL	L3
+-- 원본 테이블 삽입 확인
+-- INSERT 구문에 포함되지 않은 DEPT_TITLE 컬럼은
+-- NULL삽입되어 있다.
+
+ROLLBACK;
+
+SELECT * FROM V_DCOPY2;
+
+-- 복사한 테이블(DEPT_COPY2)의
+-- DEPT_TITLE 컬럼에 NOT NULL 제약조건 추가
+
+ALTER TABLE DEPT_COPY2 MODIFY
+DEPT_TITLE CONSTRAINT TITLE_NN NOT NULL;
+
+-- 다시 VIEW를 이용해 INSERT
+INSERT INTO V_DCOPY2
+VALUES('D0', 'L3');
+-- > 원본 테이블 DEPT_COPY2에 DEPT_ID, LOCATION_ID 컬럼에 ('D0', 'L3')를 삽입
+-- > DEPT_TITLE 컬럼에는 NULL 삽입
+-- > BUT DEPT_TITLE에는 NOT NULL 제약조건 설정이 되어
+-- > NULL 값 삽입 불가능
+
+-- ORA-01400: NULL을 ("KH_CGT"."DEPT_COPY2"."DEPT_TITLE") 
+-- 안에 삽입할 수 없습니다
+
+-- 데이터 무결성 : 중복 X, NULL X --> 신뢰도 높은 데이터
+-- 대부분의 컬럼에 NOT NULL 제약조건이 추가되어 있음
+-- NOT NULL이 설정된 테이블을 이용해서 VIEW를 만들면
+-- INSERT 거의 불가능
+
+-- 결론 : VIEW 가지고 DML 수행하는 행동 지양
+
+---------------------------------------------
+
+/* WITH READ ONLY 추가*/
+
+-- 읽기전용 X, VIEW 변경
+CREATE OR REPLACE VIEW V_DCOPY2
+AS SELECT DEPT_ID, DEPT_TITLE, LOCATION_ID
+FROM DEPT_COPY2;
+
+INSERT INTO V_DCOPY2
+VALUES ('D0', '기획팀', 'L3');
+
+ROLLBACK;
+
+-- 읽기전용 O, VIEW 변경
+CREATE OR REPLACE VIEW V_DCOPY2
+AS SELECT DEPT_ID, DEPT_TITLE, LOCATION_ID
+FROM DEPT_COPY2
+WITH READ ONLY;
+
+
+INSERT INTO V_DCOPY2
+VALUES ('D0', '기획팀', 'L3');
+-- ORA-42399: 읽기 전용 뷰에서는 DML 작업을 수행할 수 없습니다.
+
+-----------------------------------------------------------------------
+
+/* SEQUENCE(순서, 연속)
+ * - 순차적으로 일정한 간격의 숫자(번호)를 발생시키는 객체
+ * EX)게시글 번호
+ * *** SEQUENCE 왜 사용하나 ***
+ * PRIMARY KEY(기본키) : 테이블 내 각 행을 구별하는 식별자 역할
+ * 						NOT NULL && UNIQUE의 의미를 가짐 
+ * 
+ * PK 가 지정된 컬럼에 삽입될 값을 생성할때 SEQUENCE를 이용하면 좋다
+ * 
+ *******************************************************************
+  [작성법]
+  
+  CREATE SEQUENCE 시퀀스이름
+  [STRAT WITH 숫자] -- 처음 발생시킬 시작값 지정, 생략하면 자동 1이 기본
+  [INCREMENT BY 숫자] -- 다음 값에 대한 증가치, 생략하면 자동 1이 기본
+  
+  [MAXVALUE 숫자 | NOMAXVALUE] -- 발생시킬 최대값 지정 (10의 27승 -1)
+  
+  [MINVALUE 숫자 | NOMINVALUE] -- 최소값 지정 (-10의 26승)
+  [CYCLE | NOCYCLE] -- 값 순환 여부 지정
+  
+  [CACHE 바이트크기 | NOCACHE] -- 캐쉬메모리 기본값은 20바이트, 최소값은 2바이트
+
+-- 시퀀스의 캐시 메모리는 할당된 크기만큼 미리 다음 값들을 생성해 저장해둠
+-- --> 시퀀스 호출 시 미리 저장되어진 값들을 가져와 반환하므로 
+--     매번 시퀀스를 생성해서 반환하는 것보다 DB속도가 향상됨.
+
+ ********************************************************************
+ * 
+ * ** 사용법 **
+ * 
+ * 1. 시퀀스명.NEXTVAL : 다음 시퀀스 번호를 얻어옴
+ * 					  (INCREMENT BY 만큼 증가된 수)
+ * 					  단, 생성 후 처음 호출된 시퀀스인 경우
+ * 					  START WITH에 작선된 값이 반환됨
+ * 
+ * 2. 시퀀스명.CURRVAL : 현재 시퀀스 번호를 얻어옴
+ * 					  단, 시퀀스가 생성 되자마자 호출할 경우 오류 발생
+ * 					  == 마지막으로 호출한 NEXTVAL 값을 반환
+ * */
+
+-- 테이블 생성
+CREATE TABLE TB_TEST(
+	TEST_NO NUMBER PRIMARY KEY,
+	TEST_NAME VARCHAR2(30) NOT NULL
+);
+
+-- 시퀀스 생성
+CREATE SEQUENCE SEQ_TEST_NO
+START WITH 100 -- 100번부터 시작
+INCREMENT BY 5 -- 5씩 증가
+MAXVALUE 150   -- 최대값 150
+NOMINVALUE	   -- 최소값 없음
+NOCYCLE		   -- 반복X
+NOCACHE;       -- 미리 만들어두는 숫자 없음
+
+
+-- 시퀀스 생성 확인
+SELECT SEQ_TEST_NO.NEXTVAL FROM DUAL;
+
+SELECT SEQ_TEST_NO.CURRVAL FROM DUAL;
+-- ORA-08002: 시퀀스 SEQ_TEST_NO.CURRVAL은 이 세션에서는 정의 되어 있지 않습니다
+
+
+-- 다시 NEXTVAL 호출
+SELECT SEQ_TEST_NO.NEXTVAL FROM DUAL;
+SELECT SEQ_TEST_NO.NEXTVAL FROM DUAL;
+SELECT SEQ_TEST_NO.NEXTVAL FROM DUAL;
+
+-- TB_TEST에 값 삽입
+INSERT INTO TB_TEST VALUES(SEQ_TEST_NO.NEXTVAL, '홍길동' || SEQ_TEST_NO.CURRVAL);
+
+
+SELECT * FROM TB_TEST;
+
+-- INSERT 추가 수행
+INSERT INTO TB_TEST VALUES(SEQ_TEST_NO.NEXTVAL, '홍길동' || SEQ_TEST_NO.CURRVAL);
+
+SELECT * FROM TB_TEST;
+
+
+-- UPDATE에 시퀀스 사용
+UPDATE TB_TEST
+SET TEST_NO = SEQ_TEST_NO.NEXTVAL,
+	TEST_NAME = '고길동' || SEQ_TEST_NO.CURRVAL
+WHERE TEST_NO = (SELECT MAX(TEST_NO) FROM TB_TEST);
+
+-- UPDATE 확인
+SELECT * FROM TB_TEST;
+
+-- UPDATE 추가수행
+UPDATE TB_TEST
+SET TEST_NO = SEQ_TEST_NO.NEXTVAL,
+	TEST_NAME = '고길동' || SEQ_TEST_NO.CURRVAL
+WHERE TEST_NO = (SELECT MAX(TEST_NO) FROM TB_TEST);
+-- 시퀀스 SEQ_TEST_NO.NEXTVAL exceeds MAXVALUE은 사례로 될 수 없습니다
+-- SEQUENCE MAXVALUE 초과 (MAXVALUE 150)
+
+
+
+-- 가장 마지막 TEST_NO를 조회하는 SELECT 
+SELECT MAX(TEST_NO)
+FROM TB_TEST;
+
+SELECT * FROM
+	(SELECT TEST_NO
+	FROM TB_TEST
+	ORDER BY TEST_NO DESC)
+WHERE ROWNUM = 1;
+
+----------------------------------------------------------
+
+-- SEQUENCE 변경(ALTER)
+/*
+  *[STRAT WITH 숫자] -- 처음 발생시킬 시작값 지정, 생략하면 자동 1이 기본*
+  *변경 불가 (처음 만들때만 설정 가능)
+  
+  
+  [작성법]
+  
+  ALTER SEQUENCE 시퀀스이름
+  
+  [INCREMENT BY 숫자] -- 다음 값에 대한 증가치, 생략하면 자동 1이 기본
+  [MAXVALUE 숫자 | NOMAXVALUE] -- 발생시킬 최대값 지정 (10의 27승 -1)
+  [MINVALUE 숫자 | NOMINVALUE] -- 최소값 지정 (-10의 26승)
+  [CYCLE | NOCYCLE] -- 값 순환 여부 지정
+  [CACHE 바이트크기 | NOCACHE] -- 캐쉬메모리 기본값은 20바이트, 최소값은 2바이트
+*/
+
+
+-- SEQ_TEST_NO의 증가값을 1, 최대값 155로 수정
+ALTER SEQUENCE SEQ_TEST_NO
+INCREMENT BY 1
+MAXVALUE 155;
+
+--UPDATE 구문 재 실행
+UPDATE TB_TEST
+SET TEST_NO = SEQ_TEST_NO.NEXTVAL,
+	TEST_NAME = '고길동' || SEQ_TEST_NO.CURRVAL
+WHERE TEST_NO = (SELECT MAX(TEST_NO) FROM TB_TEST);
+
+-- UPDATE 확인
+SELECT * FROM TB_TEST;
+
+----------------------------------------------------------------------------------
+
+--VIEW, SEQUENCE 삭제
+
+DROP VIEW V_DCOPY2; -- VIEW 삭제
+DROP SEQUENCE SEQ_TEST_NO; -- SEQUENCE 삭제
+-- 시퀀스는 START WITH 를 변경하고 싶을때 삭제 후 다시 생성해야됨
+-- 수정도 마찬가지
+----------------------------------------------------------------------------------
+
+/* INDEX(색인)
+ * - SQL 구문 중 SELECT 처리 속도를 향상 시키기 위해 
+ * 	 컬럼에 대하여 생성하는 객체
+ * 
+ * - 인덱스 내부 구조는 B* 트리 형식으로 되어있음.
+ * B : BINARY
+ * 
+ * ** INDEX의 장점 **
+ * - 이진 트리 형식으로 구성되어 자동 정렬 및 검색 속도 증가.
+ * - 조회 시 테이블의 전체 내용을 확인하며 조회하는 것이 아닌
+ * 	 인덱스가 지정된 컬럼만을 이용해서 조회하기 때문에 
+ * 	 시스템의 부하가 낮아짐
+ * 
+ * ** INDEX의 단점 **
+ * - 데이터 변경(INSERT, UPDATE, DELETE) 작업 시
+ * 	 이진 트리 구조에 변형이 일어남
+ * 	 -> DML 작업이 빈번한 경우 시스템 부하가 늘어 성능 저하
+ * 
+ * - 인덱스도 하나의 객체, 별도 저장공간이 필요(메모리 소비)
+ * - 인덱스 생성 시간이 필요함.
+ * 
+ * 
+ * [작성법]
+ * CREATE [UNIQUE] INDEX 인덱스명
+ * ON 테이블명(컬럼명[, 컬럼명 | 함수명]);
+ * 
+ * DROP INDEX 인덱스명;
+ *
+ * ** 인덱스 자동 생성 되는 경우 **
+ * -> PK 또는 UNIQUE 제약조건이 설정된 컬럼에 대해
+ * 	  UNIQUE INDEX가 자동으로 생성된다
+ * */
+
+--INDEX를 사용X 검색
+SELECT * FROM EMPLOYEE
+WHERE EMP_NAME != '0';
+
+
+--INDEX를 사용O 검색
+--> WHERE에 INDEX가 설정된 컬럼을 언급
+SELECT * FROM EMPLOYEE
+WHERE EMP_ID != '0';
+--> 데이터 적어서 차이 식별 불가
+
+
+-- 인덱스 확인용 테이블 생성
+CREATE TABLE TB_INDEX_TEST(
+	TEST_NO NUMBER PRIMARY KEY, -- UNIQUE INDEX 자동생성
+	TEST_ID VARCHAR(20) NOT NULL
+);
+
+-- TB_INDEX_TEST 테이블에 샘플데이터 100만개 삽입
+-- (PL/SQL 사용)
+
+BEGIN
+	FOR I IN 1..1000000
+	LOOP
+		INSERT INTO TB_INDEX_TEST
+		VALUES (I, 'TEST' || I);
+	END LOOP;
+
+	COMMIT;
+END;
+
+--INDEX를 사용X 검색
+SELECT * FROM TB_INDEX_TEST
+WHERE TEST_ID = 'TEST500000'; -- 20 ~ 30
+
+
+--INDEX를 사용O 검색
+--> WHERE에 INDEX가 설정된 컬럼을 언급
+SELECT * FROM TB_INDEX_TEST
+WHERE TEST_NO = 500000; -- 0 ~ 3
+
+-- TEST_ID 컬럼에 대한 인덱스 생성
+CREATE INDEX IDX_TEST_ID
+ON TB_INDEX_TEST(TEST_ID);
+
+-- 인덱스 생성 후 조회
+SELECT * FROM TB_INDEX_TEST
+WHERE TEST_ID = 'TEST500000'; -- 26/1/0/1/0/0
+
+----------------------------------------------
+
+-- 인덱스 삭제
+DROP INDEX IDX_TEST_ID;
+-- 테이블 삭제
+DROP TABLE TB_INDEX_TEST;
 
