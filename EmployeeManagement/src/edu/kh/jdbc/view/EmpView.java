@@ -2,11 +2,11 @@ package edu.kh.jdbc.view;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 import edu.kh.jdbc.model.dto.Emp;
 import edu.kh.jdbc.model.service.EmpService;
@@ -109,10 +109,11 @@ public class EmpView {
 				case 4: insertEmployee(); break;
 				case 5: updateEmployee(); break;
 				case 6: deleteEmployee(); break;
-				case 7: retireEmployee(); break;
+				case 7: retireEmployeeCheck(); break;
 				case 8: lastDayOfHireDate(); break;
 				case 9: DepartmentalStatistics(); break;
-//				case 9: DepartmentalStatisticsLinkedHashMap(); break;
+				case 10: DepartmentalStatisticsLinkedHashMap(); break;
+				case 11: DepartmentalStatisticsLinkedHashMapSense(); break;
 				case 0: System.out.println("\n[프로그램을 종료합니다...]\n"); break;
 				
 				default: System.out.println("\n[메뉴에 존재하는 번호를 입력하세요.]\n");
@@ -173,18 +174,70 @@ public class EmpView {
 		System.out.println("\n----- 부서별 통계 조회 -----\n");
 
 		try {
-			HashMap<String, ArrayList<Integer>>  empList = service.DepartmentalStatisticsLinkedHashMap();
+			Map<String, ArrayList<String>>  empList = 
+					service.DepartmentalStatisticsLinkedHashMap();
 
-			if (empList.isEmpty()) {
-				System.out.println("[조회된 부서가 없습니다.]");
-				return;
-			}
-
+			for(String key : empList.keySet())
+	        	System.out.println(key + " | " + empList.get(key).get(0) + "명" +
+			" | " + empList.get(key).get(1) + "원");
 			 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("\n[부서별 통계 조회 중 예외 발생]\n");
 		}
+	}
+	
+	private void DepartmentalStatisticsLinkedHashMapSense() {
+		// 각 부서별
+		// 부서명, 인원 수, 급여 평균
+		// 부서코드 오름차순 조회
+
+		// HINT.
+		// - 별도의 DTO 작성 또는
+		// Map(LinkedHashMap : key 순서가 유지되는 Map) 이용
+		
+		System.out.println("\n----- 부서별 통계 조회 -----\n");
+		
+//		Emp emp = new Emp();
+//		
+//		emp.setEmpId(200);
+//		
+//		emp.setEmpName("고길동");
+//		emp.getEmpId();
+//		emp.getEmpName();
+//		
+//		Map<String, Object> map = new HashMap<>();
+//		map.put("empId", 200);
+//		map.put("empName", "고길동");
+//		
+//		map.get("empId");
+//		map.get("empName");
+//
+//		List<Emp> empList;
+//		
+//		List<Map<String, Object>> mapList;
+		
+		// 서비스 호출
+		try {
+			List<Map<String, Object>> mapList = service.selectDepartment();
+			
+			//조회 결과 출력
+			for(Map<String, Object> map : mapList) {
+//				System.out.printf("%s / %d / %d\n",
+//						map.get("deptTitle"),
+//						map.get("count"),
+//						map.get("avg"));
+				Set<String> set = map.keySet();
+				for(String key : set) {
+					System.out.print(map.get(key) + " ");
+				}
+				System.out.println();
+			}
+		} catch (SQLException e) {
+			System.out.println("부서별 통계 조회 중 예외 발생");
+			e.printStackTrace();
+		}
+				
 	}
 
 	private void lastDayOfHireDate() {
@@ -235,12 +288,56 @@ public class EmpView {
 		
 		//서비스 호출 후 결과 반환 받기
 		try {
+			
 			int result = service.retireEmployee(input);
 			if(result > 0) {
 				System.out.println("퇴사 처리가 완료되었습니다");
 			}else {
 				System.out.println("사번이 일치하는 사원이 없습니다");
 			}
+		} catch (SQLException e) {
+			System.out.println("퇴사 처리 중 예외 발생");
+			e.printStackTrace();
+		}
+		// 성공 : [퇴사 처리가 완료되었습니다] 
+		// 실패 : [사번이 일치하는 사원이 없습니다]
+		// 예외 : [퇴사 처리 중 예외 발생]
+		
+	}
+	
+	private void retireEmployeeCheck() {
+		System.out.println("\n----- 사번으로 사원 퇴사 -----\n");
+		System.out.print("퇴사 처리 할 사원의 사번 입력 : ");
+		int input = sc.nextInt();
+		
+		//서비스 호출 후 결과 반환 받기
+		try {
+			int check = service.checkEmployee(input);
+			
+			if(check == 0) {
+				System.out.println("사번이 일치하는 사원이 존재하지 않습니다");
+				return;
+			}
+			if(check == 1) {
+				System.out.println("이미 퇴직 처리된 사원입니다");
+				return;
+			}
+			
+			System.out.println("정말 퇴사처리 하시겠습니까? Y/N");
+			char check1 = sc.next().toUpperCase().charAt(0);
+			
+			if(check1 == 'N') {
+				System.out.println("취소되었습니다.");
+				return;
+			}
+			if(check1 != 'Y') {
+				System.out.println("잘못 입력 하셧습니다.");
+				return;
+			}
+			service.retireEmployee(input);
+			
+			System.out.println("퇴사 처리가 완료되었습니다");
+			
 		} catch (SQLException e) {
 			System.out.println("퇴사 처리 중 예외 발생");
 			e.printStackTrace();

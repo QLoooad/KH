@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.kh.jdbc.model.dao.EmpDAO;
 import edu.kh.jdbc.model.dto.Emp;
@@ -110,6 +111,15 @@ public class EmpService {
 
 		return result;
 	}
+	public void retireEmployee2(int input) throws SQLException {
+		Connection conn = getConnection();
+		
+		dao.retireEmployee2(conn, input);
+		
+		commit(conn);
+
+		close(conn);
+	}
 
 	public List<Emp> lastDayOfHireDate() throws SQLException {
 		Connection conn = getConnection();
@@ -131,13 +141,44 @@ public class EmpService {
 		return empList;
 	}
 	
-	public HashMap<String, ArrayList<Integer>> DepartmentalStatisticsLinkedHashMap() throws SQLException {
+	public Map<String, ArrayList<String>> DepartmentalStatisticsLinkedHashMap() throws SQLException {
 		Connection conn = getConnection();
 		
-		HashMap<String, ArrayList<Integer>> empList = dao.DepartmentalStatisticsLinkedHashMap(conn);
+		Map<String, ArrayList<String>> empList = dao.DepartmentalStatisticsLinkedHashMap(conn);
 		
 		close(conn);
 		
 		return empList;
+	}
+
+	/** 사원의 퇴사유무, 존재유무 결과 반환
+	 * @param input
+	 * @return check(0 : 없는 사원, 1 : 퇴직한 사원, 2 : 재직중인 사원)
+	 * @throws SQLException 
+	 */
+	public int checkEmployee(int input) throws SQLException {
+		Connection conn = getConnection();
+		
+		int check = dao.checkEmployee(conn, input);
+		
+		close(conn);
+
+		return check;
+	}
+
+	/** 부서별 통계 조회 서비스
+	 * @return mapList
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDepartment() throws SQLException{
+
+		Connection conn = getConnection();
+		
+		List<Map<String, Object>> mapList = dao.selectDepartment(conn);
+		
+		close(conn);
+		
+		return mapList;
+		
 	}
 }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.kh.jdbc.model.dto.Emp;
 
@@ -24,7 +25,7 @@ public class EmpDAO {
 		List<Emp> empList = new ArrayList<>();
 		
 		try {
-			String sql = "SELECT EMP_ID ,EMP_NAME,DEPT_TITLE ,JOB_NAME,SALARY,PHONE,EMAIL\r\n"
+			String sql = "SELECT EMP_ID ,EMP_NAME,NVL(DEPT_TITLE, '없음') ,JOB_NAME,SALARY,NVL(PHONE, '없음'),EMAIL\r\n"
 					+ "FROM EMPLOYEE\r\n"
 					+ "JOIN DEPARTMENT ON(DEPT_CODE = DEPT_ID)\r\n"
 					+ "JOIN JOB USING(JOB_CODE)\r\n"
@@ -225,6 +226,22 @@ public class EmpDAO {
 		return result;
 	}
 	
+	public void retireEmployee2(Connection conn, int input) throws SQLException {
+
+
+		try {
+			String sql = "UPDATE EMPLOYEE\r\n" + "SET ENT_YN = 'Y',\r\n" + "	ENT_DATE = SYSDATE\r\n"
+					+ "WHERE EMP_ID = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, input);
+			pstmt.executeUpdate();
+
+		} finally {
+
+			close(pstmt);
+		}
+
+	}
 	public List<Emp> lastDayOfHireDate(Connection conn) throws SQLException {
 		List<Emp> empList = new ArrayList<>();
 
@@ -292,12 +309,13 @@ public class EmpDAO {
 		}
 		return empList;
 	}
-	public HashMap<String, ArrayList<Integer>> DepartmentalStatisticsLinkedHashMap(Connection conn) throws SQLException {
-		HashMap<String, ArrayList<Integer>> empList = new LinkedHashMap<String, ArrayList<Integer>>();
-
+	
+	public Map<String, ArrayList<String>> DepartmentalStatisticsLinkedHashMap(Connection conn) throws SQLException {
+		Map<String, ArrayList<String>> empList = new LinkedHashMap<String, ArrayList<String>>();
+		
 		try {
 			String sql = "SELECT DEPT_TITLE, \"인원 수\", SALARY\r\n"
-					+ "FROM (SELECT DEPT_CODE,DEPT_TITLE, COUNT(*) \"인원 수\", AVG(SALARY) SALARY\r\n"
+					+ "FROM (SELECT DEPT_CODE, NVL(DEPT_TITLE, '부서없음') DEPT_TITLE, COUNT(*) \"인원 수\", AVG(SALARY) SALARY\r\n"
 					+ "		FROM EMPLOYEE\r\n"
 					+ "		JOIN DEPARTMENT ON(DEPT_CODE = DEPT_ID)\r\n"
 					+ "		GROUP BY DEPT_CODE,DEPT_TITLE\r\n"
@@ -307,21 +325,109 @@ public class EmpDAO {
 			rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
-
+				ArrayList<String> values = new ArrayList<String>();
 				String deptName = rs.getString(1);
 				int peopleNum = rs.getInt(2);
 				int salary = rs.getInt(3);
-
-				empList.put(deptName, new ArrayList<Integer>());
-				empList.get(deptName).add(peopleNum,salary);
+				
+				String amount = String.valueOf(salary);
+				amount = amount.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+				
+				values.add(String.valueOf(peopleNum));
+				values.add(amount);
+				
+				empList.put(deptName, values);
 			}
-
 		} finally {
 
 			close(rs);
 			close(stmt);
 		}
 		return empList;
+	}
+	
+	
+	
+	/** 사원의 퇴사유무, 존재유무 sql 수행 후결과 반환
+	 * @param input
+	 * @return check(0 : 없는 사원, 1 : 퇴직한 사원, 2 : 재직중인 사원)
+	 * @throws SQLException 
+	 */
+	public int checkEmployee(Connection conn, int input) throws SQLException {
+
+		int check = 0;
+		
+		try {
+			String sql = "SELECT \r\n"
+					+ "		CASE\r\n"
+					+ "			WHEN (SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_ID = ? ) = 0\r\n"
+					+ "			THEN 0\r\n"
+					+ "		\r\n"
+					+ "			WHEN (SELECT COUNT(*) FROM EMPLOYEE WHERE EMP_ID = ? AND ENT_YN = 'Y') = 1\r\n"
+					+ "			THEN 1\r\n"
+					+ "			\r\n"
+					+ "			ELSE 2\r\n"
+					+ "		END \"CHECK\"\r\n"
+					+ "FROM DUAL";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, input);
+			pstmt.setInt(2, input);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				check = rs.getInt("CHECK");
+			}
+			
+		} finally {
+			close(rs);
+			close(stmt);
+		}
+		
+		return check;
+	}
+	
+	/** 부서별 통계 조회 SQL 수행 후 결과 반환
+	 * @param conn
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDepartment(Connection conn) throws SQLException{
+		// 1. 결과 저장용 객체 생성
+		List<Map<String, Object>> mapList = new ArrayList<>();
+		
+		try {
+			String sql = "SELECT DEPT_TITLE, \"인원 수\", SALARY\r\n"
+					+ "FROM (SELECT DEPT_CODE, NVL(DEPT_TITLE, '부서없음') DEPT_TITLE, COUNT(*) \"인원 수\", AVG(SALARY) SALARY\r\n"
+					+ "		FROM EMPLOYEE\r\n"
+					+ "		JOIN DEPARTMENT ON(DEPT_CODE = DEPT_ID)\r\n"
+					+ "		GROUP BY DEPT_CODE,DEPT_TITLE\r\n"
+					+ "		ORDER BY DEPT_CODE DESC)";
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				String deptTitle = rs.getString(1);
+				int count = rs.getInt(2);
+				int avg = rs.getInt(3);
+				
+				Map<String, Object> map = new LinkedHashMap<>();
+				
+				map.put("deptTitle", deptTitle);
+				map.put("count", count);
+				map.put("avg", avg);
+				
+				mapList.add(map);
+				
+				
+			}
+			
+		} finally {
+
+
+		
+		}
+		
+		return mapList;
 	}
 
 }
