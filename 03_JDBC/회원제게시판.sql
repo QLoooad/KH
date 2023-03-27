@@ -1,4 +1,3 @@
-DROP TABLE MEMBER;
 
 -- 회원제 게시판
 
@@ -165,23 +164,37 @@ SELECT COUNT(*) FROM "COMMENT"
 WHERE BOARD_NO = 8;
 
 
+-- 회원 정보(이름, 성별) 수정
+UPDATE "MEMBER"
+SET MEMBER_NM = ?,
+MEMBER_GENDER = ?
+WHERE MEMBER_NO = ?;
 
+-- 비번 변경
+UPDATE "MEMBER"
+SET MEMBER_PW = ?
+WHERE ? = ?
+AND MEMBER_NO = ?;-- 비번과 입력된 비번
+/*
+UPDATE "MEMBER"
+SET MEMBER_PW = newPw
+WHERE Session.loginMember.getMemberPw() = nowPw
+AND MEMBER_NO = memberNo;
+*/
+SELECT MEMBER_PW
+FROM "MEMBER";
 
+UPDATE "MEMBER"
+SET MEMBER_PW = 'pass99'
+WHERE MEMBER_PW = 'pass999'
+AND MEMBER_NO = 4;
 
+COMMIT;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- 탈퇴
+DELETE FROM "MEMBER"
+WHERE MEMBER_PW = ?
+AND MEMBER_NO = ?;
 
 
 

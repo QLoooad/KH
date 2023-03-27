@@ -11,6 +11,25 @@
 		ORDER BY MEMBER_NO DESC
 	</entry>
 	
+	<entry key = "updateMember">
+		UPDATE "MEMBER"
+		SET MEMBER_NM = ?,
+		MEMBER_GENDER = ?
+		WHERE MEMBER_NO = ?
+	</entry>
+	
+	<entry key = "updatePw">
+		UPDATE "MEMBER"
+		SET MEMBER_PW = ?
+		WHERE MEMBER_PW = ?
+		AND MEMBER_NO = ?
+	</entry>
+	
+	<entry key = "unRegisterMember">
+		DELETE FROM "MEMBER"
+		WHERE MEMBER_PW = ?
+		AND MEMBER_NO = ?
+	</entry>
 </properties>
 
 
