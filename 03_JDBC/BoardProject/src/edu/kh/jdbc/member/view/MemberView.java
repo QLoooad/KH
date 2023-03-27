@@ -17,7 +17,7 @@ public class MemberView {
 	private Scanner sc = new Scanner(System.in);
 	
 	private MemberService service = new MemberService();
-	
+	// 230327 테스트 
 	/**	
 	 * 회원 기능 메뉴
 	 */
