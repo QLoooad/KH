@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import edu.kh.jdbc.board.view.BoardView;
 import edu.kh.jdbc.common.Session;
 import edu.kh.jdbc.member.model.dto.Member;
 import edu.kh.jdbc.member.model.service.MemberService;
@@ -18,7 +19,10 @@ public class MemberView {
 
 	private Scanner sc = new Scanner(System.in);
 
+	// 회원 기능 화면 객체 생성
 	private MemberService service = new MemberService();
+	
+
 
 	// 230327 테스트
 	/**

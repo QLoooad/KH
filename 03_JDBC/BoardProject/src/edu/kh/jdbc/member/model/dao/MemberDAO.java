@@ -138,8 +138,8 @@ public class MemberDAO {
 			String sql = prop.getProperty("unRegisterMember");
 			// 2.2 PreaparedStatement 생성 후 placeholder에 값 세팅
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, nowPw);
-			pstmt.setInt(2, memberNo);
+			pstmt.setInt(1, memberNo);
+			pstmt.setString(2, nowPw);
 			result = pstmt.executeUpdate();
 			//매개변수에 SQL 작성x
 			
