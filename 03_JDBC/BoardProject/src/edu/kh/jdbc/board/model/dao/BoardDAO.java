@@ -127,15 +127,11 @@ public class BoardDAO {
 	            
 	            board.setBoardContent(boardContent);
 	            board.setMemberNo(memberno);
-	            
-	            
 			}
 			
 		} finally {
-			
 			close(rs);
 			close(pstmt);
-
 		}
 		
 		return board;
@@ -215,7 +211,7 @@ public class BoardDAO {
 
 	/** 다음 게시글 번호 조회 SQL 수행 
 	 * @param conn
-	 * @return
+	 * @return boardNo
 	 * @throws Exception
 	 */
 	public int nextBoardNo(Connection conn) throws Exception {
@@ -279,6 +275,8 @@ public class BoardDAO {
 		
 		return result;
 	}
+
+
 
 	
 }

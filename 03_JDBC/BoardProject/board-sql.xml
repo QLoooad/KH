@@ -59,6 +59,7 @@
 		INSERT INTO "BOARD"
 		VALUES (?, ?, ?, DEFAULT, DEFAULT, DEFAULT, ?)
 	</entry>
+	
 </properties>
 
 
