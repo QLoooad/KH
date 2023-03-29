@@ -15,7 +15,7 @@ import java.util.Properties;
 import edu.kh.jdbc.board.model.dto.Board;
 
 public class BoardDAO {
-	
+	//test
 	private Statement stmt;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
