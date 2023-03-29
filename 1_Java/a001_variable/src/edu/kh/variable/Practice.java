@@ -3,7 +3,7 @@ package edu.kh.variable;
 public class Practice {
 
 	public static void main(String[] args) {
-
+		//test
 		/* 자동형변환
 		 * 
 		 * 
