@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06_이미지 관련 태그</title>
+</head>
+<body>
+    <h1>img 태그</h1>
+    <pre>
+        - 웹 문서에서 사진이나 그림 같은 이미지를 삽입하는 용도의 태그
+
+        [속성]
+
+        1. src : 삽입할 이미지의 경로를 작성하는 속성(파일경로, 웹 주소)
+
+        2. width / height : 이미지 크기( px, % )
+
+        3. alt (대안) : 이미지의 설명을 작성하는 속성
+                    -> 이미지가 출력되지 않는 경우 화면에 표시
+                        + 웹 접근성(스크린 리더가 이미지 설명을 읽어줌)
+    </pre>
+    <!-- 절대 경로 : 변하지 않는 하나의 기준점으로 부터 목표까지의 경로 -->
+    <!-- 라이브 서버로 확인 불가 -->
+    <img src="C:\workspace\04_WebFront\images\cats\cat1.jpg" width="50%" height="50%"
+        alt="cat1.jpg 이미지">
+
+    <hr>
+
+    <!-- 상대경로 : 현재 파일 위치로 부터 목표까지의 경로-->
+    <img src="..\images\dogs\검빵이(3).jpg" width="50%" height="50%"
+        alt="검빵이(3).jpg 이미지">
+
+
+    <hr>
+
+    <img src="https://cdn.imweb.me/upload/S20210720ef466f4f488bc/ffa33b71eaa16.png" width="50%" height="50%">
+
+    <hr>
+
+    <h2>고정 크기 단위(px)</h2>
+    <!-- px, pt -->
+    <img src="../images/cats/cat1.jpg" width="300" height="240">
+    <img src="../images/cats/cat2.jpg" width="300" height="240">
+    <img src="../images/cats/cat3.jpg" width="300" height="240">
+    <img src="../images/cats/cat4.jpg" width="300" height="240">
+    <img src="../images/cats/cat5.jpg" width="300" height="240">
+
+    <hr>
+
+    <h2>가변 크기 단위(%) - 화면 또는 영역에 대한 상대적인 크기 단위</h2>
+    <!-- %, em, rem, vh, vw -->
+    <img src="../images/flowers/flower1.jpg" width="15%" height="240px">
+    <img src="../images/flowers/flower2.jpg" width="15%" height="240px">
+    <img src="../images/flowers/flower3.jpg" width="15%" height="240px">
+    <img src="../images/flowers/flower4.jpg" width="15%" height="240px">
+    <img src="../images/flowers/flower5.jpg" width="15%" height="240px">
+
+
+</body>
+</html>

@@ -260,7 +260,7 @@ public class MemberView {
 		System.out.println("회원 번호 : " + Session.loginMember.getMemberNo());
 		System.out.println("ID : " + Session.loginMember.getMemberId());
 		System.out.println("이름 : " + Session.loginMember.getMemberName());
-		if (Session.loginMember.getMemberGender().equals("남")) {
+		if (Session.loginMember.getMemberGender().equals("M")) {
 			System.out.println("성별 : 남");
 		} else {
 			System.out.println("성별 : 여");

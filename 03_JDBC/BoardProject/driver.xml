@@ -9,13 +9,16 @@
 	<!--<entry key="url">jdbc:oracle:thin:@localhost:1521:ORCL</entry> -->
 	
 	<!-- 각자 컴퓨터에 설치된 DB(18c) -->
-	<entry key="url">jdbc:oracle:thin:@localhost:1521:XE</entry>
+	<!--<entry key="url">jdbc:oracle:thin:@localhost:1521:XE</entry>-->
 	
 	<!-- 학원 DB 서버 -->
-	<!-- <entry key="url">jdbc:oracle:thin:@115.90.212.22:9000:XE</entry> -->
+	<entry key="url">jdbc:oracle:thin:@115.90.212.22:9000:XE</entry>
 	
-	<entry key = "user">kh_cgt</entry>
-	<entry key = "pw">oracle_cgt</entry>
+	<!-- <entry key = "user">kh_cgt</entry>
+	<entry key = "pw">oracle_cgt</entry>-->
+	
+	<entry key = "user">board_project</entry>
+	<entry key = "pw">board1234</entry>
 </properties>
 
 
