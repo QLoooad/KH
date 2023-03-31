@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실습문제</title>
+</head>
+<body>
+    <form>
+        고객명 : <input type="text" name="inputName" required><br><br>
+        전화번호 : <input type="text" name="inputPnum" required><br><br>
+        E-mail : <input type="text" name="inputEmail" required><br><br>
+
+        피자 선택 : <select name="선택" required>
+            <option value="nullPz">피자를 선택하세요</option>
+            <option value="sptpPz">고구마 피자</option>
+            <option value="sptpPz">고구마 피자</option>
+            <option value="ptpPZ">포테이토 피자</option>
+            <option value="pprnPz">페퍼로니 피자</option>
+            <option value="gjPz">고르곤졸라 피자</option>
+            <option value="mtPz">마르게리타 피자</option>
+        </select>
+
+        <fieldset>
+            <legend>피자 사이즈</legend>
+                <input type="radio" name="size" id="S" value="S" required>
+                <label for="S">Small</label>
+                <br><br>
+                <input type="radio" name="size" id="M" value="M" required>
+                <label for="M">Medium</label>
+                <br><br>
+                <input type="radio" name="size" id="L" value="L" required>
+                <label for="L">Large</label>
+        </fieldset>
+
+        <br>
+        <fieldset>
+            <legend>토핑 선택<br></legend>
+            <input type="checkbox" name="toppings" id="bacon" value="베이컨">   
+            <label for="bacon">베이컨</label><br><br>
+
+            <input type="checkbox" name="toppings" id="cheese" value="치즈">   
+            <label for="cheese">치즈</label><br><br>
+
+            <input type="checkbox" name="toppings" id="onion" value="양파">   
+            <label for="onion">양파</label><br><br>
+
+            <input type="checkbox" name="toppings" id="mushroom" value="버섯">   
+            <label for="mushroom">버섯</label><br><br>
+
+            <input type="checkbox" name="toppings" id="cheese crust" value="치즈크러스트">   
+            <label for="cheese crust">치즈크러스트</label><br><br>
+        </fieldset>
+        <br>
+
+
+        희망배송시간 : <input type="time"><br><br>
+        배송시 요청사항 : <textarea cols="20" rows="3"></textarea><br><br>
+        <button>주문하기</button>
+
+
+    </form>
+
+    
+</body>
+</html>
