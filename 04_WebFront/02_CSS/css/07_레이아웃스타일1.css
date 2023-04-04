@@ -1,0 +1,131 @@
+.area1{background-color: red;}
+.area2{background-color: orange;}
+.area3{background-color: yellow;}
+.area4{background-color: green;}
+.area5{background-color: blue;}
+
+.block{
+    border: 1px solid black;
+    width: 150px;
+    height: 150px;
+    color: white;
+
+    display: block;
+    margin-bottom: 10px;
+}
+
+.inline{
+    display: inline;
+}
+
+.inline-block{
+    display: inline-block;
+}
+
+/* 상하 2분할 */
+/* 감싸는 요소 스타일 지정 */
+.container-1{
+    border: 1px solid black;
+    width: 320px;
+    height: 450px;
+}
+
+/* 높이만 지정했지만 사이드 채움(block이라) */
+.div1-1{/* 30% */
+    height: 30%;
+    /* 감싸고있는 요소(부모 요소) 높이의 ? % */
+}
+.div1-2{/* 70% */
+    height: 70%;
+    /* 감싸고있는 요소(부모 요소) 높이의 ? % */
+}
+
+.container-2{
+    border: 1px solid black;
+    width: 500px;
+    height: 300px;
+}
+
+/* 높이만 지정했지만 사이드 채움(block이라) */
+.div2-1{
+    height: 15%;
+}
+.div2-2{
+    height: 35%;
+}
+.div2-3{
+    height: 50%;
+}
+
+
+.container-3{
+    border: 5px solid red;
+    width: 400px;
+    height: 200px;
+}
+
+.container-3 > div{
+    display: inline-block;
+    width: 50%;
+    height: 100%;
+}
+
+.container-3 >div:first-child{background-color: brown;}
+
+.container-3 >div:last-child{background-color: burlywood;}
+
+
+
+.container-4-1{
+    border-top: 1px solid red;
+    border-right: 1px solid red;
+    border-left: 1px solid red;
+    width: 300px;
+    height: 150px;
+}
+
+.container-4-2{
+    border-bottom: 1px solid red;
+    border-right: 1px solid red;
+    border-left: 1px solid red;
+    width: 300px;
+    height: 150px;
+}
+
+.containerInner > div{
+    display: inline-block;
+    width: 50%;
+    height: 100%;
+}
+
+.container-4-1 >div:first-child{background-color: brown;}
+.container-4-1 >div:last-child{background-color: burlywood;}
+
+.container-4-2 >div:first-child{background-color: indianred;}
+.container-4-2 >div:last-child{background-color: khaki;}
+
+
+
+
+.container-5{
+    border: 1px solid red;
+    width: 300px;
+    height: 300px;
+}
+
+.row{
+    width: 100%;
+    height: 50%;
+}
+
+.col{
+    width: 50%;
+    height: 100%;
+    display: inline-block;
+}
+
+
+
+.none-test{
+    display: none;
+}

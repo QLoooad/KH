@@ -1,0 +1,110 @@
+.font1{
+    font-family: "궁서", 돋움, 굴림;
+    font-size: 24px;
+    font-style: italic;
+}
+.font2{
+    font-weight: 700;
+    /* 100~900 
+    400 : nomal 
+    700 : bold */
+}
+
+.font3{
+    font-family: 'Sunflower', sans-serif;
+    color: rgb(156, 107, 43, 0.1);
+}
+
+.font4{
+    font-family: 'Sunflower', sans-serif;
+    color: rgba(0, 255, 64,0.5);
+    /* rgba( ?, ?, ?, 투명도(max 1),) */
+}
+
+.pp{
+    text-align: center;
+    line-height: 10px;
+}
+
+.heading{
+    height: 100px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    line-height: 100px;
+}
+
+.test1{
+    display: inline-block;
+    width: 400px;
+    height: 700px;
+    background-color: bisque;
+    line-height: 700px;
+}
+
+.shadow1{
+    color: red;
+    text-shadow: 5px 5px black;
+}
+.shadow2{
+    text-shadow: 5px 5px 3px #1f61ad;
+}
+.shadow3{
+    color: #fff;
+    text-shadow: 5px -5px 30 px black;
+}
+
+.spacing1{
+    letter-spacing: 0.2em;
+}
+.spacing2{
+    letter-spacing: 0.5em;
+}
+
+.book1{
+    list-style-type: none;
+}
+.book2{
+    list-style-type: upper-alpha;
+}
+
+.book3{
+    list-style-image: 
+    url(../../images/dot.png);
+}
+
+.inside{
+    list-style-position: inside;
+}
+
+/* 한번에 쓰기 */
+.bookAll{
+    list-style: url(../../images/dot.png) inside;
+}
+
+
+.list{
+    width: 300px;
+}
+.list>li{
+    border: 1px solid black;
+    list-style: none;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 30px;
+    margin: 5px;
+}
+
+.tableSide{
+    border: 1px solid black;
+}
+td, th{
+    border: 1px dotted black;
+    text-align: center;
+    padding: 10px;
+}
+
+.tableSide2{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
