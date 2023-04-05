@@ -1,0 +1,55 @@
+#colorList{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#colorList > :nth-child(1){color: thistle;}
+#colorList > :nth-child(2){color: rgb(24, 89, 150);}
+#colorList > :nth-child(3){color: rgba(200, 35, 120, 0.5);}
+#colorList > :nth-child(4){color: #abc;}
+#colorList > :nth-child(5){color: #2B98BE;}
+#colorList > :nth-child(6){color: hsl(120, 56%, 60%);}
+#colorList > :nth-child(7){color: hsla(120, 56%, 60%, 0.5);}
+
+
+#decorationList > :nth-child(1){text-decoration: overline;}
+#decorationList > :nth-child(2){text-decoration: line-through;}
+#decorationList > :nth-child(3){text-decoration: underline;}
+#decorationList > :nth-child(4) > a{text-decoration: none;}
+
+#alignTest > :nth-child(1){text-align: left;}
+#alignTest > :nth-child(2){text-align: right;}
+#alignTest > :nth-child(3){text-align: center;}
+#alignTest > :nth-child(4){text-align: justify;}
+
+#lineHeight{line-height: 50px;}
+
+#letterSpacing{letter-spacing: 50px;}
+
+#fontFamily > li:nth-child(1){font-family: '궁서';}
+#fontFamily > li:nth-child(2){font-family: '궁서체';}
+#fontFamily > li:nth-child(3){font-family: '없는 고딕','궁서';}
+#fontFamily > li:nth-child(4){
+    font-family: 'Dokdo', cursive;
+    font-size: 24px;
+}
+
+@font-face {
+    font-family: 'EF_watermelonSalad';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_watermelonSalad.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+#fontFamily > li:nth-child(5){font-family: 'EF_watermelonSalad';}
+
+/* 다운 받은 폰트 적용 */
+@font-face {
+    font-family: 'Gugi';
+    src: url('Gugi-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#fontFamily > li:nth-child(6){font-family: 'Gugi';}
