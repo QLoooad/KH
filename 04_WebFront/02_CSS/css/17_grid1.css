@@ -1,0 +1,45 @@
+.grid-container{
+    background-color: thistle;
+    /* height: 400px; */
+    /* 내부 요소를 grid로 배치 */
+    display: grid;
+
+    /* 행, 열 갯수 + 크기 */
+    /* grid-template-rows */
+    /* grid-template-columns */
+
+    /* 열을 먼저 지정하면 내부 cell이 밀리면서
+        행이 구성되어진다
+        -> 구성된 행의 크기를 지정 */
+    grid-template-columns: 100px 100px 100px;
+    grid-template-rows: 50px 100px;
+
+    /* repeat(횟수, 크기)함수  */
+    grid-template-columns: repeat(3, 25%);
+    /* 1:1:1 */
+    grid-template-columns: repeat(3, 1ft);
+
+    /* fr단위 */
+    /* 2:1:1 */
+    grid-template-columns: 2fr repeat(2, 1ft);
+
+    grid-template-rows: repeat(3, 1fr);
+
+    /* minmax(최소, 최대) */
+    grid-template-rows: repeat(3, 100px);
+
+    grid-template-rows: repeat(2, 100px) minmax(100px, auto);
+    
+    grid-template-columns: 100px minmax(200px, 300px) 100px;
+    /* minmax(200px, 300px) 평소 300px  화면이 줄면 200px까지 줄음 */
+
+    /* auto-fit / auto-fill */
+    /* auto-fit : 화면 늘리면 알아서 늘어남 */
+    /* auto-fill : 화면 늘리면 최대 사이즈 이상 늘어나지 않음 */
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+
+    /* grid-gap */
+    /* gap: 10px; */
+    row-gap: 20px;
+    column-gap: 20px;
+}

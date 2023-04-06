@@ -1,0 +1,37 @@
+/* 예제에서 공통적으로 사용할 스타일 지정 */
+body{
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+div{
+    border: 1px solid black;
+    box-sizing: border-box;
+    /* content + padding + border = width/height
+        -> content 조절 */
+}
+
+pre{
+    font-size: 1rem;
+    font-family: '맑은 고딕';
+}
+
+pre > b{
+    font-size: 1.5em;
+    color: red;
+}
+
+pre > i{
+    font-size: 1.5em;
+}
+
+.item1{background-color: #79fecd;}
+.item2{background-color: #79ebd4;}
+.item3{background-color: #79d9db;}
+.item4{background-color: #79c6e2;}
+.item5{background-color: #79b4e9;}
+.item6{background-color: #79a1f0;}
+.item7{background-color: #798ff7;}
+.item8{background-color: #6978ff;}
+.item9{background-color: #5e61ff;}
