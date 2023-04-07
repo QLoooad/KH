@@ -84,7 +84,6 @@ nav{
     /* 화면 밖을 벗어났을때 지정된 위치 고정 */
     top: 0px;
     background-color: white;
-    border-top: 2px solid rgb(75, 75, 75);
     border-bottom: 2px solid rgb(75, 75, 75);
     z-index: 1000;
 }
@@ -92,10 +91,9 @@ nav > ul{
     display: flex;
     list-style: none;
     height: 100%;
-    justify-content: space-around;
 }
 
-nav > ul > li{
+nav li{
     /* flex : (flex-grow, shrink, basis) */
     flex: 0 1 150px;
 }

@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>16_웹 문서 구조</title>
 
     <link rel="stylesheet" href="css/16_웹문서구조.css">
+    <link rel="stylesheet" href="css/20_반응형웹(미디어쿼리).css">
     <!-- font awesome 라이브러리 추가 + key 등록-->
     <script src="https://kit.fontawesome.com/f7459b8054.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
 
@@ -48,7 +49,9 @@
             <section></section>
         </header>
 
+        <button type="button" class="fa-solid fa-bars nav-btn" id="openBtn"></button>
         <nav>
+            <button type="button" class="fa-solid fa-bars nav-btn" id="closeBtn"></button>
             <ul>
                 <li><a href="#">공지사항</a></li>
                 <li><a href="#">자유 게시판</a></li>
@@ -123,5 +126,34 @@
             <a href="#">고객센터</a>
         </article>
     </footer>
+
+    <script>
+        // 자바스크립트 작성 영역
+
+        const openBtn = document.getElementById('openBtn');
+        const closeBtn = document.getElementById('closeBtn');
+
+        // nav 요소
+        const nav = document.querySelector('nav');
+
+        // 열기 버튼을 누르면 nav의 display가 flex로 변경
+        openBtn.addEventListener("click",() => {
+            nav.style.display = "flex";
+        })
+
+        // 닫기 버튼을 누르면 nav의 display가 none로 변경
+        closeBtn.addEventListener("click", function(){
+            nav.style.display = "none"
+        });
+
+        // 화면 너비가 1024px을 초과했을 때 nav의 style속성 제거
+        window.addEventListener("resize", () => {
+            if(window.innerWidth > 1024){
+                nav.removeAttribute("style");
+            }
+        });
+
+    </script>
+
 </body>
 </html>
