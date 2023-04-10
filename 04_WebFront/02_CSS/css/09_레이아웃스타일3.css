@@ -99,7 +99,7 @@ div{
 
     position: sticky;/* 화면에서 벗어날 경우 지정위치에 고정 */
     top: 0px;
-    margin-top: -10px ;
+    margin-top: 50px ;
     z-index: 999;
     padding: 10px 30px;
     text-align: center;
