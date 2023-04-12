@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05_2_간이계산기만들기</title>
+</head>
+<body>
+
+    두 수를 입력 받아 버튼에 작선된 연산을 수행하는 계산기 만들기
+    <hr>
+    첫 번째 값 : <input id="num1" type="text"> <br>
+    두 번째 값 : <input id="num2" type="text"> <br>
+    <br>
+    4. 
+    <button onclick="calculator3(this)">+</button>
+    <button onclick="calculator3(this)">*</button>
+    <button onclick="calculator3(this)">-</button>
+    <button onclick="calculator3(this)">/</button>
+    <button onclick="calculator3(this)">%</button>
+    삼항연산자(한줄)
+    <br><br>
+    5. 
+    <button onclick="calculator4('+')">+</button>
+    <button onclick="calculator4('-')">*</button>
+    <button onclick="calculator4('*')">-</button>
+    <button onclick="calculator4('/')">/</button>
+    <button onclick="calculator4('%')">%</button>
+    매개변수
+    <br><br>
+
+    계산 결과 : <span id="result"></span>
+
+    <script>
+        // 작성된 HTML 요소에 원하는 속성(id, class, onclick) 작성 후
+        // 필요한 JS 코드를 이용해 계산기 만들기
+
+        function calculator3(btn){
+            result.innerText = (btn.innerText === '+') ? Number(document.getElementById("num1").value) + Number(document.getElementById("num2").value) : (btn.innerText === '-') ? Number(document.getElementById("num1").value) - Number(document.getElementById("num2").value) : (btn.innerText === '*') ? Number(document.getElementById("num1").value) * Number(document.getElementById("num2").value) : (btn.innerText === '/') ? parseInt(Number(document.getElementById("num1").value) / Number(document.getElementById("num2").value)) : (btn.innerText === '%') ? Number(document.getElementById("num1").value) % Number(document.getElementById("num2").value) : "에러";
+        }
+
+        function calculator4(op){
+            const num1 = Number(document.getElementById("num1").value);
+            const num2 = Number(document.getElementById("num2").value);
+
+            let result;
+
+            switch(op){
+                case '+': result = num1 + num2; break;
+                case '-': result = num1 - num2; break;
+                case '*': result = num1 * num2; break;
+                case '/': result = parseInt(num1 / num2); break;
+                case '%': result = num1 % num2; break;
+            }
+            document.getElementById("result").innerText = result;
+        }
+
+    </script>
+
+</body>
+</html>

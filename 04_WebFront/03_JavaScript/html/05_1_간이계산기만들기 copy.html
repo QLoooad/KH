@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05_1_간이계산기만들기</title>
+</head>
+<body>
+
+    두 수를 입력 받아 버튼에 작선된 연산을 수행하는 계산기 만들기
+    <hr>
+    첫 번째 값 : <input id="num1" type="text"> <br>
+    두 번째 값 : <input id="num2" type="text"> <br>
+    <br>
+    1. 
+    <button onclick="add()">+</button>
+    <button onclick="multi()">*</button>
+    <button onclick="subtraction()">-</button>
+    <button onclick="division()">/</button>
+    <button onclick="remainder()">%</button>
+    개별 function
+    <br>
+    <br>
+    2. 
+    <button onclick="calculator(this)">+</button>
+    <button onclick="calculator(this)">*</button>
+    <button onclick="calculator(this)">-</button>
+    <button onclick="calculator(this)">/</button>
+    <button onclick="calculator(this)">%</button>
+    단독 function
+    <br>
+    <br>
+
+    3. 
+    <button onclick="calculator2(this)">+</button>
+    <button onclick="calculator2(this)">*</button>
+    <button onclick="calculator2(this)">-</button>
+    <button onclick="calculator2(this)">/</button>
+    <button onclick="calculator2(this)">%</button>
+    삼항연산자
+    <br><br>
+    4. 
+    <button onclick="calculator3(this)">+</button>
+    <button onclick="calculator3(this)">*</button>
+    <button onclick="calculator3(this)">-</button>
+    <button onclick="calculator3(this)">/</button>
+    <button onclick="calculator3(this)">%</button>
+    삼항연산자(한줄)
+    <br><br>
+
+    계산 결과 : <span id="result"></span>
+
+    <script>
+        // 작성된 HTML 요소에 원하는 속성(id, class, onclick) 작성 후
+        // 필요한 JS 코드를 이용해 계산기 만들기
+
+        function calculator(btn){
+            const num1 = Number(document.getElementById("num1").value);
+            const num2 = Number(document.getElementById("num2").value);
+            
+            const operator = btn.innerText;
+
+            switch(operator){
+                case '+': result.innerText = num1 + num2; break;
+                case '-': result.innerText = num1 - num2; break;
+                case '*': result.innerText = num1 * num2; break;
+                case '/': result.innerText = parseInt(num1 / num2); break;
+                case '%': result.innerText = num1 % num2; break;
+            }
+        }
+        ///////////////////////////////////////////////////////////////
+        function calculator2(btn){
+            const num1 = Number(document.getElementById("num1").value);
+            const num2 = Number(document.getElementById("num2").value);
+            
+            result.innerText = (btn.innerText === '+') ? num1 + num2 : 
+                            (btn.innerText === '-') ? num1 - num2 : 
+                            (btn.innerText === '*') ? num1 * num2 : 
+                            (btn.innerText === '/') ? parseInt(num1 / num2) : 
+                            (btn.innerText === '%') ? num1 % num2 : "에러";
+        }
+        ///////////////////////////////////////////////////////////////
+        function calculator3(btn){
+            result.innerText = (btn.innerText === '+') ? Number(document.getElementById("num1").value) + Number(document.getElementById("num2").value) : (btn.innerText === '-') ? Number(document.getElementById("num1").value) - Number(document.getElementById("num2").value) : (btn.innerText === '*') ? Number(document.getElementById("num1").value) * Number(document.getElementById("num2").value) : (btn.innerText === '/') ? parseInt(Number(document.getElementById("num1").value) / Number(document.getElementById("num2").value)) : (btn.innerText === '%') ? Number(document.getElementById("num1").value) % Number(document.getElementById("num2").value) : "에러";
+        }
+        ///////////////////////////////////////////////////////////////
+        function add(){
+            const num1 = Number(document.getElementById("num1").value);
+            const num2 = Number(document.getElementById("num2").value);
+
+            const result = document.getElementById("result");
+
+            result.innerText = num1 + num2;
+        }
+
+        function multi(){
+            const num1 = Number(document.getElementById("num1").value);
+            const num2 = Number(document.getElementById("num2").value);
+
+            const result = document.getElementById("result");
+
+            result.innerText = num1 * num2;
+        }
+
+        function subtraction(){
+            const num1 = Number(document.getElementById("num1").value);
+            const num2 = Number(document.getElementById("num2").value);
+
+            const result = document.getElementById("result");
+
+            result.innerText = num1 - num2;
+        }
+
+        function division(){
+            const num1 = Number(document.getElementById("num1").value);
+            const num2 = Number(document.getElementById("num2").value);
+
+            const result = document.getElementById("result");
+
+            result.innerText = parseInt(num1 / num2);
+        }
+
+        function remainder(){
+            const num1 = Number(document.getElementById("num1").value);
+            const num2 = Number(document.getElementById("num2").value);
+
+            const result = document.getElementById("result");
+
+            result.innerText = num1 % num2;
+        }
+
+
+
+
+    </script>
+
+</body>
+</html>
