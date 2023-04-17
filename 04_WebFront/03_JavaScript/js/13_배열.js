@@ -69,7 +69,7 @@ document.getElementById("btn2").addEventListener("click", ()=>{
 
     console.log(arr2.sort((a,b) => b-a)); // (내림차순)
 
-    // indexOf("값") : 값이 배열에 있으면 index 번호, 없으면 -1
+    // 배열.indexOf("값") : 값이 배열에 있으면 index 번호, 없으면 -1
     console.log(arr.indexOf("갈비"));
     console.log(arr.indexOf("꽃등심"));
 
