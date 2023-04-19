@@ -161,3 +161,4 @@ function doubleFn(fn){// 전달 받은 함수 결과를 2배로 반환 함수
                 //const sumFn = function(n1, n2){return n1 + n2}
     return fn(1, 2) * 2;
 }
+
