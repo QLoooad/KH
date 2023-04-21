@@ -31,6 +31,7 @@ function testFn(){
 
 // 함수 호출
 testFn();
+console.log("num6 : " + num6);
 
 // num3 is not defined(정의 되지 않음 == 존재하지 않거나 접근 불가능)
 // console.log("함수 외부에서 선언됨 (함)num3 : " + num3);
@@ -77,9 +78,9 @@ testFn2();
 // var의 호이스팅(hoisting)
 // 변수가 선언되기 전에 사용 가능하게 하는 기술
 // error가 발생하지 않고 undefined 발생
-console.log(test);
+console.log("test  " + test);
 var test = 10;
-console.log(test);
+console.log("test  " + test);
 
 
 
