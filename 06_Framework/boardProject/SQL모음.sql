@@ -83,8 +83,6 @@ WHERE MEMBER_DEL_FL = 'N'
 AND MEMBER_EMAIL = 'user01@kh.or.kr'
 AND MEMBER_PW = 'pass01!';
 
-user01@kh.or.kr
-pass01!
 
 
 
