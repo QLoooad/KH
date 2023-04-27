@@ -1,6 +1,7 @@
 package edu.kh.project.member.model.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import edu.kh.project.member.model.dao.MemberDAO;
@@ -18,16 +19,39 @@ public class MemberServiceImpl implements MemberService{
 	//	  -> 객체를 직접 만들지 않고 Spring이 만들걸 주입(Spring에 의존)
 	@Autowired
 	private MemberDAO dao;
+	
+	@Autowired // bean으로 등록된 객체 중 타입이 일치하는 
+	private BCryptPasswordEncoder bcrypt;
 
 	@Override
-	public Member login(Member loginMember) {
+	public Member login(Member inputMember) {
 		
 		// 암호화 추가 예정
+//		System.out.println("암호화 확인 : " + bcrypt.encode(inputMember.getMemberPw()));
+		
+		// bcrytp 암호화는 salt가 추가되기 때문에
+		// 계속 비밀번호가 바뀌게 되어 DB에서 비교 불가
+		// -> 별도로 제공해주는 metches(평문, 암호문)을 이용해 비교
 		
 		// dao 메서드 호출
-		Member inputMember = dao.login(loginMember);
+		Member loginMember = dao.login(inputMember);
 		
-		return inputMember;
+		if(loginMember != null) { // 아이디가 일치하는 회원이 조회된 경우
+			
+			// 입력한 PW, 암호화된 PW 같은지 확인 
+			if(bcrypt.matches(inputMember.getMemberPw(), loginMember.getMemberPw())) {
+				
+				// 비밀번호를 유지하지 않기 위해서 로그인 정보에서 제거
+				loginMember.setMemberPw(null);
+				
+			}else { // 다를 경우
+				loginMember = null; // 로그인 실패처럼 만듦
+				
+			}
+			
+		}
+		
+		return loginMember;
 	}
 	
 	

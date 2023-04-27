@@ -83,6 +83,16 @@ WHERE MEMBER_DEL_FL = 'N'
 AND MEMBER_EMAIL = 'user01@kh.or.kr'
 AND MEMBER_PW = 'pass01!';
 
+
+-- user01 PW 변경
+UPDATE "MEMBER" SET
+MEMBER_PW = '$2a$10$acJRSH0a5mcguov6gdQ2RutncyHcRDZE8/vS6BF.r2PI2EpB6WGhC';
+
+
+COMMIT;
+
+
+
 user01@kh.or.kr
 pass01!
 

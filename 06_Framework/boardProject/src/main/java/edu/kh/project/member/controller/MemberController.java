@@ -1,12 +1,22 @@
 package edu.kh.project.member.controller;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.kh.project.member.model.dao.MemberDAO;
 import edu.kh.project.member.model.dto.Member;
@@ -24,6 +34,9 @@ import edu.kh.project.member.model.service.MemberService;
 
 @RequestMapping("/member") // 공통된 주소 앞부분 작성
 						   // member로 시작하는 요청은 해당 컨트롤러에서 처리
+
+@SessionAttributes({"loginMember"}) // Medel의 이름(Key)를 적으면 session으로 추가
+
 public class MemberController {
 	
 	// @Autowired : 작성된 필드와
@@ -34,16 +47,6 @@ public class MemberController {
 	// MemberService를 구현한 MemberServiceImpl의 Bean 주입
 	@Autowired
 	private MemberService service;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	// 로그인 	: /member/login 
@@ -141,17 +144,240 @@ public class MemberController {
 	 * @return 메인페이지 redirect:/ 주소
 	 */
 	@PostMapping("/login")
-	public String login(Member inputMember, Model model) {
-		
+	public String login(Member inputMember, Model model
+						, @RequestHeader(value = "referer") String referer
+						, @RequestParam(value = "saveId", required = false) String saveId
+						, HttpServletResponse resp
+						, RedirectAttributes ra) {
 		// Member inputMember : 커멘드 객체(필드에 파라미터 담겨있음)
+		
+		// HttpServletRequest.getHeader("referer") << 서블릿에서 사용한 방법
+		
+		// @RequestHeader(value = "referer") String referer
+		// -> 요청 HTTP header에서 "referer"(이전주소) 값을 얻어와
+		//	  매개변수  String referer에 저장
+		
+		// page, request, sesstion, application
+		
+		// Model model : 데이터 전달용 객체
+		// -> 데이터를 K : V 형식으로 담아 전달
+		// -> 기본적으로 request scope
+		// -> @SesstionAttributes 어노테이션과 함께 사용 시 Session scope 됨
+		
+		// @RequestParam(value = "saveId", required = false) String saveId
+		// -> name 속성 값이 "saveId"인 파마니터를 전달 받아 저장
+		// -> required = false : 필수 아님(null 허용)
+		
+		// (주의) required 속성 미작성 시 기본 값 true
+		// -> 파라미터가 전달되지 않는 경우 주의
+		
+		// HttpServletResponse resp : 서버 -> 클라이언트 응답 
 		
 		// 로그인 서비스 호출
 		Member loginMember = service.login(inputMember);
 		
-		// DB 조회경과 확인
-		System.out.println(loginMember);
+		// DB 조회결과 확인
+//		System.out.println(loginMember);
+		
+		// 로그인 결과에 따라 리다이렉트 경로를 다르게 지정
+		String path = "redirect:";
+		
+		if(loginMember != null) { // 로그인 성공 시
+			path += "/"; // 메인페이지로 리다이렉트
+			
+			// Session에 로그인한 회원 정보 추가
+			// Servlet -> HttpSession.setAttribute(key, value);
+			// Spring -> Model + @SessionAttributes
+
+			// model에 로그인한 회원 정보 추가
+			model.addAttribute("loginMember", loginMember);
+			// -> 현재는 request scope
+			
+			// 2) 클래스 위에 @SessionAttributes 추가
+			// -> session scope로 변경
+			
+			// 아이디 저장---------------------------------------------------------
+			 	
+			/* Cookie란?
+             * - 클라이언트 측(브라우저)에서 관리하는 파일
+             * 
+             * - 쿠키파일에 등록된 주소 요청 시 마다
+             *   자동으로 요청에 첨부되어 서버로 전달됨.
+             * 
+             * - 서버로 전달된 쿠키에
+             *   값 추가, 수정, 삭제 등을 진행한 후 
+             *   다시 클라이언트에게 반환
+             * */
+			
+			/* Session
+			 * - 서버가 클라이언트의 정보를 저장하고 있음(쿠키와의 차이점)
+			 * 
+			 * */
+			
+			// 쿠키 생성(해당 쿠키에 담을 데이터 K:V 로 지정)
+			Cookie cookie = new Cookie("saveId", loginMember.getMemberEmail());
+			
+			if(saveId != null) { // 체크 되었을 때
+				// 한 달 동안 유지되는 쿠키 생성
+				cookie.setMaxAge(60*60*24*30); // 초 단위
+				
+				
+			}else {
+				// 0초 동안 유지 되는 쿠키 생성
+				// -> 기존 쿠키를 삭제
+				cookie.setMaxAge(0);
+			}
+					
+			// 클라이언트가 어떤 요청을 할때 쿠키가 첨부될지 경로(주소)를 지정
+			cookie.setPath("/"); // localhost / 이하 모든 주소
+								// ex) / , /member/login, /member/logout
+								// 모든 요청에 쿠키 첨부
+			
+			// 응답 객체(HttpServletResponse)를 이용해서
+			// 만들어진 쿠키를 클라이언트에게 전달
+			
+			resp.addCookie(cookie);
+			
+			// --------------------------------------------------------------------
+			
+			
+		}else { // 로그인 실패 시
+			path += referer; // HTTP Header - referer(이전 주소)
+			
+			/*	redirect(재요청) 시 
+			 * 	기존 요청(request)이 사라지고 새로운 요청을 만들게 되어
+			 * 	새로운 요청(request)을 만들게 되어
+			 * 
+			 * 	redirect된 페이지에서는 이전 요청이 유지 되지 않는다
+			 * 	-> 유지하고 싶으면 어쩔 수 없이 Session을 사용
+			 * 
+			 * 	[Spring]
+			 * 	이런 상황을 해결하기 위한 객체
+			 * 	RedirectAttributes를 제공
+			 * 
+			 * 	RedirectAttributes
+			 * 	-> 리 다이렉트 시 데이터를 request scope로 전달할 수 있게 하는 객체
+			 * 
+			 * 	응답 전 : request scope
+			 *  
+			 * 	응답 중 : session scope로 잠시 이동
+			 *  
+			 * 	응답 후 : request scope 복귀 
+			 * 
+			 * */
+			
+			// addFlashAttribute : 잠시 session에 추가
+			ra.addFlashAttribute("message", "아이디 또는 비밀번호가 일치하지 않습니다.");
+			
+		}
+		
+		return path;
+	}
+	
+	@GetMapping("/logout")
+	public String logout(SessionStatus status, HttpSession session) {
+		
+		// SessionStatus : 세션 상태를 관리하는 객체
+		
+		// 세션 무효화
+		// Servlet -> HttpSEssion.invalidate()
+		// Spring
+		// 1) HttpSession을 이용한 경우
+		//		-> HttpSession.invalidate()
+		
+		// 2) Model + @SessionAttributes 이용한 경우
+		//		-> SessionStatus.setComplete()
+		
+		status.setComplete();
+//		session.invalidate(); // 세션 무효화
+		
 		
 		return "redirect:/";
 	}
+	
+	
+	// 로그인 전용 화면 이동
+	@GetMapping("/login")
+	public String login() {
+		
+		
+		
+		return "member/login";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/* 스프링 예외 처리 방법( 3종류, 우선 순위, 중복 사용)
+	 * 
+	 * 1순위 : 메서드 단위로 처리
+	 * 		-> try-catch / throws 
+	 * 
+	 * 2순위 : 클래스 단위로 처리
+	 * 		-> @ExceptionHandler
+	 *  
+	 * 3순위 : 프로그램 단위(전역) 처리
+	 * 		-> @ControllerAdvice
+	 * */
+	
+	
+	// 현재 클래스에서 발생하는 모든 예외를 모아서 처리
+//	@ExceptionHandler(Exception.class)
+	public String exceptionhandler(Exception e, Model model) {
+		
+		// Exception e : 예외 정보를 담고있는 객체
+		// Model model : 데이터 전달용 객체(request scope가 기본)
+		
+		e.printStackTrace(); // 예외 내용/발생 메서드 확인
+		
+		model.addAttribute("e", e);
+		
+		// forward 진행 -> View Resolver의 prefix, suffix를 붙여 JSP 경로로 만듦
+		return "common/error";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

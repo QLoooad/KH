@@ -8,7 +8,7 @@
 <header>
     <section>
         <!-- 클릭 시 메인페이지 이동 로고 -->
-        <a href="#"><img src="/resources/images/Github.png" alt="로고" id="homeLogo"></a>
+        <a href="/"><img src="/resources/images/Github.png" alt="로고" id="homeLogo"></a>
     </section>
     <section>
         <!-- 검색어 입력 화면 -->
@@ -38,6 +38,31 @@
     </section>
 
     <section></section>
+
+    <%-- 우측 상단 드롭다운 메뉴 --%>
+    <div class="header-top-menu">
+
+        <c:choose>
+            <c:when test="${empty loginMember}">
+                <%-- 로그인 X --%>
+                <a href="/">메인 페이지</a> | <a href="/member/login">로그인</a>
+            
+            </c:when>
+            <c:otherwise>
+                <%-- 로그인 O --%>
+                <label for="headerMenuToggle">
+                    닉네임 <i class="fa-solid fa-caret-down"></i>
+                </label>
+            
+                <input type="checkbox" id="headerMenuToggle">
+                <div class="header-menu">
+                    <a href="#">내정보</a>
+                    <a href="/member/logout">로그아웃</a>
+                </div>
+            </c:otherwise>
+        </c:choose>
+    </div>
+
 </header>
 
 <nav>
