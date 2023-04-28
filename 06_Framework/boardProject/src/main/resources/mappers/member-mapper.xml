@@ -80,6 +80,20 @@
 		AND MEMBER_EMAIL = #{memberEmail}
   	</select>
   	
+  	<!-- 회원 가입 -->    <!-- mybatis-config 에 지정된 별칭 --><!-- <typeAlias type="edu.kh.project.member.model.dto.Member"
+																		alias="Member" /> -->
+	<!-- 
+		insert, update, delete와 같은 DML 구문은
+		수행 결과가 항상 성공한 행의 개수(int 자료형)으로 고정
+		-> resultType 을 작성하지 않는다 (항상 int)
+	 -->																	
+  	<insert id="signUp" parameterType="Member">
+  		INSERT INTO "MEMBER"
+		VALUES(SEQ_MEMBER_NO.NEXTVAL, #{memberEmail}, #{memberPw}
+				, '${memberNickname}', #{memberTel}, #{memberAddress}, NULL, DEFAULT, DEFAULT, DEFAULT)
+  		
+  	</insert>
+  	
   	
   	
   	

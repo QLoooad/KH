@@ -21,4 +21,10 @@ public interface MemberService {
 	 */
 	Member login(Member loginMember);
 
+	/** 회원 가입 서비스(PW 암호화 필요)
+	 * @param inputMember
+	 * @return result ( 0 or 1 : 성공)
+	 */
+	int signUp(Member inputMember);
+
 }

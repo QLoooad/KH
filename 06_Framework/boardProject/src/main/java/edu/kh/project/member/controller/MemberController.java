@@ -306,10 +306,85 @@ public class MemberController {
 	}
 	
 	
+	// 회원 가입 페이지 이동
+	@GetMapping("/signUp")
+	public String signUp() {
+		// /WEB-INF/views/member/signUp.jsp forward(요청 위임)
+		// -> viewResolver가 prefix, suffix
+		
+		return "member/signUp";
+	}
 	
 	
-	
-	
+	// 회원 가입 진행
+	@PostMapping("/signUp")
+	public String SignUp(Member inputMember, @RequestParam String[] memberAddress, RedirectAttributes ra) {
+		
+		// -------- 매개 변수 설명 ---------
+		// Member inputMember : 커멘드 객체 (제출된 파라미터가 필드에 저장된 객체)
+		
+		// -------- @RequestParam String[] memberAddress 설명 ---------
+		// 배열로 만들면 각 배열마다 주소가 하나씩 들어감
+		
+		// 04535,서울 종로,409호 << 이런 String 이 아래 처럼 
+		
+		// String[0] = "04535,"; 
+		// String[1] = "서울 종로,"; 
+		// String[2] = "409호"; 
+		
+		
+		// 12345^^^서울시^^^2층
+		// 주소 구분자를  ,  ->  ^^^ 변경
+		
+		// RedirectAttributes ra : 리다이렉트 시 데이터를 request scope로 전달하는 객체
+		
+//		String addr = inputMember.getMemberAddress().replaceAll(",", "^^^");
+//		inputMember.setMemberAddress(addr);
+		// -> 클라이언트가 , 를 직접 입력하면 문제 발생
+		
+		
+		
+		// 만약 주소를 입력하지 않은 경우 (,,) 에 null 로 변경
+		if(inputMember.getMemberAddress().equals(",,")) {
+			
+			inputMember.setMemberAddress(null);
+			
+		}else {
+			
+			// String.join("구분자", String[])
+			// 배열의 요소를 하나의 문자열로 변경
+			// 단, 요소 사이에 "구분자" 추가
+			
+			String addr = String.join("^^^", memberAddress);
+			inputMember.setMemberAddress(addr);
+			
+		}
+		
+		// 가입 성공 여부에 따라 주소 변경
+		String path = "redirect:";
+		String message = null;
+		
+		// 회원 가입 서비스 호출
+		// DB에 DML 수행 시 성공 행의 개수 (int형) 반환
+		
+		int result = service.signUp(inputMember);
+		
+		if(result > 0) {
+			path += "/"; // 메인페이지
+			
+			message = inputMember.getMemberNickname() + "님의 가입을 환영합니다.";
+			
+		}else {
+//			path += "/member/signUp"; // 절대 경로
+			path += "signUp"; // 상대 경로
+			message = "회원 가입 실패";
+		}
+		// 리다이렉트 시 session에 잠깐 올라갔다 내려오도록 세팅
+		ra.addFlashAttribute("message", message);
+		
+		
+		return path;
+	}
 	
 	
 	
