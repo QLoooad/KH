@@ -66,10 +66,21 @@ VALUES(SEQ_MEMBER_NO.NEXTVAL, 'user01@kh.or.kr', 'pass01!'
 		, '유저일', '01012341234', '04540,,서울시 중구 남대문로 120,,2층',
 		NULL, DEFAULT, DEFAULT, DEFAULT);
 	
+	
 INSERT INTO "MEMBER"
 VALUES(SEQ_MEMBER_NO.NEXTVAL, 'user02@kh.or.kr', 'pass02!'
 		, '유저둘', '01056785678', '04540,,서울시 중구 남대문로 120,,2층',
 		NULL, DEFAULT, DEFAULT, DEFAULT);
+	
+INSERT INTO "MEMBER"
+VALUES(SEQ_MEMBER_NO.NEXTVAL, '3333@3333.com', '3333'
+		, '삼삼삼삼', '01033333333', '333,,서울시 중구 남대문로 333,,3층',
+		NULL, DEFAULT, DEFAULT, DEFAULT);
+	
+
+
+DELETE FROM "MEMBER"
+WHERE MEMBER_NO = 10;
 	
 COMMIT;
 
@@ -89,17 +100,43 @@ SELECT MEMBER_PW FROM "MEMBER" WHERE MEMBER_NO = 4;
 -- 회원 번호가 일치하는 회원의 비밀번호 변경
 UPDATE "MEMBER" SET
 MEMBER_PW = #{memberPw}
-WHERE MEMBER_NO = #{memberNo}
+WHERE MEMBER_NO = #{memberNo};
 
 
 -- 회원 탈퇴
 UPDATE "MEMBER" SET
 MEMBER_DEL_FL = 'Y'
-WHERE MEMBER_NO = #{memberNo}
+WHERE MEMBER_NO = #{memberNo};
+
+-- 닉네임으로 전화번호 조회
+SELECT MEMBER_TEL
+FROM "MEMBER"
+WHERE MEMBER_NICKNAME = #{nickname}
+AND MEMBER_DEL_FL = 'N';
+
+-- 이메일 중복 검사
+SELECT COUNT(*)
+FROM "MEMBER"
+WHERE MEMBER_EMAIL = #{email}
+AND MEMBER_DEL_FL = 'N';
+
+-- 닉네임 중복 검사
+SELECT COUNT(*)
+FROM "MEMBER"
+WHERE MEMBER_NICKNAME = '삼삼삼삼'
+AND MEMBER_DEL_FL = 'N';
 
 
+-- user01@kh.or.kr
+-- 123123
 
+-- user02@kh.or.kr
+-- pass02!
 
+-- qwer@qwer.com
+-- 123123
+
+SELECT * FROM "MEMBER";
 
 
 

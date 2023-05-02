@@ -95,8 +95,8 @@ public class MyPageController {
 			message = "회원 정보가 수정되었습니다.";
 			// Session에 로그인된 회원 정보도 수정(동기화)
 			loginMember.setMemberNickname(updateMember.getMemberNickname());
-			loginMember.setMemberNickname(updateMember.getMemberTel());
-			loginMember.setMemberNickname(updateMember.getMemberAddress());
+			loginMember.setMemberTel(updateMember.getMemberTel());
+			loginMember.setMemberAddress(updateMember.getMemberAddress());
 			
 		}else {
 			message = "회원 정보 수정 실패";
