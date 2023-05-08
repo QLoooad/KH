@@ -408,6 +408,9 @@ document.getElementById("signUpFrm").addEventListener("submit", e=>{
 
             case "memberNickname":
                 alert("닉네임이 유효하지 않습니다"); break;
+
+            case "memberTel":
+                alert("전화번호가 유효하지 않습니다"); break;
             }
 
             // 유효하지 않은 input 태그로 focus 이동
@@ -430,7 +433,7 @@ const nickMessage = document.getElementById("nickMessage");
 // 닉네임이 입력이 되었을 떄
 memberNickname.addEventListener("input", ()=>{
     // 닉네임에 입력이 되지 않은 경우
-    if(memberNickname.value.trim().length == 0){
+    if(memberNickname.value.trim() == ''){
         nickMessage.innerText = "한글,영어,숫자로만 2~10글자";
 
         nickMessage.classList.remove("confirm", "error");
@@ -453,18 +456,17 @@ memberNickname.addEventListener("input", ()=>{
                 nickMessage.innerText = "사용 가능한 닉네임 입니다.";
                 nickMessage.classList.add("confirm"); // .confirm 스타일 적용
                 nickMessage.classList.remove("error"); // .error 스타일 제거
-                checkObj.memberEmail = true; // 유효 O
+                checkObj.memberNickname = true; // 유효 O
             }else{
                 nickMessage.innerText = "이미 사용중인 닉네임 입니다.";
                 nickMessage.classList.remove("confirm"); // .confirm 스타일 적용
                 nickMessage.classList.add("error"); // .error 스타일 제거
-                checkObj.memberEmail = false; // 유효 O
+                checkObj.memberNickname = false; // 유효 X
             }
         })
         .catch(err => console.log(err));
-
+        
     }else{ // 무효
-
         nickMessage.innerText = "닉네임 형식이 유효하지 않습니다."
         nickMessage.classList.add("error");
         nickMessage.classList.remove("confirm");
