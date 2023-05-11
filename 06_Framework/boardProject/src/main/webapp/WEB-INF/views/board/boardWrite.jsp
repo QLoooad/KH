@@ -22,7 +22,16 @@
     <main>
         <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 
-        <form action="/board2/${boardCode}/insert" method="POST" class="board-write" id="boardWriteFrm">  
+                            <%-- @PathVariable --%>
+        <form action="/board2/${boardCode}/insert" method="POST" class="board-write" 
+                id="boardWriteFrm" enctype="multipart/form-data">  
+                                    <%-- enctype="multipart/form-data"
+                                        제출데이터 인코딩 X 있는 그대로 읽어라
+                                        파일 제출 가능 
+                                        MultiPartResolver가 문자열, 파일을 구분
+                                        문자열 -> String, int, DTO, Map(HttpMessageConverter) 자동 변환
+                                        파일 -> MultiPartFile 객체 -> transferTo()  파일을 서버에 저장
+                                    --%>
             <h1 class="board-name">${boardName}</h1>
 
             <!-- 제목 -->
@@ -87,7 +96,7 @@
             </div>
 
 
-             <!-- 버튼 영역 -->
+            <!-- 버튼 영역 -->
             <div class="board-btn-area">
                 <button type="submit" id="writebtn">등록</button>
             </div>
