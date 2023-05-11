@@ -33,7 +33,6 @@ public class MemberController {
 		return "member/login";
 	}
 
-
 	@PostMapping("/login")
 	public String login(Member inputMember, Model model, @RequestHeader(value = "referer") String referer,
 			@RequestParam(value = "saveId", required = false) String saveId, HttpServletResponse resp,
@@ -78,7 +77,7 @@ public class MemberController {
 	public String signup() {
 		return "member/signup";
 	}
-	
+
 	// 회원 가입 두번째 페이지로 이동
 	@GetMapping("/signupInfo")
 	public String signupInfo() {
@@ -88,30 +87,45 @@ public class MemberController {
 
 	// 회원 가입 진행
 	@PostMapping("/signup")
-	public String signup(Member inputMember, RedirectAttributes ra, Model model) {
+	public String signup(@RequestParam("memberEmail") String memberEmail
+			, @RequestParam("memberPw") String memberPw
+			, HttpSession session) {
+		
+		session.setAttribute("memberEmail", memberEmail);
+		session.setAttribute("memberPw", memberPw);
+		
+		return "redirect:signupInfo";
+	}
 
-		// -------- 매개 변수 설명 ---------
-		// Member inputMember : 커멘드 객체 (제출된 파라미터가 필드에 저장된 객체)
-		// RedirectAttributes ra : 리다이렉트 시 데이터를 request scope로 전달하는 객체
+	@RequestMapping("/signupInfo")
+	public String signupInfo(Member inputMember, HttpSession session, RedirectAttributes ra) {
 
-
-		// 가입 성공 여부에 따라 주소 변경
+		String memberEmail = (String)session.getAttribute("memberEmail");
+		String memberPw = (String)session.getAttribute("memberPw");
+		
+		inputMember.setMemberEmail(memberEmail);
+		inputMember.setMemberPw(memberPw);
+		
+		System.out.println("con Email  " + inputMember.getMemberEmail());
+		System.out.println("con Pw  " + inputMember.getMemberPw());
+		
 		String path = "redirect:";
 		String message = null;
-		
-		
+
 		// 회원 가입 서비스 호출
 		// DB에 DML 수행 시 성공 행의 개수 (int형) 반환
 
 		int result = service.signup(inputMember);
-		model.addAttribute("memberEmail", );
 		if (result > 0) {
 			path += "/"; // 메인페이지
 
 			message = inputMember.getMemberNickname() + "님의 가입을 환영합니다.";
+			
+//			session.removeAttribute("memberEmail");
+//			session.removeAttribute("memberPw");
 
 		} else {
-//				path += "/member/signUp"; // 절대 경로
+//						path += "/member/signUp"; // 절대 경로
 			path += "signup"; // 상대 경로
 			message = "회원 가입 실패";
 		}
@@ -119,6 +133,7 @@ public class MemberController {
 		ra.addFlashAttribute("message", message);
 
 		return path;
+
 	}
 
 }

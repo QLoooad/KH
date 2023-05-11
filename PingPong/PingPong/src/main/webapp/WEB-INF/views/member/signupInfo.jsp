@@ -14,7 +14,7 @@
 <body>
 
 	<div class="login-container">
-        <form class="signup-info-box">
+        <form class="signup-info-box" method="post">
             <a href="index.html"><img src="/resources/images/logo_X1.png"></a>
     
             <p>회원 정보 입력하기</p>
