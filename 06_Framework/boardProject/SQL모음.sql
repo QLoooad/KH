@@ -664,23 +664,63 @@ AND MEMBER_NO = ?;
 
 -- INSERT + SUB QUERY
 
-SELECT '웹접근경로', IMG_PATH, '변경명', IMG_RENAME, '원본명', IMG_ORIGINAL,
+SELECT * FROM BOARD_IMG ORDER BY IMG_NO DESC;
+
+INSERT INTO "BOARD_IMG" 
+SELECT SEQ_IMG_NO.NEXTVAL, A.*
+FROM (SELECT '웹접근경로' IMG_PATH, '변경명' IMG_RENAME, '원본명' IMG_ORIGINAL,
 		0 IMG_ORDER, 1501 BOARD_NO
-FROM DUAL;
+FROM DUAL
+
+UNION ALL
+
+SELECT '웹접근경로' IMG_PATH, '변경명' IMG_RENAME, '원본명' IMG_ORIGINAL,
+		1 IMG_ORDER, 1501 BOARD_NO
+FROM DUAL
+
+UNION ALL
+
+SELECT '웹접근경로' IMG_PATH, '변경명' IMG_RENAME, '원본명' IMG_ORIGINAL,
+		2 IMG_ORDER, 1501 BOARD_NO
+FROM DUAL)A;
+
+
+ROLLBACK;
 
 
 
+-- 게시글 수정
+UPDATE "BOARD" SET
+BOARD_TITLE = #{boardTitle},
+BOARD_CONTENT =#{boardContent},
+B_UPDATE_DATE = SYSDATE 
+WHERE  BOARD_CODE  = #{boardCode}
+AND BOARD_NO = #{boardNo}
+;
+
+-- 이미지 삭제
+DELETE FROM "BOARD_IMG"
+WHERE BOARD_NO  = #{boardNo}
+AND IMG_ORDER IN (${deleteList})
+;
 
 
+-- 이미지 수정
+UPDATE "BOARD_IMG" SET
+IMG_PATH = #{imagepath},
+IMG_ORIGINAL = #{imageOriginal},
+IMG_RENAME = #{imageReName}
+WHERE BOARD_NO  = #{boardNo}
+AND  IMG_ORIGINAL = #{imageOrder}
+;
 
+-- 게시글 삭제
+DELETE FROM "BOARD"
+WHERE  BOARD_CODE  = #{boardCode}
+AND BOARD_NO = #{boardNo}
+;
 
-
-
-
-
-
-
-
+SELECT * FROM BOARD;
 
 
 
