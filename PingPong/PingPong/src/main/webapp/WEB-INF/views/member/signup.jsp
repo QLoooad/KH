@@ -13,8 +13,8 @@
 <body>
 	<div class="login-container customChk">
 
-        <form class="signup-box" action="signupInfo.html" method="post">
-            <a href="index.html"><img src="/resources/images/logo_X1.png"></a>
+        <form class="signup-box" method="post" action="/member/signup">
+            <a href="/"><img src="/resources/images/logo_X1.png"></a>
         
             <p>이메일로 가입하기</p>
     
@@ -57,7 +57,7 @@
     
             <div>
                 <button type="button" onclick="location.href='login.html'">이전</button>
-                <button class="signup-next"><a href="/member/signupInfo">다음</a></button>
+                <button class="signup-next">다음</button>
             </div>
         </form>
     

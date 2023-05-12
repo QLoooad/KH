@@ -10,6 +10,6 @@ public interface MemberService {
 	 * @param inputMember
 	 * @return result
 	 */
-	int signup(Member inputMember);
+	int signupInfo(Member inputMember);
 
 }

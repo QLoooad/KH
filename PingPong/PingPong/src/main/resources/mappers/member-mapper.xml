@@ -25,7 +25,7 @@
 
 	<!-- 회원 가입 -->
 	<!-- <typeAlias type="com.pingpong.project.member.model.dto.Member" alias="Member" /> -->
-	<insert id="signUp" parameterType="Member">
+	<insert id="signupInfo" parameterType="Member">
 		INSERT INTO "MEMBER"
 		VALUES(SEQ_MEMBER_NO.NEXTVAL, #{memberEmail}, #{memberPw}, #{memberNickname}
 			, #{memberUrl}, DEFAULT, DEFAULT, DEFAULT)

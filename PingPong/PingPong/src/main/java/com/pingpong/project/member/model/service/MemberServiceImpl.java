@@ -44,13 +44,14 @@ public class MemberServiceImpl implements MemberService {
 	// 예외 발생 시 rollback
 	// 발생 안하면 서비스 종료 시 commit
 	@Override
-	public int signup(Member inputMember) {
+	public int signupInfo(Member inputMember) {
 		// 비밀번호를 BCrypt를 이용하여 암호화 후 다시 inputMember에 세팅
 		String encPw = /*bcrypt.encode*/inputMember.getMemberPw();
 		inputMember.setMemberPw(encPw);
 		
+		
 		// DAO 호출
-		int result = dao.signup(inputMember);
+		int result = dao.signupInfo(inputMember);
 		
 		return result;
 	}

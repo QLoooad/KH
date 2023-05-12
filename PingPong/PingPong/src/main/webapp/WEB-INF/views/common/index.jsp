@@ -10,7 +10,10 @@
     <title>PingPong</title>
     <!-- 공통 헤더 css -->
     <link rel="stylesheet" href="/resources/css/style.css">
-
+    
+    <!-- 파비콘 -->
+	<link rel="icon" type="image/x-icon" href="/resources/images/pingpong.ico">
+	
     <!-- 제이쿼리 -->
     <script src="/resources/js/jquery.js"></script>
 
@@ -18,10 +21,17 @@
     <link rel="stylesheet" href="/resources/css/main/mainSlide.css">
     <script src="/resources/js/main/slick.js"></script>
 
+    <style>
+        #btn11{
+            position: absolute; width: 100px; height: 40px; background-color: #5286DC; top: 200px; left: 100px; border-radius: 20px; color: #fff;
+        }
+    </style>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
     <!-- 메인 슬라이드 -->
+    
+    <button id="btn11" onclick="location.href='/manager/'">관리자 페이지</button>
     <main>
         <div class="slider center autoplay">
             <div class="slider-item">
