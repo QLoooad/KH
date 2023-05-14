@@ -46,7 +46,7 @@
                 </label>
 
                 <div class="signUp-input-area">
-                    <input type="text" name="authKey" id="authKey" s placeholder="인증번호 입력" maxlength="6" autocomplete="off" >
+                    <input type="text" name="authKey" id="authKey" placeholder="인증번호 입력" maxlength="6" autocomplete="off" >
                     
                     <button id="checkAuthKeyBtn" type="button">인증하기</button>
                 </div>

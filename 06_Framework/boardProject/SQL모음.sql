@@ -12,6 +12,21 @@ QUOTA UNLIMITED ON SYSTEM;
 
 --------------------------------------------------------------
 
+ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
+
+-- 계정 생성
+CREATE USER "pingpong" IDENTIFIED BY "pingpong123";
+
+-- 권한 부여
+GRANT CONNECT, RESOURCE, CREATE VIEW TO "pingpong";
+
+-- 객체 생성 공간 할당
+ALTER USER "pingpong" DEFAULT TABLESPACE SYSTEM
+QUOTA UNLIMITED ON SYSTEM;
+
+
+--------------------------------------------------------------
+
 DROP TABLE "MEMBER";
 
 CREATE TABLE "MEMBER" (
