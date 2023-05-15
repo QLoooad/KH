@@ -15,7 +15,7 @@
 <body>
 	<div class="login-container customChk">
 
-        <form class="signup-box" method="post" action="/member/signup">
+        <form class="signup-box" method="post" action="/member/signup" name="signUpFrm" id="signUpFrm">
             <a href="/"><img src="/resources/images/logo_X1.png"></a>
         
             <p>이메일로 가입하기</p>
@@ -26,13 +26,15 @@
                 <button type="button" class="certi-send" id="sendAuthKeyBtn">전송</button>
                 <button type="button" class="certi-resend" id="reSendAuthKeyBtn">재전송</button>
                 <p class="email-send">인증 번호가 발송 되었습니다.</p>
-            </div>
                 <span class="email-message" id="emailMessage">메일을 받을 수 있는 이메일을 입력해주세요.</span>
+                
+            </div>
 
             <div class="signup-input-CertNum">
                 <p>인증번호 입력</p>
                 <input type="text" name="authKey" id="authKey" placeholder="인증번호 입력" maxlength="6" autocomplete="off">
                 <button type="button" id="checkAuthKeyBtn">인증</button>
+                <span class="class-hidden" id="authKeyMessage">5:00</span>
             </div> 
     
             <div class="signup-input-password">
@@ -63,7 +65,7 @@
             </div>
     
             <div>
-                <button type="button" onclick="location.href='login.html'">이전</button>
+                <button type="button" onclick="location.href='/'">이전</button>
                 <button class="signup-next">다음</button>
             </div>
         </form>

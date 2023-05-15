@@ -8,10 +8,10 @@
       <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
       
       <!-- 자기 컴퓨터 (18C) -->
-      <property name="url" value="jdbc:oracle:thin:@localhost:1521:ORCL" />
+      <!-- <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" /> -->
       
       <!-- 자기 컴퓨터 (19C) -->
-      <!-- <property name="url" value="jdbc:oracle:thin:@115.90.212.22:10000:orcl" /> -->
+      <property name="url" value="jdbc:oracle:thin:@115.90.212.22:10000:orcl" />
       
       <!-- 학원 DB서버 -->
       <!-- <property name="url" value="jdbc:oracle:thin:@115.90.212.22:9000:XE" /> -->
