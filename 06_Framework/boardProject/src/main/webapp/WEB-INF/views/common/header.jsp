@@ -82,5 +82,9 @@
             </li>
 
         </c:forEach>
+        <c:if test="${not empty loginMember}" >
+            <li><a href="/chatting">채팅</a></li>
+        </c:if>
     </ul>
 </nav>
+
