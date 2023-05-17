@@ -131,7 +131,7 @@
 
 
 			<!-- 검색창 -->
-            <form action="#" method="get" id="boardSearch">
+            <form action="${boardCode}" method="get" id="boardSearch">
 
                 <select name="key" id="searchKey">
                     <option value="t">제목</option>
