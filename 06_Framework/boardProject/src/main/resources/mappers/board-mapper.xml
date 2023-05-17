@@ -310,13 +310,12 @@
 
 			<when test='key == "tc"'>
 				<!-- 제목 + 내용 -->
-				AND (BOARD_CONTENT LIKE '%${query}%' OR BOARD_CONTENT LIKE
-				'%${query}%')
+				AND (BOARD_TITLE LIKE '%${query}%' OR BOARD_CONTENT LIKE '%${query}%')
 			</when>
 
 			<when test='key == "w"'>
 				<!-- 작성자(닉네임) -->
-				AND MEMBER_NICKNAME LIKE '%${query}%"
+				AND MEMBER_NICKNAME LIKE '%${query}%'
 			</when>
 
 		</choose>
@@ -349,7 +348,8 @@
 		(SELECT IMG_PATH || IMG_RENAME FROM BOARD_IMG I
 		WHERE I.BOARD_NO = B.BOARD_NO
 		AND IMG_ORDER = 0) THUMBNAIL
-		FROM "BOARD" B
+		FROM "BOARD" 
+		B
 		JOIN "MEMBER" USING(MEMBER_NO)
 		WHERE BOARD_DEL_FL = 'N'
 		AND BOARD_CODE = #{boardCode}
@@ -367,19 +367,28 @@
 
 			<when test='key == "tc"'>
 				<!-- 제목 + 내용 -->
-				AND (BOARD_CONTENT LIKE '%${query}%' OR BOARD_CONTENT LIKE
-				'%${query}%')
+				AND (BOARD_TITLE LIKE '%${query}%' OR BOARD_CONTENT LIKE '%${query}%')
 			</when>
 
 			<when test='key == "w"'>
 				<!-- 작성자(닉네임) -->
-				AND MEMBER_NICKNAME LIKE '%${query}%"
+				AND MEMBER_NICKNAME LIKE '%${query}%'
 			</when>
-
 		</choose>
 		ORDER BY BOARD_NO DESC
 	</select>
 
+	<!-- 헤더 검색 -->
+	<select id="headerSearch" resultType="map">
+		SELECT * FROM(
+			SELECT BOARD_NO, BOARD_TITLE, READ_COUNT, BOARD_CODE, BOARD_NAME 
+			FROM "BOARD"
+			JOIN "BOARD_TYPE" USING(BOARD_CODE)
+			WHERE BOARD_TITLE LIKE '%${query}%'
+			AND BOARD_DEL_FL = 'N'
+			ORDER BY READ_COUNT DESC, BOARD_NO DESC)
+		<![CDATA[ WHERE ROWNUM <= 10  ]]>
+	</select>
 
 
 

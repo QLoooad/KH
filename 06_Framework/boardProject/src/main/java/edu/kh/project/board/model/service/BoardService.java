@@ -58,6 +58,12 @@ public interface BoardService {
 	 * @return boardList
 	 */
 	Map<String, Object> selectBoardList(Map<String, Object> paramMap, int cp);
+	
+	/** 헤더 검색
+	 * @param query
+	 * @return list
+	 */
+	List<Map<String, Object>> headerSearch(String query);
 
 	
 	

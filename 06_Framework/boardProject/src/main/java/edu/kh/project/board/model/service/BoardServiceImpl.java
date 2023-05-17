@@ -122,6 +122,13 @@ public class BoardServiceImpl implements BoardService{
 		return map;
 	}
 	
+    // 헤더 검색
+	@Override
+	public List<Map<String, Object>> headerSearch(String query) {
+		return dao.headerSearch(query);
+	}
+
+	
 	
 	
 	

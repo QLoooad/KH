@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="/resources/css/main-style.css">
 <!-- font awesome 라이브러리 추가 + key 등록-->
 <script src="https://kit.fontawesome.com/f7459b8054.js" crossorigin="anonymous"></script>
-
+<script src="/resources/js/header.js"></script>
 <header>
     <section>
         <!-- 클릭 시 메인페이지 이동 로고 -->
@@ -19,7 +19,7 @@
                 - GET : input태그 값을 주소에 담에서 제출(주소에 보임)
                 - POST : input태그 값을 주소에 담지 않고 제출(주소에 안보임)
                         -> HTTP Body에 담에서 제출-->
-            <form action="#" method="get">
+            <form action="/board/1" method="get">
                 <fieldset><!-- form태그 내 영역 구분 -->
                     <!-- 
                         input의 name 속성 == 제출 시 key 값
@@ -27,13 +27,16 @@
 
                         autocomplete="off" : 브라우저 제공 자동완성 off
                     -->
-                    <input type="search" name="query" id="query" placeholder="검색어 입력" autocomplete="off">
+                    <input type="search" name="query" id="query" 
+                    placeholder="검색어 입력" autocomplete="off" value="${param.query}">
 
+                    <input type="hidden" name="key" value="t">
                     <!-- 검색 버튼 -->
                     <!-- button type="submit" 기본값 -->
                     <button id="searchBtn" class="fa-solid fa-magnifying-glass"></button>
                 </fieldset>
             </form>
+            <ul id="searchResult" class="close"></ul>
         </article>
     </section>
 

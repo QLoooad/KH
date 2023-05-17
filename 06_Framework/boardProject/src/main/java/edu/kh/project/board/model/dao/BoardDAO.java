@@ -138,7 +138,14 @@ public class BoardDAO {
 		return sqlSession.selectList("boardMapper.selectBoardList_search", paramMap, rowBounds);
 	}
 
-	
+	/** 헤더 검색
+	 * @param query
+	 * @return list
+	 */
+	public List<Map<String, Object>> headerSearch(String query) {
+		return sqlSession.selectList("boardMapper.headerSearch", query);
+	}
+
 	
 	
 	
