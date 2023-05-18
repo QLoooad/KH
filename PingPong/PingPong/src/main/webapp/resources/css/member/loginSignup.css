@@ -87,7 +87,7 @@ form.signup-box>div>p{font-weight: bold; font-size: 14px; margin-bottom: 8px;
 margin-top: 20px;}
 
 /* 이메일 주소 + 인증 번호 + 비밀번호 */
-.signup-input-email{margin-top: 30px;}
+.signup-input-email{margin-top: 30px; display: block;}
 
 .signup-box>div:nth-of-type(1)>button, .signup-box>div:nth-of-type(2)>button{
     width: 80px; height: 40px;
@@ -111,14 +111,17 @@ margin-top: 20px;}
 .email-message, .URL-check-message{
     font-size: 12px;
     letter-spacing: -1px;
-    margin-right: 130px;
+    /* margin-right: 130px; */
     color: #5C5C5C;
     font-weight: lighter;
     display: block;
 }
+#sendAuthKeyBtn{
+    display: block;
+}
 
 .class-hidden{
-    visibility: hidden;
+    display: none;
 }
 
 /* 이메일 검사 메세지 색상 지정 */
@@ -134,11 +137,7 @@ margin-top: 20px;}
     display: flex; justify-content: space-between;
     margin-top: 40px; margin-bottom: 73px; font-size: 14px;
 }
-/* 비밀번호 체크 */
-/* form.signup-box>div .pwInconsistency{
-    color: red; font-size: 13px; font-weight: normal;
-    display: none;
-} */
+
 /* 비밀번호 관련 메세지 */
 .signUp-message{
     font-size: 12px;
@@ -151,6 +150,12 @@ input::placeholder {
     color:#C5C5C5;
     font-size: 12px;
     font-weight: lighter;
+}
+.reset-pw-text{
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 8px;
+    margin-top: 20px;
 }
 
 .signup-check>div{display: flex; justify-content: center;}
@@ -353,6 +358,10 @@ input::placeholder {
     color: green; font-size: 13px; font-weight: normal; margin-top: 8px;
     display: none;
 }
+.input-CertNum{
+    position: relative;
+}
+
 
 /* 체크 박스 타입 css */
 .customChk input[type="checkbox"] {

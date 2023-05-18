@@ -1,11 +1,13 @@
 package com.pingpong.project.mypage.model.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.pingpong.project.board.model.dto.Board;
 import com.pingpong.project.member.model.dto.Member;
 import com.pingpong.project.mypage.model.dto.MyPage;
 
@@ -21,7 +23,6 @@ public class MypageDAO {
 	 */
 	public int updateInfo(Member updateMember) {
 		return sqlSession.update("mypageMapper.updateInfo", updateMember);
-
 	}
 
 	/** 회원 비밀번호 조회
@@ -53,9 +54,18 @@ public class MypageDAO {
 		return sqlSession.update("mypageMapper.secession", memberNo);
 	}
 	
-	/** 배경화면 수정
+
+	/** 프로필 이미지 수정
 	 * @param map
 	 * @return result
+	 */
+	public int updateProfile(Map<String, Object> map) {
+		return sqlSession.update("memberProfileMapper.updateProfile", map);
+	}
+
+	/** 배경 이미지 수정
+	 * @param map
+	 * @return
 	 */
 	public int backgroundUpdate(Map<String, Object> map) {
 		return sqlSession.update("mypageMapper.backgroundUpdate", map);
@@ -69,20 +79,38 @@ public class MypageDAO {
 		return sqlSession.insert("mypageMapper.backgroundInsert", map);
 	}
 
-	/** 회원 프로필 가져오기
+	/** 게시글 조회
 	 * @param memberNo
-	 * @return memberProfile
+	 * @return boardList
 	 */
-	public MyPage selectMemberProfile(int memberNo) {
-		System.out.println("DAO");
-		MyPage self = sqlSession.selectOne("mypageMapper.selectMemberProfile", memberNo);
-		System.out.println(self);
-		System.out.println(self.getBackgroundImage());
-		return self;
-
+	public List<Board> selectBoardList(int memberNo) {
+		
+		return sqlSession.selectList("boardMapper.selectBoardList", memberNo);
 	}
 
+	/** 회원 정보 조회
+	 * @param memberNo
+	 * @return myPage
+	 */
+	public MyPage selectMemberProfile(int memberNo) {
+		return sqlSession.selectOne("mypageMapper.selectMemberProfile", memberNo);
+	}
 
-	
+	/** 북마크한 게시글 조회 
+	 * @param memberNo
+	 * @return boardMarkList
+	 */
+	public List<Board> selectBoardMarkList(int memberNo) {
+		return sqlSession.selectList("boardMapper.selectBoardMarkList", memberNo);
+	}
+
+	/** 좋아요한 게시글 조회
+	 * @param memberNo
+	 * @return boardLikeList
+	 */
+	public List<Board> selectBoardLikeList(int memberNo) {
+		return sqlSession.selectList("boardMapper.selectBoardLikeList", memberNo);
+	}
+
 
 }
