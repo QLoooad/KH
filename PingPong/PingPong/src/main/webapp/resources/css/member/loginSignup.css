@@ -33,10 +33,6 @@
 .search-input-email>p,.login-input-password>p{
     font-size: 14px;font-weight: bold; margin-bottom: 8px;
 }
-.passwordwrong{ /* 비밀번호 틀렸을 때 나오는 경고 문구 */
-    color: red; font-size: 13px; margin-top: 4px;
-    display: none;
-}
 
 .login-box button{
     width: 320px; height: 50px; border-radius: 5px;
@@ -94,7 +90,7 @@ margin-top: 20px;}
     border-radius: 5px; font-size: 14px; font-weight: bold;
     background-color: #231F20; color: #fff;
 }
-.signup-box>div:nth-of-type(1)>input, .signup-box>div:nth-of-type(2)>input{
+.signup-box>div:nth-of-type(1)>input,  .signup-box>div:nth-of-type(2)>input{
     width: 230px; margin-right: 10px;
 }
 
@@ -116,9 +112,9 @@ margin-top: 20px;}
     font-weight: lighter;
     display: block;
 }
-#sendAuthKeyBtn{
+#pwSearchCertNumFrm > .search-input-email > #sendAuthKeyBtn{
     display: block;
-}
+} 
 
 .class-hidden{
     display: none;
