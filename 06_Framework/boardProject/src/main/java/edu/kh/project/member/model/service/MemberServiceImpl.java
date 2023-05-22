@@ -1,7 +1,5 @@
 package edu.kh.project.member.model.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,19 +23,9 @@ public class MemberServiceImpl implements MemberService{
 	
 	@Autowired // bean으로 등록된 객체 중 타입이 일치하는 
 	private BCryptPasswordEncoder bcrypt;
-	
-	// org.slf4j.Logger; : 로그 작성 객체
-	private Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
-													// 로그를 얻고자 하는 클래스 명.class.
+
 	@Override
 	public Member login(Member inputMember) {
-		
-		// 로그 출력
-		logger.info("MemberService.login() 실행"); // 정보 출력
-		logger.debug("memberEmail : " + inputMember.getMemberEmail());
-		logger.warn("경고");
-		logger.error("에러");
-		
 		
 		// 암호화 추가 예정
 //		System.out.println("암호화 확인 : " + bcrypt.encode(inputMember.getMemberPw()));
