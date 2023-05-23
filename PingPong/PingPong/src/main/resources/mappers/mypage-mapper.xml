@@ -10,6 +10,8 @@
 		<result property="memberInfo" column="MEMBER_INFO"/>
 		<result property="memberCareer" column="MEMBER_CAREER"/>
 		<result property="oneLiner" column="ONE_LINER"/>
+		<result property="memberUrl" column="MEMBER_URL"/>
+		<result property="memberCertificate" column="MEMBER_CERTIFICATE"/>
 		
 		<collection property="techList" 
 					select="selectTechList"
@@ -22,6 +24,26 @@
 					ofType="Career"
 					/>		
 	</resultMap>
+	
+	<resultMap type="Tech" id="tech_rm">
+		<id property="techNo" column="TECH_NO"/>
+		<result property="techName" column="TECH_NAME"/>
+		<result property="techImg" column="TECH_IMG"/>	
+		<result property="memberNo" column="MEMBER_NO"/>	
+	</resultMap>
+	
+	<resultMap type="Interest" id="interest_rm">
+		<id property="interestsNo" column="INTERESTS_NO"/>
+		<result property="interestsName" column="INTERESTS_NAME"/>
+	</resultMap>
+	
+	<resultMap type="SNS" id="SNS_rm">
+		<id property="snsNo" column="SNS_NO"/>
+		<result property="snsName" column="SNS_NAME"/>
+		<result property="snsImg" column="SNS_IMG"/>	
+		<result property="memberNo" column="MEMBER_NO"/>
+	</resultMap>
+
 
 	<!-- 회원 정보 수정 -->
 	<update id="updateInfo" parameterType="Member">
@@ -31,21 +53,17 @@
 		WHERE MEMBER_NO = #{memberNo}
 	</update>
 	
-	
 	<!-- 회원 비밀번호 조회 -->
 	<select id="selectEncPw" parameterType="_int" resultType="string">
 		SELECT MEMBER_PW FROM "MEMBER" WHERE MEMBER_NO = #{memberNo}
 	</select>
 	
-	
 	<!-- 비밀번호 변경 -->
-	<!-- Member : 사용자 지정 별칭 (mybatis-config.xml) -->
 	<update id="changePw" parameterType="Member">
 		UPDATE "MEMBER" SET
 		MEMBER_PW = #{memberPw}
 		WHERE MEMBER_NO = #{memberNo}
 	</update>
-	
 	
 	<!-- 회원 탈퇴 -->
 	<update id="secession" parameterType="_int">
@@ -54,14 +72,12 @@
 		WHERE MEMBER_NO = #{memberNo}
 	</update>
 	
-	
 	<!-- 프로필 이미지 수정 -->
 	<update id="updateProfileImage">
 		UPDATE "MEMBER_PROFILE" SET
 		PROFILE_IMG = #{profileImage}
 		WHERE MEMBER_NO = #{memberNo}
 	</update>
-	
 	
 	<!-- 배경화면 수정 -->
 	<update id="backgroundUpdate">
@@ -70,33 +86,96 @@
 		WHERE MEMBER_NO = #{memberNo}
 	</update>
 	
-	
 	<!-- 배경화면 삽입 -->
 	<insert id="backgroundInsert">
 		INSERT INTO "MEMBER_PROFILE"("MEMBER_NO", "BACKGROUND_IMG")
 		VALUES(#{memberNo}, #{backgroundImage})
 	</insert>
 	
-	
 	<!-- 내 정보 조회하기 -->
 	<select id="selectMemberProfile" resultMap="mypage_rm">
-		SELECT MEMBER_NO, MEMBER_NICKNAME, PROFILE_IMG, BACKGROUND_IMG, MEMBER_INFO, MEMBER_CAREER, ONE_LINER 
+		SELECT MEMBER_NO, MEMBER_NICKNAME, PROFILE_IMG, BACKGROUND_IMG, MEMBER_INFO, MEMBER_CAREER, MEMBER_CERTIFICATE, ONE_LINER ,MEMBER_URL
 		FROM "MEMBER_PROFILE"
 		RIGHT JOIN "MEMBER" USING(MEMBER_NO)
 		WHERE MEMBER_NO = #{memberNo}
 	</select>
 	
-	<select id="selectTechList">
-		SELECT TECH_NAME, TECH_IMG
-		FROM "TECH"
-		WHERE TECH_NO IN (SELECT TECH_NO FROM "MEMBER_TECH"
-					WHERE MEMBER_NO = #{memberNO})
+	<!-- 프로필 정보 수정 -->
+	<update id="updateProfileInfo" parameterType="MyPage" >
+		UPDATE "MEMBER_PROFILE"
+		SET MEMBER_INFO = #{memberInfo}
+			, MEMBER_CAREER = #{memberCareer}
+			, MEMBER_CERTIFICATE = #{memberCertificate}
+		WHERE MEMBER_NO = #{memberNo}
+	</update>
+	
+	
+	
+	
+	
+	<!-- 전체 지식기술 조회 -->
+	<select id="selectTechList" resultMap="tech_rm">
+		SELECT * FROM "TECH"
 	</select>
 	
-	<select id="selectCareerList">
-		SELECT CERTIFICATE_NO, MEMBER_CERT
-		FROM "CAREER"
-		WHERE CERTIFICATE_NO IN (SELECT CERTIFICATE_NO FROM "MEMBER_PROFILE"
-					WHERE MEMBER_NO = #{memberNo})	
+	<!-- 선택된 지식기술 조회 -->
+	<select id="seletCheckTechList" resultMap="tech_rm">
+		SELECT MEMBER_TECH_NO, MEMBER_NO, TECH_NO, TECH_NAME, TECH_IMG
+		FROM "MEMBER_TECH"
+		JOIN "TECH" USING (TECH_NO)
+		WHERE MEMBER_NO = #{memberNo}
 	</select>
+	
+	<!-- 선택된 지식/기술 한개씩 삽입 -->
+	<insert id="insertNewTechList">
+		INSERT INTO "MEMBER_TECH"
+		VALUES(SEQ_TECH_NO.NEXTVAL, #{memberNo}, #{techNo})
+	</insert>
+	
+	<!-- 선택한 techImgList 조회 -->
+	<select id="seletCheckTechImgList" resultMap="tech_rm">
+		SELECT TECH_IMG
+		FROM "MEMBER_TECH"
+		JOIN "TECH" USING (TECH_NO)
+		WHERE MEMBER_NO =  #{memberNo}
+	</select>
+	
+	<delete id="techListDeleteAll">
+		DELETE FROM "MEMBER_TECH"
+		WHERE MEMBER_NO = #{memberNo}
+	</delete>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	<!-- 전체 관심분야 조회 -->
+	<select id="selectInterestList" resultMap="interest_rm">
+		SELECT INTERESTS_NO, INTERESTS_NAME
+		FROM INTERESTS
+	</select>
+	
+	
+	<!-- 전체 SNS 조회 -->
+	<select id="selectSNSList" resultMap="SNS_rm">
+		SELECT SNS_NO, SNS_NAME, SNS_IMG
+		FROM SNS
+	</select>
+	
+	
+
+
 </mapper>

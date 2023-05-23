@@ -22,7 +22,7 @@
             <form action="/member/login" method="post">
                 <div class="login-input-email">
                     <p>이메일</p>
-                    <input type="email" name="memberEmail" required>
+                    <input type="email" name="memberEmail" value="${cookie.saveId.value}" required>
                 </div>
     
                 <div class="login-input-password">
@@ -34,11 +34,11 @@
     
                 <div class="login-check">
                     <div>
-                        <input type="checkbox" id="checkLogin" name="saveId">
-                        <label for="checkLogin">
-                            <span></span>
-                            로그인 유지
-                        </label>
+                        <c:if test="${ !empty cookie.saveId.value}">
+                            <c:set var="chk" value="checked"/>
+                        </c:if>
+                        <input type="checkbox" id="saveId" name="saveId" ${chk}>
+                        <label for="saveId"><span></span>아이디 저장</label>
                     </div>
                     <a href="/member/pwSearch">비밀번호 찾기</a>
                 </div>

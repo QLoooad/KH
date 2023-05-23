@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.pingpong.project.member.model.dto.Member;
+import com.pingpong.project.search.model.dto.SearchTag;
 
 @Repository // DB 연결 의미 + bean 등록
 public class AjaxDAO {
@@ -34,17 +35,22 @@ public class AjaxDAO {
 		return sqlSession.selectOne("ajaxMapper.checkUrl", URL);
 	}
 		
+	// 닉네임이 일부라도 일치하는 모든 회원 조회 (40명)
+	public List<Member> selectAllNickname(String input) {
+		return sqlSession.selectList("ajaxMapper.selectAllNickname", input);
+	}
+	// 태그가 일부라도 일치하는 모든 태그 조회 (40명)
+	public List<SearchTag> selectAllTag(String headerOpenSearchBox) {
+		return sqlSession.selectList("ajaxMapper.selectAllTag", headerOpenSearchBox);
+	}
+	
 	//////////////////////////////////////////////////////////
 	// 이메일로 회원 정보 조회
 	public Member selectMember(String email) {
 		return sqlSession.selectOne("ajaxMapper.selectMember", email);
 	}
 
-	// 이메일이 일부라도 일치하는 모든 회원 조회
-	public List<Member> selectMemberList(String input) {
-		return sqlSession.selectList("ajaxMapper.selectMemberList", input);
-		
-	}
+	
 	// 닉네임으로 전화번호 조회
 	public String selectMemberTel(String nickname) {
 		return sqlSession.selectOne("ajaxMapper.selectMemberTel", nickname);

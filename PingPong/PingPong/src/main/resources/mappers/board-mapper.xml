@@ -20,6 +20,13 @@
 		<result property="likeCount" column="LIKE_COUNT"/>
 		<result property="likeCheck" column="LIKE_CHECK"/>
 					
+		<collection property="bookmarkList"
+					select="selectBookmarkList"
+					column="BOARD_NO"
+					javaType="java.util.ArrayList"
+					ofType="Bookmark"
+					/>			
+					
 		<collection property="likeList"
 					select="selectLikeList"
 					column="BOARD_NO"
@@ -46,6 +53,11 @@
 		<id property="memberNo" column="MEMBER_NO"/>
 	</resultMap>
 	
+	<resultMap type="Bookmark" id="bookmark_rm" autoMapping="true">
+		<id property="boardNo" column="BOARD_NO"/>
+		<id property="memberNo" column="MEMBER_NO"/>
+	</resultMap>
+	
 	<resultMap type="BoardImage" id="boardImage_rm">
 		<id property="imgNo" column="IMG_NO"/>
 		<result property="imgOrder" column="IMG_ORDER"/>
@@ -66,6 +78,12 @@
 		<result property="commentDelFl" column="COMMENT_DEL_FL"/>		
 	</resultMap>
 	
+	<resultMap type="Hashtag" id="hashtag_rm">
+		<id property="hashNo" column="HASH_NO"/>
+		<result property="hashtagName" column="HASHTAG_NAME"/>
+		<result property="boardNo" column="BOARD_NO"/>
+	</resultMap>
+	
 	<select id="selectCommentList" resultMap="comment_rm">
 		SELECT LEVEL, C.* FROM
 			(SELECT COMMENT_NO, COMMENT_CONTENT,
@@ -82,13 +100,13 @@
 				]]>
 			 
 				BOARD_NO, MEMBER_NO, MEMBER_NICKNAME, PROFILE_IMG, PARENT_NO, COMMENT_DEL_FL,
-				(SELECT COUNT(*) FROM "COMMENT" IIC WHERE IIC.PARENT_NO IN (SELECT IC.COMMENT_NO FROM "COMMENT")) CHILD_CHECK
+				(SELECT COUNT(*) FROM "COMMENT" IIC WHERE IIC.PARENT_NO IN (SELECT IC.COMMENT_NO FROM "COMMENT") AND COMMENT_DEL_FL ='N') CHILD_CHECK
 			FROM "COMMENT" IC
 			JOIN "MEMBER" M ON(IC.COMMENT_MEMBER_NO = M.MEMBER_NO)
 			LEFT JOIN "MEMBER_PROFILE" USING(MEMBER_NO)
 			WHERE BOARD_NO = #{boardNo}) C
 		WHERE COMMENT_DEL_FL = 'N'
-		START WITH PARENT_NO IS NULL
+		START WITH PARENT_NO = 0
 		CONNECT BY PRIOR COMMENT_NO = PARENT_NO
 		ORDER SIBLINGS BY COMMENT_NO
 	</select>
@@ -160,6 +178,11 @@
 		WHERE BOARD_NO = #{boardNo}
 	</select>
 	
+	<select id="selectBookmarkList" resultMap="bookmark_rm">
+		SELECT MEMBER_NO
+		FROM "BOOKMARK"
+		WHERE BOARD_NO = #{boardNo}
+	</select>
 	
     <!-- 좋아요 테이블 삽입 -->
     <insert id="insertBoardLike">
@@ -184,7 +207,7 @@
 	<delete id="deleteBoardMarkup">
 		DELETE FROM "BOOKMARK"
 		WHERE BOARD_NO = #{boardNo}
-		AND MEMBER_NO = #{memberNo]
+		AND MEMBER_NO = #{memberNo}
 	</delete>
     
     <!-- 좋아요 수 조회 -->
@@ -216,5 +239,107 @@
 			</foreach>	
     	) A
     </insert>
+    
+    <insert id="hashInsert" parameterType="list">
+    	INSERT INTO "HASHTAG"
+		SELECT SEQ_HASHTAG_NO.NEXTVAL, A.*
+    	FROM(
+    		<foreach collection="list" item="hash" separator=" UNION ">
+				SELECT #{hash.hashtagName} HASHTAG_NAME 
+				FROM DUAL 
+				WHERE (SELECT COUNT(*) FROM "HASHTAG" WHERE HASHTAG_NAME=#{hash.hashtagName}) = 0
+			</foreach>	
+    	) A
+    </insert>
+    
+    <insert id="hashBoardInsert" parameterType="list">
+    	INSERT INTO "HASHTAG_BOARD"	
+   		<foreach collection="list" item="hash" separator=" UNION ">
+			SELECT #{hash.boardNo} BOARD_NO, (SELECT HASH_NO FROM HASHTAG WHERE HASHTAG_NAME = #{hash.hashtagName})
+			FROM DUAL 
+		</foreach>	
+    </insert>
+    
+    <insert id="insertComment" useGeneratedKeys="true" parameterType="Comment">
+	  <selectKey resultType="_int" keyProperty="commentNo" order="BEFORE">
+	    SELECT SEQ_COMMENT_NO.NEXTVAL FROM DUAL
+	  </selectKey>
+	  INSERT INTO "COMMENT" VALUES(#{commentNo}, #{commentContent}, SYSDATE, #{memberNo}, #{boardNo}, DEFAULT, #{parentNo})
+	</insert>
+    
+    <select id="selectComment" resultMap="comment_rm">
+    	SELECT COMMENT_NO, COMMENT_CONTENT,
+			<![CDATA[
+			CASE  
+				WHEN SYSDATE - COMMENT_DATE < 1/24/60
+				THEN FLOOR( (SYSDATE - COMMENT_DATE) * 24 * 60 * 60 ) || '초 전'
+				WHEN SYSDATE - COMMENT_DATE < 1/24
+				THEN FLOOR( (SYSDATE - COMMENT_DATE) * 24 * 60) || '분 전'
+				WHEN SYSDATE - COMMENT_DATE < 1
+				THEN FLOOR( (SYSDATE - COMMENT_DATE) * 24) || '시간 전'
+				ELSE TO_CHAR(COMMENT_DATE, 'YYYY-MM-DD')
+			END COMMENT_DATE,
+			]]>
+		 
+			BOARD_NO, MEMBER_NO, MEMBER_NICKNAME, PROFILE_IMG, PARENT_NO, COMMENT_DEL_FL,
+			(SELECT COUNT(*) FROM "COMMENT" IIC WHERE IIC.PARENT_NO IN (SELECT IC.COMMENT_NO FROM "COMMENT") AND COMMENT_DEL_FL ='N') CHILD_CHECK
+		FROM "COMMENT" IC
+		JOIN "MEMBER" M ON(IC.COMMENT_MEMBER_NO = M.MEMBER_NO)
+		LEFT JOIN "MEMBER_PROFILE" USING(MEMBER_NO)
+		WHERE COMMENT_NO = #{commentNo}
+    </select>
+    
+    <update id="updateBoard">
+    	UPDATE "BOARD" SET
+    	BOARD_CONTENT = #{boardContent}
+    	WHERE BOARD_NO = #{boardNo}
+    </update>
+	
+	<select id="selectHashtagList" resultMap="hashtag_rm">
+		SELECT HASHTAG_NAME
+		FROM "HASHTAG"
+		WHERE HASHTAG_NAME LIKE '${hashtagName}%'
+	</select>
+
+	<!-- 댓글 삭제 -->
+	<update id="deleteComment">
+		UPDATE "COMMENT" SET
+		COMMENT_DEL_FL = 'Y'
+		WHERE COMMENT_NO = #{commentNo}
+		OR PARENT_NO = #{commentNo}
+	</update>
+	
+	<!-- 댓댓글 삭제 -->
+	<update id="deleteChildComment">
+		UPDATE "COMMENT" SET
+		COMMENT_DEL_FL = 'Y'
+		WHERE COMMENT_NO = #{commentNo}
+	</update>
+
+	<!-- 메인 화면 게시글 리스트 조회 (최신순) -->
+	<select id="selectBoardAll" resultMap="board_rm">
+		SELECT BOARD_NO, IMG_ADDRESS THUMBNAIL, MEMBER_NO
+		FROM BOARD
+		JOIN BOARD_IMG USING(BOARD_NO)
+		WHERE BOARD_DEL_FL = 'N'
+		AND IMG_ORDER = 1
+		ORDER BY 1 DESC
+	</select>
+	
+	<!-- 슬라이드에 넣어줄 게시글 가져오기 (좋아요 많은 순) -->
+	<select id="selectMainList" resultMap="board_rm">
+		SELECT B.BOARD_NO, BI.IMG_ADDRESS AS THUMBNAIL, B.MEMBER_NO,
+		  (SELECT COUNT(*)
+		   FROM "LIKE"
+		   WHERE "LIKE".BOARD_NO = B.BOARD_NO
+		   ) AS LIKE_COUNT
+		FROM BOARD B
+		JOIN BOARD_IMG BI ON B.BOARD_NO = BI.BOARD_NO
+		WHERE B.BOARD_DEL_FL = 'N'
+		AND BI.IMG_ORDER = 1
+		ORDER BY LIKE_COUNT DESC
+		FETCH FIRST 12 ROWS ONLY
+	</select>
+
 	
 </mapper>

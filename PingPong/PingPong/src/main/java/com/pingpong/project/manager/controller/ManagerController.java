@@ -26,15 +26,26 @@ public class ManagerController {
 	@Autowired
 	private ManagerService service;
 	
-	//가입 회원 + 회원 목록 조회 + 페이지 네이션
+	//가입 회원 목록 조회 + 페이지 네이션
 	@GetMapping("/")
 	public String managerPage(
 			Model model
 			,@RequestParam(value="cp", required=false, defaultValue="1") int cp
+			, @RequestParam Map<String, Object> paramMap
 			) {
+		
+		if(paramMap.get("key") == null) {
 		Map<String, Object> map = service.selectMemberList(cp);
 		
 		model.addAttribute("map",map);
+		
+		}else {
+			
+			Map<String, Object> map = service.selectMemberList(paramMap, cp); // 오버로딩
+			
+			model.addAttribute("map", map);
+		}
+		
 		
 		return "manager/managerExistingMember";
 	}
@@ -60,13 +71,25 @@ public class ManagerController {
 	public String managerSecessionMember(
 			Model model
 			,@RequestParam(value="cp", required=false, defaultValue="1") int cp
+			, @RequestParam Map<String, Object> paramMap
 			) {
-		Map<String, Object> SecessionList = service.selectSessionList(cp);
-		
-		model.addAttribute("SecessionList",SecessionList);
+		if(paramMap.get("key") == null) {
+			
+			Map<String, Object> map = service.selectSecessionList(cp);
+			
+			model.addAttribute("map",map);
+		}else {
+			
+			Map<String, Object> map = service.selectSecessionList(paramMap, cp); // 오버로딩
+			
+			model.addAttribute("map", map);
+			
+		}
 		
 		return "manager/managerSecessionMember";
 	}
+	
+	
 	// 체크된 탈퇴 회원 복구
 	@PostMapping("/restore")
 	public String managerRestoreMember(
@@ -87,11 +110,21 @@ public class ManagerController {
 	public String managerPost(
 			Model model
 			,@RequestParam(value="cp", required=false, defaultValue="1") int cp
+			, @RequestParam Map<String, Object> paramMap
 			) {
+		
+		if(paramMap.get("key") == null) {
+		
 		Map<String, Object> boardList = service.selectBoardList(cp);
 		
 		model.addAttribute("boardList",boardList);
 		
+		}else {
+			
+		Map<String, Object> boardList = service.selectBoardList(paramMap, cp);
+		
+		model.addAttribute("boardList",boardList);
+		}
 
 		return "manager/managerPost";
 	}
@@ -129,10 +162,21 @@ public class ManagerController {
 	public String managerComment(
 			Model model
 			,@RequestParam(value="cp", required=false, defaultValue="1") int cp
+			, @RequestParam Map<String, Object> paramMap
 			) {
+		if(paramMap.get("key") == null) {
+		
 		Map<String, Object> CommentList = service.selectCommentList(cp);
 		
 		model.addAttribute("CommentList",CommentList);
+		
+		}else {
+			
+		Map<String, Object> CommentList = service.selectCommentList(paramMap, cp);
+		
+		model.addAttribute("CommentList",CommentList);
+		
+		}
 		
 		return "manager/managerComment";
 	}
@@ -170,12 +214,22 @@ public class ManagerController {
 	public String manager1To1inquiry(
 			Model model
 			,@RequestParam(value="cp", required=false, defaultValue="1") int cp
+			, @RequestParam Map<String, Object> paramMap
 			) {
 		
-		Map<String, Object> InquiryList = service.selectInquiryList(cp);
+		if(paramMap.get("key") == null) {
 		
-		model.addAttribute("InquiryList",InquiryList);
+			Map<String, Object> InquiryList = service.selectInquiryList(cp);
 		
+			model.addAttribute("InquiryList",InquiryList);
+		
+		}else {
+			
+			Map<String, Object> InquiryList = service.selectInquiryList(paramMap, cp);
+			
+			model.addAttribute("InquiryList",InquiryList);
+			
+		}
 		
 		return "manager/manager1To1Inquiry";
 	}

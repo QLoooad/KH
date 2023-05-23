@@ -43,6 +43,12 @@ COMMIT;
 DELETE FROM "MEMBER_TECH";
 DELETE FROM "TECH";
 
+
+DELETE FROM "TECH"
+WHERE TECH_NO=24;
+
+COMMIT;
+
 ---------------------
 -- 지식/기술 아이콘 INSERT
 
@@ -51,7 +57,8 @@ FROM "pingpong".TECH
 ORDER BY TECH_NO;
 
 SELECT MEMBER_TECH_NO, MEMBER_NO, TECH_NO
-FROM "pingpong".MEMBER_TECH;
+FROM "pingpong".MEMBER_TECH
+ORDER BY MEMBER_NO, TECH_NO;
 
 SELECT MEMBER_NO, MEMBER_EMAIL, MEMBER_PW, MEMBER_NICKNAME, MEMBER_URL, ENROLL_DATE, MEMBER_DEL_FL, AUTHORITY
 FROM "pingpong"."MEMBER";
@@ -100,14 +107,7 @@ INSERT INTO "pingpong".TECH (TECH_NO, TECH_NAME, TECH_IMG)
 VALUES(19, '큐베이스', '/resources/images/personal/techIcon/certiIcon19_cubase.png');
 INSERT INTO "pingpong".TECH (TECH_NO, TECH_NAME, TECH_IMG)
 VALUES(20, '베가스 ', '/resources/images/personal/techIcon/certiIcon20_vegas.png');
-INSERT INTO "pingpong".TECH (TECH_NO, TECH_NAME, TECH_IMG)
-VALUES(21, 'ios', '/resources/images/personal/techIcon/certiIcon21_ios.png');
-INSERT INTO "pingpong".TECH (TECH_NO, TECH_NAME, TECH_IMG)
-VALUES(22, '안드로이드', '/resources/images/personal/techIcon/certiIcon22_android.png');
-INSERT INTO "pingpong".TECH (TECH_NO, TECH_NAME, TECH_IMG)
-VALUES(23, 'spring', '/resources/images/personal/techIcon/certiIcon23_spring.png');
-INSERT INTO "pingpong".TECH (TECH_NO, TECH_NAME, TECH_IMG)
-VALUES(24, 'tomcat', '/resources/images/personal/techIcon/certiIcon24_tomcat.png');
+
 
 
 ---------------------
@@ -118,20 +118,73 @@ ALTER TABLE "MEMBER_PROFILE" DROP COLUMN CERTIFICATE_NO;
 SELECT * FROM "MEMBER_PROFILE";
 
 ---------------------
--- !!!!!!!!!!!!!!!!!  SELECT  !!!!!!!!!!!!!!!!!
+-- !!!!!!!!!!!!!!!!!  JOIN SELECT  !!!!!!!!!!!!!!!!!
 SELECT MEMBER_NO, MEMBER_NICKNAME, TECH_NAME
 FROM "MEMBER"
 JOIN "MEMBER_TECH" USING (MEMBER_NO)
 JOIN "TECH" USING (TECH_NO)
 WHERE MEMBER_NO = 50;
 
+SELECT TECH_NAME
+FROM "MEMBER"
+JOIN "MEMBER_TECH" USING (MEMBER_NO)
+JOIN "TECH" USING (TECH_NO)
+WHERE MEMBER_NO = 1;
+
+SELECT TECH_NO, TECH_NAME, TECH_IMG
+FROM "TECH"
+WHERE TECH_NO IN (SELECT TECH_NO FROM "MEMBER_TECH"
+			WHERE MEMBER_NO = 50);
+		
+		
+SELECT COUNT(*) FROM "MEMBER_TECH";
+
+
+
+---------------------
+-- !!!!!!!!!!!!!!!!!  UPDATE  !!!!!!!!!!!!!!!!!
+--UPDATE [변경될테이블] 
+--SET [컬럼1] = A2.[컬럼1] , [컬럼2] = A2.[컬럼2] 
+--FROM [조인테이블1] A2 
+--JOIN [조인테이블2] A3 
+--ON A2.[컬럼] = A3.[컬럼] 
+--WHERE [변경될테이블].[조건컬럼] = A2.[조건컬럼]
+
+
+---------------------
+---------------------	
+SELECT MEMBER_TECH_NO, MEMBER_NO, TECH_NO FROM "MEMBER_TECH";
+---------------------
+		
+SELECT COUNT(TECH_NO) 
+FROM "MEMBER_TECH"
+WHERE MEMBER_NO = 50;
+
+DELETE FROM "MEMBER_TECH"
+WHERE MEMBER_NO=50;
+
+INSERT INTO "MEMBER_TECH"
+VALUES(SEQ_TECH_NO.NEXTVAL, 50, 15);
+
+UPDATE "MEMBER_TECH"
+SET TECH_NO = 4
+WHERE MEMBER_NO = 50;
+
+---------------------
+---------------------
+
+
+SELECT MEMBER_TECH_NO, MEMBER_NO, TECH_NO, TECH_NAME
+FROM "MEMBER_TECH"
+JOIN "TECH" USING (TECH_NO)
+WHERE MEMBER_NO = 50;
+
+COMMIT;
 
 
 ---------------------
 ------ 샘플데이터 ------
 ---------------------
-SELECT * FROM "MEMBER_PROFILE";
-
 UPDATE "pingpong".MEMBER_PROFILE
 SET PROFILE_IMG='/resources/images/profileImage/20230519090939_72865.jpg'
 	, BACKGROUND_IMG='/resources/images/mypage/20230518212505_71467.PNG'
@@ -145,6 +198,35 @@ INSERT INTO "pingpong".MEMBER_TECH
 (MEMBER_TECH_NO, MEMBER_NO, TECH_NO)
 VALUES(SEQ_TECH_NO.NEXTVAL, 50, 5);
 
+INSERT INTO "pingpong".MEMBER_TECH
+(MEMBER_TECH_NO, MEMBER_NO, TECH_NO)
+VALUES(SEQ_TECH_NO.NEXTVAL, 50, 6);
+
+INSERT INTO "pingpong".MEMBER_TECH
+(MEMBER_TECH_NO, MEMBER_NO, TECH_NO)
+VALUES(SEQ_TECH_NO.NEXTVAL, 50, 7);
+
+
+
+SELECT TECH_NO, TECH_NAME, TECH_IMG
+FROM "pingpong".TECH
+ORDER BY TECH_NO;
+
+SELECT MEMBER_TECH_NO, MEMBER_NO, TECH_NO
+FROM "pingpong".MEMBER_TECH
+ORDER BY MEMBER_NO, TECH_NO;
+
+SELECT * FROM "MEMBER_PROFILE";
+
+SELECT MEMBER_NO, MEMBER_EMAIL, MEMBER_PW, MEMBER_NICKNAME, MEMBER_URL, ENROLL_DATE, MEMBER_DEL_FL, AUTHORITY
+FROM "pingpong"."MEMBER";
+
+COMMIT;
+
+
+
+
+
 
 
 
@@ -156,3 +238,6 @@ FROM "pingpong"."MEMBER";
 SELECT MEMBER_NO, PROFILE_IMG, BACKGROUND_IMG, MEMBER_INFO, MEMBER_CAREER, MEMBER_TECH, CERTIFICATE_NO, ONE_LINER
 FROM "pingpong".MEMBER_PROFILE;
 
+
+
+SELECT * FROM "TECH";

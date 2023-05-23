@@ -17,6 +17,10 @@ import com.pingpong.project.manager.dao.ManagerDAO;
 import com.pingpong.project.member.model.dto.Member;
 
 
+/**
+ * @author user
+ *
+ */
 @Service
 public class ManagerServiceImpl implements ManagerService{
 
@@ -47,23 +51,59 @@ public class ManagerServiceImpl implements ManagerService{
 		return map;
 	}
 	
+	// 검색된 회원 목록 조회
+		@Override
+		public Map<String, Object> selectMemberList(Map<String, Object> paramMap, int cp) {
+			
+			int listCount = dao.getMemberListCount(paramMap);
+			
+			Pagination pagination = new Pagination(listCount, cp);
+			
+			List<Member> memberList = dao.selectMemberList(pagination, paramMap);
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("pagination", pagination);
+			map.put("memberList", memberList);
+			
+			return map;
+		}	
+	
+	
 	// 탈퇴 회원 목록 조회
 	@Override
-	public Map<String, Object> selectSessionList(int cp) {
+	public Map<String, Object> selectSecessionList(int cp) {
 
 		int listCount = dao.getDelListCount();
 		
 		Pagination pagination = new Pagination(listCount, cp);
 		
-		List<Member> memberList = dao.selectSessionList(pagination);
+		List<Member> memberList = dao.selectSecessionList(pagination);
 		
-		Map<String, Object> SecessionList = new HashMap<>();
-		SecessionList.put("pagination", pagination);
-		SecessionList.put("memberList", memberList);
+		Map<String, Object> map = new HashMap<>();
+		map.put("pagination", pagination);
+		map.put("memberList", memberList);
 		
-		return SecessionList;
+		return map;
+	}
+	
+	// 검색된 탈퇴 회원 목록 조회
+	@Override
+	public Map<String, Object> selectSecessionList(Map<String, Object> paramMap, int cp) {
+		
+		int listCount = dao.getDelListCount(paramMap);
+		
+		Pagination pagination = new Pagination(listCount, cp);
+		
+		List<Member> memberList = dao.selectSecessionList(pagination, paramMap);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("pagination", pagination);
+		map.put("memberList", memberList);
+		
+		return map;
 	}
 
+	
 	// 게시글 목록 조회
 	@Override
 	public Map<String, Object> selectBoardList(int cp) {
@@ -80,6 +120,25 @@ public class ManagerServiceImpl implements ManagerService{
 		
 		return map;
 	}
+	
+	
+	// 검색된 게시글 목록 조회
+	@Override
+	public Map<String, Object> selectBoardList(Map<String, Object> paramMap, int cp) {
+			
+		int listCount = dao.getContentListCount(paramMap);
+		
+		Pagination pagination = new Pagination(listCount, cp);
+		
+		List<Board> boardList = dao.selectBoardList(pagination,paramMap);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("pagination", pagination);
+		map.put("boardList", boardList);
+		
+		return map;
+	}
+
 
 	// 댓글 목록 조회
 	@Override
@@ -97,6 +156,24 @@ public class ManagerServiceImpl implements ManagerService{
 		
 		return map;
 	}
+	
+	// 검색된 댓글 목록 조회
+		@Override
+		public Map<String, Object> selectCommentList(Map<String, Object> paramMap, int cp) {
+			
+		int listCount = dao.getCommentListCount(paramMap);
+		
+		Pagination pagination = new Pagination(listCount, cp);
+		
+		List<Comment> CommentList = dao.selectCommentList(pagination,paramMap);
+			
+		Map<String, Object> map = new HashMap<>();
+		map.put("pagination", pagination);
+		map.put("CommentList", CommentList);
+		
+		return map;
+		}
+
 
 	// 1:1 문의 목록 조회
 	@Override
@@ -107,6 +184,23 @@ public class ManagerServiceImpl implements ManagerService{
 		Pagination pagination = new Pagination(listCount, cp);
 		
 		List<Inquiry> InquiryList = dao.selectInquiryList(pagination);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("pagination", pagination);
+		map.put("inquiryList", InquiryList);
+		
+		return map;
+	}
+	
+	// 검색된 1:1 문의 목록 조회
+	@Override
+	public Map<String, Object> selectInquiryList(Map<String, Object> paramMap, int cp) {
+	
+		int listCount = dao.getInquiryListCount(paramMap);
+		
+		Pagination pagination = new Pagination(listCount, cp);
+		
+		List<Inquiry> InquiryList = dao.selectInquiryList(pagination,paramMap);
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("pagination", pagination);
@@ -180,6 +274,7 @@ public class ManagerServiceImpl implements ManagerService{
 		return dao.commentRe(commentNo);
 	}
 
+	
 	
 	
 	

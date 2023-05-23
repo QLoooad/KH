@@ -1,88 +1,164 @@
-// 문서가 모두 로딩된 후 수행
-document.addEventListener("DOMContentLoaded", () => {
+// 검색(태그, 닉네임) 펑션
+function handleSearchInput(headerSearchModContainer, headerOpenSearchBox) {
+    let tempTimeout;
 
-    const query = document.querySelector("#query"); // 헤더 검색창
+    if (headerOpenSearchBox != null) {
+        headerOpenSearchBox.addEventListener("input", (e) => {
+            if (e.target.value.trim().length == 0) return;
 
-    const searchResult = document.querySelector("#searchResult"); // 검색창 자동 완성 영역
+            clearTimeout(tempTimeout);
 
+            tempTimeout = setTimeout(() => {
+                if (headerOpenSearchBox.value == '' || headerOpenSearchBox.value == '#') {
+                    headerSearchModContainer.style.display = "none";
+                } else {
+                    headerSearchModContainer.style.display = "block";
+                }
+                headerSearchModContainer.innerHTML = '';
 
-    query.addEventListener("input", e => {
+                if (headerOpenSearchBox.value.charAt(0) != '#') {
+                    fetch("/selectAllNickname", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/text" },
+                        body: headerOpenSearchBox.value
+                    })
+                        .then(resp => resp.json())
+                        .then(memberList => {
+                            console.log(memberList);
 
-        if (query.value.trim().length > 0) { // 입력된 내용이 있을 때
-            fetch("/board/headerSearch?query=" + query.value.trim())
-                .then(resp => resp.json())
-                .then(list => {
-                    console.log(list);
+                            if (memberList.length == 0) {
+                                headerSearchModContainer.style.display = "none";
+                                return;
+                            } else {
+                                headerSearchModContainer.style.display = "block";
+                            }
+                            for (let member of memberList) {
+                                let newLink = document.createElement("a");
+                                newLink.href = "/mypage/" + member.memberNo;
 
-                    if (list.length > 0) { // 검색 결과가 있을 때
-                        searchResult.classList.remove("close");
+                                let mainBox = document.createElement("div");
+                                mainBox.classList.add("search-result-main-box");
 
-                        // BOARD_NO, BOARD_TITLE, READ_COUNT, BOARD_CODE, BOARD_NAME 
+                                let innerBox = document.createElement("div");
+                                innerBox.classList.add("search-result-inner-box");
 
-                        searchResult.innerHTML = ""; // 이전 검색 내역 삭제
+                                let modRound1 = document.createElement("div");
+                                modRound1.classList.add("searchModRound1");
 
-                        for (let map of list) {
-                            const li = document.createElement("li");
-                            li.setAttribute("path", `${map.BOARD_CODE}/${map.BOARD_NO}`);
+                                let userPicture = document.createElement("img");
+                                userPicture.classList.add("search-user-picture");
+                                userPicture.src = member.profileImage;
+                                userPicture.alt = "";
 
+                                modRound1.appendChild(userPicture);
+                                innerBox.appendChild(modRound1);
 
-                            const a = document.createElement("a");
+                                let userBox = document.createElement("div");
+                                userBox.classList.add("search-input-user-box");
 
-                            map.BOARD_TITLE = map.BOARD_TITLE.replace(query.value, `<mark>${query.value}</mark>`);
-                            map.BOARD_TITLE = `<b>${map.BOARD_TITLE}</b>`;
+                                let userName = document.createElement("span");
+                                userName.classList.add("search-input-tag-name");
+                                userName.textContent = member.memberNickname;
 
-                            a.innerHTML = `${map.BOARD_TITLE} - ${map.BOARD_NAME}`;
+                                userBox.appendChild(userName);
+                                innerBox.appendChild(userBox);
 
-                            a.setAttribute("href", "#");
+                                mainBox.appendChild(innerBox);
+                                newLink.appendChild(mainBox);
 
-                            a.addEventListener("click", e => {
-                                e.preventDefault();
+                                headerSearchModContainer.appendChild(newLink);
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                } else {
+                    fetch("/selectAllTag", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/text" },
+                        body: e.target.value.substring(1)
+                    })
+                        .then(resp => resp.json())
+                        .then(tagList => {
+                            if (tagList.length == 0) {
+                                headerSearchModContainer.style.display = "none";
+                                return;
+                            } else {
+                                headerSearchModContainer.style.display = "block";
+                            }
+                            for (let tag of tagList) {
+                                let newLink = document.createElement("a");
+                                newLink.href = "/";
 
-                                const path = e.currentTarget.parentElement.getAttribute("path");
+                                let mainBox = createElementWithClass("div", "search-result-main-box");
+                                let innerBox = createElementWithClass("div", "search-result-inner-box");
+                                let modRound1 = createElementWithClass("div", "searchModRound1");
 
-                                location.href = "/board/" + path;
+                                let svg = createElementWithNS("svg", "http://www.w3.org/2000/svg");
+                                svg.setAttribute("aria-label", "해시태그");
+                                svg.classList.add("search-tag-icon");
 
+                                let svgElements = [
+                                    { tag: "line", attributes: [["fill", "none"], ["stroke", "currentColor"], ["stroke-linecap", "round"], ["stroke-linejoin", "round"], ["stroke-width", "2"], ["x1", "4.728"], ["x2", "20.635"], ["y1", "7.915"], ["y2", "7.915"]] },
+                                    { tag: "line", attributes: [["fill", "none"], ["stroke", "currentColor"], ["stroke-linecap", "round"], ["stroke-linejoin", "round"], ["stroke-width", "2"], ["x1", "3.364"], ["x2", "19.272"], ["y1", "15.186"], ["y2", "15.186"]] },
+                                    { tag: "line", attributes: [["fill", "none"], ["stroke", "currentColor"], ["stroke-linecap", "round"], ["stroke-linejoin", "round"], ["stroke-width", "2"], ["x1", "17.009"], ["x2", "13.368"], ["y1", "2"], ["y2", "22"]] },
+                                    { tag: "line", attributes: [["fill", "none"], ["stroke", "currentColor"], ["stroke-linecap", "round"], ["stroke-linejoin", "round"], ["stroke-width", "2"], ["x1", "10.64"], ["x2", "7"], ["y1", "2"], ["y2", "22"]] }
+                                ];
 
-                            });
+                                svgElements.forEach(function (element) {
+                                    let svgElement = createElementWithNS(element.tag, "http://www.w3.org/2000/svg");
+                                    element.attributes.forEach(function (attribute) {
+                                        svgElement.setAttribute(attribute[0], attribute[1]);
+                                    });
+                                    svg.appendChild(svgElement);
+                                });
 
-                            li.append(a)
-                            searchResult.append(li);
+                                modRound1.appendChild(svg);
+                                innerBox.appendChild(modRound1);
 
+                                let tagBox = createElementWithClass("div", "search-input-tag-box");
+                                let tagName = createElementWithClassText("span", "search-input-tag-name", tag.hashtagName);
 
-                        }
+                                tagBox.appendChild(tagName);
+                                innerBox.appendChild(tagBox);
 
-                    } else { // 검색 결과가 없다면
-                        searchResult.classList.add("close");
-                    }
-                })
-                .catch(err => console.log(err));
+                                mainBox.appendChild(innerBox);
+                                newLink.appendChild(mainBox);
 
+                                headerSearchModContainer.appendChild(newLink);
 
-        } else { // 입력된 내용이 없을 때
-            searchResult.classList.add("close");
-        }
+                                // Helper functions
+                                function createElementWithClass(tagName, className) {
+                                    let element = document.createElement(tagName);
+                                    element.classList.add(className);
+                                    return element;
+                                }
 
+                                function createElementWithClassText(tagName, className, textContent) {
+                                    let element = createElementWithClass(tagName, className);
+                                    element.textContent = textContent;
+                                    return element;
+                                }
 
-    })
-
-});
-
-document.addEventListener("click", e => {
-    const elementList = document.querySelectorAll(".search-area, .search-area *");
-    const searchResult = document.querySelector("#searchResult"); // 검색창 자동 완성 영역
-
-    let flag = true;
-    for (let element of elementList) {
-
-        if (element == e.target) {
-            flag = false;
-            break;
-        }
+                                function createElementWithNS(tagName, namespace) {
+                                    return document.createElementNS(namespace, tagName);
+                                }
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                }
+            }, 1);
+        });
     }
+}
 
-    if (flag) {
-        searchResult.classList.add("close");
-        // searchResult.innerHTML = ""; 
-    }
+const headerSearchModContainer1 = document.getElementById("headerSearchModContainer");
+const headerOpenSearchBox1 = document.getElementById("headerOpenSearchBox");
 
-});
+const navSearchModContainer = document.getElementById("navSearchModContainer");
+const navSearchBox = document.getElementById("navSearchBox");
+handleSearchInput(headerSearchModContainer1, headerOpenSearchBox1);
+handleSearchInput(navSearchModContainer, navSearchBox);
+

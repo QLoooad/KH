@@ -4,7 +4,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -26,7 +30,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.pingpong.project.board.model.dto.Board;
 import com.pingpong.project.common.utility.Util;
 import com.pingpong.project.member.model.dto.Member;
+import com.pingpong.project.message.model.dto.Follow;
+import com.pingpong.project.message.model.service.AlarmService;
+import com.pingpong.project.mypage.model.dto.Interest;
 import com.pingpong.project.mypage.model.dto.MyPage;
+import com.pingpong.project.mypage.model.dto.SNS;
+import com.pingpong.project.mypage.model.dto.Tech;
 import com.pingpong.project.mypage.model.service.MypageService;
 
 
@@ -38,11 +47,15 @@ public class MypageController {
 	@Autowired
 	private MypageService service;
 	
+	@Autowired
+	private AlarmService alarmService;
+	
 	// 프로필 조회
 	@GetMapping("/{memberNo}")
 	public String personal(
 			@PathVariable("memberNo") int memberNo
-			, Model model) {
+			, Model model
+			, @SessionAttribute("loginMember") Member loginMember) {
 		
 		
 		MyPage mypage = service.selectMemberProfile(memberNo);  // 멤버 프로필 회원의 정보
@@ -50,19 +63,65 @@ public class MypageController {
 		List<Board> boardMarkList = service.selectBoardMarkList(memberNo);  // 북마크한 게시글 목록
 		List<Board> boardLikeList = service.selectBoardLikeList(memberNo);  // 좋아요한 게시글 목록
 		
+		// memberNo == 현재 보고 있는 페이지의 멤버 번호
+		Map<String, Integer> follow = new HashMap<>();
+		follow.put("memberNo", memberNo);
+		follow.put("followerNo", loginMember.getMemberNo());
+		int followCheck = alarmService.followCheck(follow); // 팔로우 여부 체크 0 == 안함 / 1 == 함
+		List<Follow> myfollowList = alarmService.myfollowList(follow); // 내가 팔로우 하는 사람들
+		List<Follow> mefollowList = alarmService.mefollowList(follow); // 나를 팔로우 하는 사람들
+		
+		
+		model.addAttribute("memberNo", memberNo);
 		model.addAttribute("mypage", mypage);
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("markList", boardMarkList);
 		model.addAttribute("likeList", boardLikeList);
+		
+		model.addAttribute("followCheck", followCheck);
+		model.addAttribute("myfollowList", myfollowList);
+		model.addAttribute("mefollowList", mefollowList);
+		
+		
+		// 선택한 techImgList 조회
+		List<Tech> checkTechImgList = service.seletCheckTechImgList(loginMember.getMemberNo());
+		
+		List<String> techImgList = new ArrayList<>();
+		
+		for (Tech tech : checkTechImgList) {
+		    techImgList.add(tech.getTechImg());
+		}
+		model.addAttribute("techImgList", techImgList);
 		
 		return "personal/post";
 	}
 	
 	// 내 정보 수정으로 이동
 	@GetMapping("/myPageModi")
-	public String myPageModi(@SessionAttribute("loginMember") Member loginMember, Model model) {
+	public String myPageModi(@SessionAttribute("loginMember") Member loginMember
+							, Model model) {
+		
+		// interestList 전체 조회
+		List<Interest> interestList = service.selectInterestList();
+		model.addAttribute("interestList", interestList);
+		
+		// techList 전체 조회
+		List<Tech> techList = service.selectTechList();
+		model.addAttribute("techList", techList); 
+		
+		// 선택한 techList 조회
+		List<Tech> checkTechList = service.seletCheckTechList(loginMember.getMemberNo());
+		model.addAttribute("checkTechList", checkTechList);
+		
+		
+		// SNSList 전체 조회
+		List<SNS> SNSList = service.selectSNSList();
+		model.addAttribute("SNSList", SNSList);
+		
+		
 		return "personal/myPageModi"; 
 	}
+	
 	
 	
 	
@@ -70,6 +129,7 @@ public class MypageController {
 	@PostMapping("/myPageModi")
 	public String updateInfoAndProfile(Member updateMember
 									, @RequestParam(value="profileImage", required=false) MultipartFile profileImage
+									, @RequestParam(value="interest", required=false) String[] interest
 									, @SessionAttribute("loginMember") Member loginMember
 									, @SessionAttribute("mypage") MyPage mypage
 									, RedirectAttributes ra
@@ -82,41 +142,127 @@ public class MypageController {
 
 	    String webPath = "/resources/images/profileImage/";	    
 	    String filePath = session.getServletContext().getRealPath(webPath);
-	    
-//	    System.out.println(profileImage);
-	    
-	    String fileName = profileImage.getOriginalFilename();
-//		System.out.println(fileName);
-	    
-		String reName = Util.fileRename(fileName);
-//		System.out.println(reName);
-		
-	    // 프로필 이미지 수정
-	    int profileResult = service.updateProfile(profileImage, reName, webPath, filePath, loginMember.getMemberNo());
 
 	    String message = null;
-	    if (infoResult > 0 && profileResult > 0) {
-	    	
-	        message = "회원 정보가 수정되었습니다.";
+	    if (profileImage != null && !profileImage.isEmpty()) {
+	        String fileName = profileImage.getOriginalFilename();
+	        String reName = Util.fileRename(fileName);
+	        
+	        // 프로필 이미지 수정
+	        int profileResult = service.updateProfile(profileImage, reName, webPath, filePath, loginMember.getMemberNo());
 
-	        // Session에 로그인 된 회원 정보 수정
-	        loginMember.setMemberNickname(updateMember.getMemberNickname());
-	        loginMember.setMemberUrl(updateMember.getMemberUrl());
-	        
-	        mypage.setProfileImage(webPath+reName);
-	        
+	        if (infoResult > 0 && profileResult > 0) {
+	            message = "회원 정보가 수정되었습니다.";
+
+	            // Session에 로그인 된 회원 정보 수정
+	            loginMember.setMemberNickname(updateMember.getMemberNickname());
+	            loginMember.setMemberUrl(updateMember.getMemberUrl());
+	            
+	            mypage.setProfileImage(webPath + reName);
+	        } else {
+	            message = "회원 정보 수정 실패";
+	        }
 	    } else {
-	        message = "회원 정보 수정 실패";
+	        if (infoResult > 0) {
+	            message = "회원 정보가 수정되었습니다.";
+
+	            // Session에 로그인 된 회원 정보 수정
+	            loginMember.setMemberNickname(updateMember.getMemberNickname());
+	            loginMember.setMemberUrl(updateMember.getMemberUrl());
+	        } else {
+	            message = "회원 정보 수정 실패";
+	        }
+	    }
+	    
+	    // 관심분야
+	    if (interest != null) {
+	        for(String i : interest) {
+	            // System.out.println(i);
+	        }
 	    }
 
 	    ra.addFlashAttribute("message", message);
 
-	    return "redirect:myPageModi";
+	    return "personal/post";
 	}
 
+	
+	
+	// 프로필 편집 memberInfo, memberCareer, memberCertificate
+	@PostMapping("/profile")
+	public String updateProfileInfo(MyPage updateMyPage
+			, @RequestParam(value="tech", required=false) String[] techArray
+			, @RequestParam(value="SNS", required=false) String[] SNSArray
+			, @SessionAttribute("mypage") MyPage mypage
+			, @SessionAttribute("loginMember") Member loginMember
+			, RedirectAttributes ra
+			, HttpSession session) {
+		
+		
+		
+		List<String> selectedtechList = Arrays.asList(techArray);
+		
+		
+		updateMyPage.setMemberNo(mypage.getMemberNo());
+		
+		// 자기소개, 커리어, 자격증 수정
+		int profileInfoResult = service.updateProfileInfo(updateMyPage);
+		
+//		System.out.println(profileInfoResult);
+//		System.out.println(updateMyPage);
+		
+		String message = null;
+		if(profileInfoResult > 0) {
+			
+			message = "회원 프로필 정보가 수정되었습니다";
+			
+			mypage.setMemberInfo(updateMyPage.getMemberInfo());
+			mypage.setMemberCareer(updateMyPage.getMemberCareer());
+			mypage.setMemberCertificate(updateMyPage.getMemberCertificate());
+			
+//			System.out.println(updateMyPage.getMemberInfo());
+//			System.out.println(updateMyPage.getMemberCareer());
+//			System.out.println(updateMyPage.getMemberCertificate());
+			
+		}else {
+			message = "회원 프로필 정보 수정 실패";
+		}
+		
+		
+		
+		/* *** 지식/기술 리스트 *** */
+		// 선택한 techImgList 조회 전 모두 삭제(체크 해제 구현을 위한)
+		int techListDelete =  service.techListDeleteAll(loginMember.getMemberNo());
+				
+		
+		// 체크된 techList 삽입
+		for(String tech : selectedtechList) {	
+			
+			Map<String, Object> techMap = new HashMap<>();
+			
+			techMap.put("techNo", tech);
+			techMap.put("memberNo", loginMember.getMemberNo());
+			
+			System.out.println(techMap.get("techNo"));
+			
+			int result = service.insertNewTechList(techMap);
+		}
+
+		
+       
+		
+		// SNS 
+//		for(String s : SNS) {
+//			System.out.println(s);
+//		}
+		
+		ra.addFlashAttribute("message", message);
+		
+		return "redirect:/mypage/" + mypage.getMemberNo(); // mypage로 redirect
+	}
 
 	
-	// 비밀번호 수정
+	// 비밀번호 변경
 	@PostMapping("/changePw")
 	public String changePw(String currentPw, String newPw
 						, @SessionAttribute("loginMember") Member loginMember
@@ -186,8 +332,6 @@ public class MypageController {
 	}
 	
 	
-	
-    
     // 배경화면 변경
     @PostMapping("/background/insert")
     public String background(
