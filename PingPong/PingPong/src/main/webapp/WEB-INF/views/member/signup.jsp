@@ -58,7 +58,7 @@
                     </label>
                 </div>
 
-                <a href="#" class="open-termsBtn">확인하기</a>
+                <span class="open-termsBtn">확인하기</span>
             </div>
     
             <div>
