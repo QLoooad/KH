@@ -156,7 +156,7 @@ if (imageInput != null) {
     originalImage = profileImage.getAttribute("src");
 
     // 회원 프로필 화면 진입 시 현재 회원의 프로필 이미지 상태를 확인
-    if (profileImage.getAttribute("src") == "/resources/images/profileImage/basicUserProfile.ico") {
+    if (profileImage.getAttribute("src") == "/resources/images/profileImage/basicUserProfile.png") {
         initCheck = false; // 기본 이미지
     }
     else {
@@ -220,7 +220,7 @@ if (imageInput != null) {
     deleteProfile.addEventListener("click", () => {
 
         imageInput.value = "";
-        profileImage.setAttribute("src", "/resources/images/profileImage/basicUserProfile.ico");
+        profileImage.setAttribute("src", "/resources/images/profileImage/basicUserProfile.png");
 
         deleteCheck = 0;
     });
@@ -245,6 +245,9 @@ if (imageInput != null) {
         }
     });
 }
+
+
+
 
 /* ********************************************************************** */
 
@@ -358,44 +361,116 @@ function tech_checkbox(){
 
 
 /* ********************************************************************** */
+const checkObj1ruewyehruewyeh = {
+    "memberPw": false,
+    "memberPwConfirm": false
+};
+/* *** 비밀번호 변경 시 *** */
+const memberPw = document.getElementById("memberPw");
+const memberPwConfirm = document.getElementById("memberPwConfirm");
+const pwMessage1 = document.getElementById("pwMessage1");
+const pwMessage2 = document.getElementById("pwMessage2");
+if (memberPw != null) {
+    memberPw.addEventListener("input", (e) => {
 
-/* *** 비밀번호 변경 제출 시 *** */
-const currentPw = document.querySelector("#currentPw");
-const newPw = document.querySelector("#newPw");
-const newPwConfirm = document.querySelector("#newPwConfirm");
-const secessionBtn = document.querySelector("#secessionBtn");
-const changePwFrm = document.querySelector("#changePwFrm");
+        // 비밀번호가 입력되지 않은 경우
+        if (memberPw.value.trim().length == 0) {
+            memberPw.value = ""; // 띄어쓰지 못넣게 하기
 
-if (changePwFrm != null) { // 현재 페이지가 비밀번호 변경 페이지인 경우
+            pwMessage1.innerText = "8글자 이상의 영어, 숫자, 특수문자를 포함한 비밀번호를 입력해 주세요.";
+            pwMessage1.classList.remove("confirm", "error"); // 검정 글씨
 
-    changePwBtn.addEventListener("click", e => {
+            checkObj1ruewyehruewyeh.memberPw = false; // 빈칸 == 유효 X
+            return;
+        }
+        if (memberPwConfirm.value.trim().length == 0) {
+            memberPwConfirm.value = ""; // 띄어쓰지 못넣게 하기
 
-        // 현재 비밀번호 미작성 시
-        if (currentPw.value.trim() == "") {
-            alert("현재 비밀번호를 입력해주세요");
-            e.preventDefault();
-            currentPw.focus();
+            pwMessage2.innerText = "";
+            pwMessage2.classList.remove("confirm", "error"); // 검정 글씨
+
+            checkObj1ruewyehruewyeh.memberPwConfirm = false; // 빈칸 == 유효 X
             return;
         }
 
-        // 비밀번호 유효성 검사
+        // 8~ 영문 소문자, 최소 1개의 숫자 혹은 특수 문자 포함
         const regEx = /^(?=.*[a-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-z\d$@$!%*#?&]{8,}$/;
-        if (!regEx.test(newPw.value)) {
-            alert("비밀번호가 유효하지 않습니다");
-            e.preventDefault();
-            newPw.focus();
-            return;
-        }
 
-        // 비밀번호 != 비밀번호 확인
-        if (newPw.value != newPwConfirm.value) {
-            alert("비밀번호가 일치하지 않습니다");
-            e.preventDefault();
-            newPwConfirm.focus();
-            return;
-        }
+        // 입력한 비밀번호가 유효한 경우
+        if (regEx.test(memberPw.value)) {
+            checkObj1ruewyehruewyeh.memberPw = true;
+            if (memberPwConfirm.value.trim().length == 0) {
 
-        changePwFrm.submit();
+                pwMessage1.innerText = "유효한 비밀번호 형식입니다";
+                pwMessage1.classList.add("confirm");
+                pwMessage1.classList.remove("error");
+
+            } else {
+                if (memberPw.value == memberPwConfirm.value) {
+                    pwMessage2.innerText = "비밀번호가 일치합니다";
+                    pwMessage2.classList.add("confirm");
+                    pwMessage2.classList.remove("error");
+                    checkObj1ruewyehruewyeh.memberPwConfirm = true;
+
+                } else { // 다를 경우
+                    pwMessage2.innerText = "비밀번호가 일치하지 않습니다";
+                    pwMessage2.classList.add("error");
+                    pwMessage2.classList.remove("confirm");
+                    checkObj1ruewyehruewyeh.memberPwConfirm = false;
+                }
+            }
+
+        } else { // 유효하지 않은 경우
+            pwMessage1.innerText = "비밀번호 형식이 유효하지 않습니다";
+            pwMessage1.classList.add("error");
+            pwMessage1.classList.remove("confirm");
+            checkObj1ruewyehruewyeh.memberPw = false;
+        }
+    });
+
+
+    // 비밀번호 확인 유효성 검사
+    memberPwConfirm.addEventListener('input', () => {
+
+        if (true) { // 비밀번호가 유효하게 작성된 경우에
+
+            // 비밀번호 == 비밀번호 확인  (같을 경우)
+            if (memberPw.value == memberPwConfirm.value) {
+                pwMessage2.innerText = "비밀번호가 일치합니다";
+                pwMessage2.classList.add("confirm");
+                pwMessage2.classList.remove("error");
+                checkObj1ruewyehruewyeh.memberPwConfirm = true;
+
+            } else { // 다를 경우
+                pwMessage2.innerText = "비밀번호가 일치하지 않습니다";
+                pwMessage2.classList.add("error");
+                pwMessage2.classList.remove("confirm");
+                checkObj1ruewyehruewyeh.memberPwConfirm = false;
+            }
+
+        } else { // 비밀번호가 유효하지 않은 경우
+        }
+    });
+    memberPw.addEventListener('input', () => {
+
+        if (true) { // 비밀번호가 유효하게 작성된 경우에
+
+            // 비밀번호 == 비밀번호 확인  (같을 경우)
+            if (memberPw.value == memberPwConfirm.value) {
+                pwMessage2.innerText = "비밀번호가 일치합니다";
+                pwMessage2.classList.add("confirm");
+                pwMessage2.classList.remove("error");
+                checkObj1ruewyehruewyeh.memberPwConfirm = true;
+
+            } else { // 다를 경우
+                pwMessage2.innerText = "비밀번호가 일치하지 않습니다";
+                pwMessage2.classList.add("error");
+                pwMessage2.classList.remove("confirm");
+                checkObj1ruewyehruewyeh.memberPwConfirm = false;
+            }
+
+        } else { // 비밀번호가 유효하지 않은 경우
+        }
     });
 }
 
@@ -406,15 +481,15 @@ const secessionFrm = document.querySelector("#secessionFrm");
 
 if (secessionFrm != null) { // 탈퇴 페이지인 경우
 
-    const memberPw = document.querySelector("#memberPw");
+    const secessionMemberPw = document.querySelector("#secessionMemberPw");
     const agree = document.querySelector("#agree");
 
     secessionBtn.addEventListener("click", e => {
 
-        if (memberPw.value.trim() == "") { // 비밀번호 미작성
+        if (secessionMemberPw.value.trim() == "") { // 비밀번호 미작성
             alert("비밀번호를 작성해주세요");
             e.preventDefault();
-            memberPw.focus();
+            secessionMemberPw.focus();
             return;
         }
 
@@ -438,7 +513,22 @@ if (secessionFrm != null) { // 탈퇴 페이지인 경우
 
 /* ********************************************************************** */
 
+if (document.getElementById("changePwFrm") != null) {
+    document.getElementById("changePwFrm").addEventListener("submit", e => {
+        for (let key in checkObj1ruewyehruewyeh) {
+            if (!checkObj1ruewyehruewyeh[key]) {
+                switch (key) {
+                    case "memberPw":
+                        alert("비밀번호가 유효하지 않습니다"); break;
 
-
+                    case "memberPwConfirm":
+                        alert("비밀번호가 확인되지 않았습니다"); break;
+                }
+                e.preventDefault(); // form 태그 기본 이벤트 제거
+                return; // 함수 종료
+            }
+        }
+    });
+}
 
 

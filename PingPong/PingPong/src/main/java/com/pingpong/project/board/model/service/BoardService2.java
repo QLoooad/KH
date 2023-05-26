@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pingpong.project.board.model.dto.Board;
+import com.pingpong.project.board.model.dto.Declaration;
 import com.pingpong.project.board.model.dto.Hashtag;
 
 public interface BoardService2 {
@@ -23,6 +24,18 @@ public interface BoardService2 {
 	 * @param board
 	 */
 	void hashInsert(List<Hashtag> hashtags);
+
+	/** 게시글 삭제 서비스
+	 * @param boardNo
+	 * @return result
+	 */
+	int deleteBoard(String boardNo);
+
+	/** 게시글 신고 삽입
+	 * @param declaration
+	 * @return
+	 */
+	int insertreport(Declaration declaration);
 
 
 }

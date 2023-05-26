@@ -13,6 +13,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.pingpong.project.common.utility.Util;
 import com.pingpong.project.member.model.dto.Member;
 import com.pingpong.project.message.model.dto.Notice;
 import com.pingpong.project.message.model.service.AlarmService;
@@ -98,11 +99,13 @@ public class AlarmWebsocketHandler extends TextWebSocketHandler{
 
 			memberNo = notice.getMemberNo();
 			
-			String messageContent = notice.getMessageContent();
-			String limitedContent = messageContent.substring(0, Math.min(messageContent.length(), 10)) + "...";
+			String messageContent = Util.XSSHandling(notice.getMessageContent()); 
+			String limitedContent = messageContent.substring(0, Math.min(messageContent.length(), 20)) + "...";
 			
-			noticeContent = "<a href='/mypage/" + notice.getMemberNo() + "'>" + notice.getSendName() + "님의 메세지 입니다.</a>"
-			        + "<p class='messageBoxOpen'>" + limitedContent + "</p>";
+//			noticeContent = "<a href='/mypage/" + notice.getSendNo() + "'>" + notice.getSendName() + "님의 메세지 입니다.</a>"
+//			        + "<p onclick='gotoMessageFn()'>" + limitedContent + "</p>";
+			noticeContent = "<a href='#' onclick='gotoMessageFn()'>" + notice.getSendName() + "님의 메세지 입니다.</a>"
+			        + "<p onclick='gotoMessageFn()'>" + limitedContent + "</p>";
 			
 			notice.setMemberNo(memberNo); // 메세지 받는 사람 번호
 			notice.setNoticeContent(noticeContent);

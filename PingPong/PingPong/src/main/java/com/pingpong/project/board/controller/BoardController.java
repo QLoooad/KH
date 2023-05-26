@@ -6,16 +6,24 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.pingpong.project.board.model.dto.Board;
 import com.pingpong.project.board.model.dto.Comment;
+import com.pingpong.project.board.model.dto.Declaration;
 import com.pingpong.project.board.model.dto.Hashtag;
 import com.pingpong.project.board.model.service.BoardService;
+import com.pingpong.project.member.model.dto.Member;
 
 @RestController
 @Controller
@@ -33,14 +41,13 @@ public class BoardController {
 	
     // 좋아요 처리
     @PostMapping("/board/like")
-    public int like(@RequestBody Map<String, Integer> paramMap) {
+    public Board like(@RequestBody Map<String, Integer> paramMap) {
         return service.like(paramMap);
     }
     
     // 북마크 처리
     @PostMapping("/board/markup")
-    public int boardMarkup(@RequestBody Map<String, Integer> paramMap) {
-    	System.out.println(paramMap.get("check"));
+    public Board boardMarkup(@RequestBody Map<String, Integer> paramMap) {
     	return service.boardMarkup(paramMap);
     }
     
@@ -58,7 +65,7 @@ public class BoardController {
     
     // 게시글 수정
     @PostMapping("/board/editing")
-    public int boardEditing(@RequestBody Map<String, Object> paramMap) {
+    public Board boardEditing(@RequestBody Map<String, Object> paramMap) {
     	
     	return service.boardEditing(paramMap);
     }
@@ -66,8 +73,13 @@ public class BoardController {
     // 해시태그 조회
     @GetMapping("/board/hashtag")
     public List<Hashtag> getHashtags(String hashtagName) {
-    	System.out.println(hashtagName);
     	return service.getHashtags(hashtagName);
+    }
+    
+    // 해시태그 삭제
+    @PostMapping("/board/deleteHash")
+    public int deleteHash(@RequestBody Map<String, Object> paramMap) {
+    	return service.deleteHash(paramMap);
     }
 
     // 댓글 삭제
@@ -80,12 +92,9 @@ public class BoardController {
     // 댓댓글 삭제
     @PostMapping("/board/deleteChildComment")
     public int childCommentDelete(@RequestBody String commentNo1) {
-    	
-    	System.out.println(commentNo1);
-    	
     	int commentNo = Integer.parseInt(commentNo1);
     	return service.childCommentDelete(commentNo);
     }
-   
+    
     
 }

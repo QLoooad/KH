@@ -212,6 +212,13 @@ public class ManagerServiceImpl implements ManagerService{
 		
 		return map;
 	}
+	
+	// 1:1 문의 상세 조회
+	@Override
+	public Inquiry selectInquiry(int inquiryNo) {
+		return dao.selectInquiry(inquiryNo);
+	}
+
 
 	// 신고함 목록 조회
 	@Override
@@ -246,6 +253,13 @@ public class ManagerServiceImpl implements ManagerService{
 		map.put("DeclarationList", DeclarationList);
 		
 		return map;
+	}
+	
+	// 신고함 상세 조회
+	@Override
+	public Declaration DeclarationContentList(int indictmentNo) {
+		
+		return dao.DeclarationContentList(indictmentNo);
 	}
 
 
@@ -297,6 +311,7 @@ public class ManagerServiceImpl implements ManagerService{
 		return dao.commentRe(commentNo);
 	}
 
+	
 	
 	
 	

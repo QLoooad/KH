@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.pingpong.project.board.model.dto.Board;
+import com.pingpong.project.board.model.dto.Declaration;
 import com.pingpong.project.board.model.dto.Hashtag;
 import com.pingpong.project.board.model.service.BoardService2;
 import com.pingpong.project.member.model.dto.Member;
@@ -31,7 +32,7 @@ public class BoardController2 {
 	@Autowired
 	private BoardService2 service;
 	
-	
+	// 게시글 삽입
 	@PostMapping("/boardInsert")
 	public String boardInsert(
 			@SessionAttribute("loginMember") Member loginMember
@@ -51,18 +52,22 @@ public class BoardController2 {
     	int boardNo = service.boardInsert(board, images, webPath, filePath);
     	
     	// 해시태그 처리
-    	List<Hashtag> hashtags = new ArrayList<Hashtag>();
-    	
-    	String[] hashs = hashtagLists.split(",");  // 파라미터로 가져온 해시태그 "," 구분자로 나눠서 배열로 만듦
-    	
-    	for(int i=0;i<hashs.length;i++) {
-    		Hashtag hash = new Hashtag();
-    		hash.setHashtagName(hashs[i]);
-    		hash.setBoardNo(boardNo);
-    		hashtags.add(hash);
+    	if(!hashtagLists.isEmpty()) {
+    		
+    		List<Hashtag> hashtags = new ArrayList<Hashtag>();
+    		
+    		String[] hashs = hashtagLists.split(",");  // 파라미터로 가져온 해시태그 "," 구분자로 나눠서 배열로 만듦
+    		
+    		for(int i=0;i<hashs.length;i++) {
+    			Hashtag hash = new Hashtag();
+    			hash.setHashtagName(hashs[i]);
+    			hash.setBoardNo(boardNo);
+    			hashtags.add(hash);
+    		}
+
+    		service.hashInsert(hashtags);    		
+    		
     	}
-    	
-    	service.hashInsert(hashtags);
     	
     	String message = null;
     	if(boardNo > 0) {
@@ -75,4 +80,57 @@ public class BoardController2 {
 		return "redirect:/mypage/" + loginMember.getMemberNo();
 	}
 	
+	@GetMapping("/delete/{boardNo}")
+	public String deleteBoard(@PathVariable("boardNo") String boardNo
+							, String memberNo
+							, RedirectAttributes ra) {
+		
+		System.out.println(memberNo);
+		
+		int result = service.deleteBoard(boardNo);
+		
+		String message = null;
+		if(result>0) {
+			message = "게시글이 삭제되었습니다.";
+		} else {
+			message = "게시글 등록에 실패하였습니다";
+		}
+		
+		ra.addFlashAttribute("message", message);
+		
+		return "redirect:/mypage/"+memberNo;
+	}
+	
+	//게시글 신고
+    @PostMapping("/reportContent")
+    public String reportContent(
+    		Declaration declaration
+    		,@SessionAttribute("loginMember") Member loginMember
+    		,@RequestParam(value = "reportTitle") String reportTitle
+    		,RedirectAttributes ra
+    		,@RequestParam(value = "boardNo") int boardNo
+    		,@RequestParam(value = "indictmentContent") String indictmentContent
+    		) {
+    	
+    	declaration.setBoardNo(boardNo);
+    	declaration.setMemberNo(loginMember.getMemberNo());
+    	declaration.setReportTitle(reportTitle);
+    	declaration.setIndictmentContent(indictmentContent);
+    	
+    	int result = service.insertreport(declaration);
+
+    	System.out.println(result);
+    	
+    	String message = "";
+    	
+    	if(result>0) {
+    		message = "신고되었습니다.";
+    		ra.addFlashAttribute("message",message);
+    	}else {
+    		message = "신고에 실패했습니다";
+    		ra.addFlashAttribute("message",message);
+    	}
+    	return "redirect:/";
+    }
+    
 }

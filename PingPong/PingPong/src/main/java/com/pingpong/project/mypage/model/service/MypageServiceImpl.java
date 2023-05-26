@@ -42,26 +42,74 @@ public class MypageServiceImpl implements MypageService{
 	
 	// 프로필 이미지 수정 서비스
 	@Override
-	public int updateProfile(MultipartFile profileImage, String reName, String webPath, String filePath, int memberNo) throws IllegalStateException, IOException {
+	public int updateProfile(MultipartFile profileImage, String reName, String webPath, String filePath, Member loginMember) throws IllegalStateException, IOException {
+		
+
+		
+		// 업로드 된 이미지가 있을 경우 <-> 없는 경우 (X 버튼)
+		String rename = null; // 변경 이름 저장 변수
+		
+		if(profileImage.getSize() > 0) { // 업로드 된 이미지가 있을 경우
+			
+			// 1) 파일 이름 변경
+			rename = Util.fileRename(profileImage.getOriginalFilename());
+			
+			// 2) 바뀐 이름 loginMember에 세팅
+			loginMember.setProfileImage(webPath + rename);
+									// 	/resources/images/member/20230510~~~.jpg
+			
+		}else { // 없는 경우 (X 버튼)
+			loginMember.setProfileImage(null);
+			// 세션 이미지를 null로 변경해서 삭제
+		}
 		
 		Map<String, Object> map = new HashMap<>();
 		
-		map.put("memberNo", memberNo);
+		map.put("memberNo", loginMember.getMemberNo());
 		
 		map.put("profileImage", webPath+reName);
 		
 		int result = dao.updateProfile(map);
 		
 		if(result == 0) {
-			result = dao.backgroundInsert(map);
+			result = dao.profileInsert(map);
 		} 
+
 		if(result != 0) {
+			
 			profileImage.transferTo(new File(filePath+reName));
+			
 		} else {
+			
+			// 이전 이미지로 프로필 다시 세팅
 			throw new FileUploadException();
 		}
 		
 		return result;
+		
+		/*
+		Map<String, Object> map = new HashMap<>();  // map 으로 담아서 전달
+		
+		map.put("memberNo", memberNo);  // 회원번호 담기
+		
+		String fileName = backgroundImage.getOriginalFilename();
+		
+		String reName = Util.fileRename(fileName);  // 파일 이름 변경
+		
+		map.put("backgroundImage", webPath+reName);  // 경로와 변경된 파일 이름 합쳐서 전달
+		
+		int result = dao.backgroundUpdate(map);
+		System.out.println(result);
+		if(result == 0) {
+			result = dao.backgroundInsert(map);
+		} 
+		if(result != 0) {
+			backgroundImage.transferTo(new File(filePath+reName));
+		} else {
+			throw new FileUploadException();
+		}
+		return result;
+		*/
 	}
 
 	// 비밀번호 변경 서비스
@@ -246,8 +294,8 @@ public class MypageServiceImpl implements MypageService{
 
 	// 선택된 SNSList 삽입
 	@Override
-	public int insertNewSnsList(Map<String, Object> snsMap) {
-		return dao.insertNewSnsList(snsMap);
+	public int insertNewSnsList(SNS s) {
+		return dao.insertNewSnsList(s);
 	}
 
 	// SNSList 전체 삭제 후 SNSList 삽입 진행
@@ -262,10 +310,39 @@ public class MypageServiceImpl implements MypageService{
 		return dao.selectCheckSNSImgList(memberNo);
 	}
 
+	// snsURL COUNT
+	@Override
+	public int selectSNSAddress(int memberNo) {
+		return dao.selectSNSAddress(memberNo);
+	}
 
+	// snsURL UPDATE
+	@Override
+	public int updateSNSAddress(Map<String, Object> snsAddressMap) {
+		return dao.updateSNSAddress(snsAddressMap);
+	}
 
+	// snsURL INSERT
+	@Override
+	public int insertSNSAddress(Map<String, Object> snsAddressMap) {
+		return dao.insertSNSAddress(snsAddressMap);
+	}
+
+	// 선택한 snsList의 URL 주소 (링크)
+	@Override
+	public List<SNS> selectSNSAddressList(int memberNo) {
+		return dao.selectSNSAddressList(memberNo);
+	}
+
+	// 프로필 이미지 기본
+	@Override
+	public int updateBasicProfile(int memberNo) {
+		return dao.updateBasicProfile(memberNo);
+	}
 
 	
+	
+
 
 
 

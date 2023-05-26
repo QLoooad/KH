@@ -228,11 +228,11 @@ public class MypageDAO {
 	}
 
 	/** 선택된 SNSList 삽입
-	 * @param snsMap
+	 * @param s
 	 * @return
 	 */
-	public int insertNewSnsList(Map<String, Object> snsMap) {
-		return sqlSession.insert("mypageMapper.insertNewSnsList", snsMap);
+	public int insertNewSnsList(SNS s) {
+		return sqlSession.insert("mypageMapper.insertNewSnsList", s);
 	}
 
 	/** SNSList 전체 삭제 후 SNSList 삽입 진행
@@ -251,6 +251,57 @@ public class MypageDAO {
 		return sqlSession.selectList("mypageMapper.selectCheckSNSImgList", memberNo);
 	}
 
+	/** snsURL COUNT
+	 * @param memberNo
+	 * @return
+	 */
+	public int selectSNSAddress(int memberNo) {
+		return sqlSession.selectOne("mypageMapper.selectSNSAddress", memberNo);
+	}
+
+	/** snsURL UPDATE
+	 * @param selectedSnsAddress
+	 * @return
+	 */
+	public int updateSNSAddress(Map<String, Object> snsAddressMap) {
+		return sqlSession.update("mypageMapper.updateSNSAddress", snsAddressMap);
+	}
+
+	/** snsURL INSERT
+	 * @param snsAddressMap
+	 * @return
+	 */
+	public int insertSNSAddress(Map<String, Object> snsAddressMap) {
+		return sqlSession.insert("mypageMapper.insertSNSAddress", snsAddressMap);
+	}
+
+	/** 선택한 snsList의 URL 주소 (링크)
+	 * @param memberNo
+	 * @return
+	 */
+	public List<SNS> selectSNSAddressList(int memberNo) {
+		return sqlSession.selectList("mypageMapper.selectSNSAddressList", memberNo);
+	}
+
+	/** 프로필 이미지 기본
+	 * @param memberNo
+	 * @return
+	 */
+	public int updateBasicProfile(int memberNo) {
+		return sqlSession.update("mypageMapper.updateBasicProfile", memberNo);
+	}
+
+	/**
+	 * @param map
+	 * @return
+	 */
+	public int profileInsert(Map<String, Object> map) {
+		return sqlSession.insert("mypageMapper.profileInsert", map);
+	}
+	
+	
+	
+	
 
 
 

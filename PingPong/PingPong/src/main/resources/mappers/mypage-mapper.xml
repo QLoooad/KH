@@ -14,6 +14,7 @@
 		<result property="memberCertificate" column="MEMBER_CERTIFICATE"/>
 		<result property="techImg" column="TECH_IMG"/>
 		<result property="snsImg" column="SNS_IMG"/>
+		<result property="snsAddress" column="SNS_ADDRESS"/>
 		
 		<collection property="techList" 
 					select="selectTechList"
@@ -81,10 +82,23 @@
 		WHERE MEMBER_NO = #{memberNo}
 	</update>
 	
+	<!-- 프로필 이미지 삽입 -->
+	<insert id="profileInsert">
+		INSERT INTO "MEMBER_PROFILE"("MEMBER_NO", "PROFILE_IMG")
+		VALUES(#{memberNo}, #{profileImage})
+	</insert>
+	
 	<!-- 프로필 이미지 수정 -->
 	<update id="updateProfileImage">
 		UPDATE "MEMBER_PROFILE" SET
 		PROFILE_IMG = #{profileImage}
+		WHERE MEMBER_NO = #{memberNo}
+	</update>
+	
+	<!-- 프로필 기본 이미지 수정 -->
+	<update id="updateBasicProfile">
+		UPDATE "MEMBER_PROFILE" SET
+		PROFILE_IMG = '/resources/images/profileImage/basicUserProfile.png'
 		WHERE MEMBER_NO = #{memberNo}
 	</update>
 	
@@ -190,7 +204,7 @@
 	
 	<!-- 전체 SNS 조회 -->
 	<select id="selectSNSList" resultMap="SNS_rm">
-		SELECT SNS_NO, SNS_NAME, SNS_IMG, SNS_ADDRESS
+		SELECT SNS_NO, SNS_NAME, SNS_IMG
 		FROM SNS
 	</select>
 
@@ -200,12 +214,13 @@
 		FROM MEMBER_SNS
 		JOIN SNS USING (SNS_NO)
 		WHERE MEMBER_NO = #{memberNo}
+		ORDER BY SNS_NO
 	</select>
 	
 	<!-- 선택된 SNSList/기술 한개씩 삽입 -->
 	<insert id="insertNewSnsList">
 		INSERT INTO "MEMBER_SNS"
-		VALUES(SEQ_TECH_NO.NEXTVAL, #{memberNo}, #{snsNo})
+		VALUES(SEQ_SNS_NO.NEXTVAL, #{memberNo}, #{snsNo}, #{snsAddress})
 	</insert>
 	
 	<!-- 선택 해제 SNSList 삭제 -->
@@ -220,7 +235,79 @@
 		FROM "MEMBER_SNS"
 		JOIN "SNS" USING (SNS_NO)
 		WHERE MEMBER_NO = #{memberNo}
+		ORDER BY SNS_NO
 	</select>
+	
+	<!-- snsURL COUNT -->
+	<!--  
+	<select id="selectSNSAddress" resultType="_int">
+		SELECT COUNT(*)
+		FROM "MEMBER_SNS" 
+		WHERE SNS_ADDRESS IS NULL
+		AND MEMBER_NO = #{memberNo}
+	</select>
+	-->
+	
+	<!-- snsURL UPDATE -->
+	<update id="updateSNSAddress">
+		UPDATE "MEMBER_SNS" 
+		SET SNS_ADDRESS = #{snsAddress}
+		WHERE SNS_NO = #{snsNo}
+		AND MEMBER_NO = #{memberNo}
+	</update>
+	
+	<!-- snsURL INSERT -->
+	<insert id="insertSNSAddress">
+		INSERT INTO "MEMBER_SNS" 
+		(MEMBER_SNS_NO, MEMBER_NO, SNS_NO, SNS_ADDRESS)
+		VALUES (SEQ_MEMBER_SNS_NO.NEXTVAL, #{memberNo}, #{snsNo}, #{snsAddress})
+	</insert>
+	
+	<!-- 선택한 snsList의 URL 주소 (링크) -->
+	<select id="selectSNSAddressList" resultMap="SNS_rm">
+		SELECT SNS_NO, SNS_ADDRESS, MEMBER_NO
+		FROM MEMBER_SNS 
+		WHERE MEMBER_NO = #{memberNo}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 선택한 SNSList의 URL 조회 -->
+	<!--  
+	<select id="selectCheckSNSURL" resultMap="SNS_rm">
+		SELECT SNS_ADDRESS
+		FROM SNS 
+		JOIN MEMBER_SNS USING (SNS_NO)
+		WHERE MEMBER_NO = #{memberNo}
+	</select>
+	-->
+	
+	<!-- 선택한 snsList의 URL 주소 (링크) -->
+	<!--  
+	<select id="selectSNSAddress" resultMap="SNS_rm">
+		SELECT SNS_ADDRESS
+		FROM "MEMBER_SNS"
+		JOIN "SNS" USING (SNS_NO)
+		WHERE MEMBER_NO = #{memberNo}
+		ORDER BY SNS_NO
+	</select>
+	-->
+	
+	<!-- update snsAddress -->
+	<!-- 	
+	<update id="updateSNSAddress">
+		UPDATE SNS	
+		SET SNS_ADDRESS = #{snsAddress}
+		WHERE MEMBER_NO = #{memberNo}
+	</update> 
+	-->
+	
 	
 	
 	

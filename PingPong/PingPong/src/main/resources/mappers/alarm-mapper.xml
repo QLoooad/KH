@@ -19,6 +19,8 @@
 		<id property="followNo" column="FOLLOW_NO" />
 		<result property="memberNo" column="MEMBER_NO" />
 		<result property="followerNo" column="FOLLOWER_NO" />
+		<result property="followerName" column="FOLLOW_NICKNAME" />
+		<result property="followerImg" column="FOLLOW_PROFILE_IMG" />
 	</resultMap>
 	
 	
@@ -32,22 +34,37 @@
 	
 	<!-- 내가 팔로우 하는 사람들 -->
 	<select id="myfollowList" resultMap="follow_rm">
-		SELECT MEMBER_NO, FOLLOWER_NO, MEMBER_NICKNAME 
+		SELECT MEMBER_NO, FOLLOWER_NO, MEMBER_NICKNAME AS "FOLLOW_NICKNAME", 
+				PROFILE_IMG AS "FOLLOW_PROFILE_IMG"
 		FROM FOLLOW
 		JOIN "MEMBER" USING (MEMBER_NO)
-		WHERE FOLLOWER_NO = #{followerNo}
+		JOIN "MEMBER_PROFILE" USING (MEMBER_NO)
+		WHERE FOLLOWER_NO =#{memberNo}
 		ORDER BY FOLLOW_NO
 	</select>
 	
 	<!-- 나를 팔로우 하는 사람들 -->
 	<select id="mefollowList" resultMap="follow_rm">
-		SELECT F.MEMBER_NO, F.FOLLOWER_NO, M2.MEMBER_NICKNAME AS FOLLOWER_NICKNAME
+		SELECT F.MEMBER_NO, F.FOLLOWER_NO, M2.MEMBER_NICKNAME AS FOLLOW_NICKNAME, 
+		PF.PROFILE_IMG AS FOLLOW_PROFILE_IMG
 		FROM FOLLOW F
 		JOIN "MEMBER" M1 ON F.MEMBER_NO = M1.MEMBER_NO
 		JOIN "MEMBER" M2 ON F.FOLLOWER_NO = M2.MEMBER_NO
-		WHERE F.MEMBER_NO = #{followerNo}
+		JOIN "MEMBER_PROFILE" PF ON F.FOLLOWER_NO = PF.MEMBER_NO
+		WHERE F.MEMBER_NO = #{memberNo}
 		ORDER BY F.FOLLOW_NO
 	</select>
+	
+	<!-- 내가 팔로우 하는 사람들 수 조회 -->
+	<select id="myFollowCount" resultType="_int">
+			SELECT COUNT(*) 
+			FROM FOLLOW
+			JOIN "MEMBER" USING (MEMBER_NO)
+			WHERE FOLLOWER_NO =2
+			ORDER BY FOLLOW_NO
+	</select>
+	
+
 	
 	
 	<!-- 팔로워 삽입 -->
@@ -61,6 +78,13 @@
 		DELETE FROM FOLLOW
 		WHERE MEMBER_NO = #{memberNo}
 		AND FOLLOWER_NO = #{followerNo}
+	</delete>
+	
+	<!-- 팔로우 삭제 -->
+	<delete id="unfollow2">
+		DELETE FROM FOLLOW
+		WHERE MEMBER_NO = #{followerNo}
+		AND FOLLOWER_NO = #{memberNo}
 	</delete>
 	
 	
@@ -80,10 +104,24 @@
 	
 	<!-- 알람 삽입 -->
 	<insert id="insertAlarm">
-		INSERT INTO NOTICE
+<!-- 		INSERT INTO NOTICE
 		(NOTICE_NO, NOTICE_COMENT, ELAPSED_TIME, MEMBER_NO)
-		VALUES(SEQ_NOTICE_NO.NEXTVAL, #{noticeContent} , SYSDATE, #{memberNo})
+		VALUES(SEQ_NOTICE_NO.NEXTVAL, #{noticeContent} , SYSDATE, #{memberNo}) -->
+		INSERT INTO NOTICE
+		(NOTICE_NO, NOTICE_COMENT, ELAPSED_TIME, MEMBER_NO, SEND_NO, SEND_PROFILE)
+		VALUES(SEQ_NOTICE_NO.NEXTVAL, #{noticeContent}, SYSDATE, #{memberNo},#{sendNo},#{sendProfile})
 	</insert>
+	
+	<!-- 최근 알람 20개 조회 -->
+	<select id="alarmList" resultMap="notice_rm">
+		SELECT NOTICE_NO, NOTICE_COMENT, ELAPSED_TIME, MEMBER_NO,
+			   MEMBER_NICKNAME , SEND_NO, SEND_PROFILE AS "PROFILE_IMG"
+		FROM NOTICE
+		JOIN "MEMBER" USING (MEMBER_NO)
+		WHERE MEMBER_NO = #{memberNo}
+		ORDER BY 1 DESC
+		FETCH FIRST 20 ROWS ONLY
+	</select>
 	
 
 	

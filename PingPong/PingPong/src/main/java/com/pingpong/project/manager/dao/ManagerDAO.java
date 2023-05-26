@@ -244,6 +244,16 @@ public class ManagerDAO {
 		return sqlSession.selectList("managerMapper.selectInquiryList_search",paramMap,rowBounds);
 	}
 	
+	/** 1:1 문의 상세 조회
+	 * @param inquiryNo
+	 * @return
+	 */
+	public Inquiry selectInquiry(int inquiryNo) {
+
+		return sqlSession.selectOne("managerMapper.selectInquiry",inquiryNo);
+	}
+
+	
 	// 신고함 목록 카운트 조회
 		public int getDeclarationListCount() {
 			return sqlSession.selectOne("managerMapper.getDeclarationListCount");
@@ -274,6 +284,16 @@ public class ManagerDAO {
 		
 		return sqlSession.selectList("managerMapper.selectDeclarationList_search",paramMap,rowBounds);
 	}
+	
+	/** 신고함 상세 조회 
+	 * @param declarationNo
+	 * @return
+	 */
+	public Declaration DeclarationContentList(int indictmentNo) {
+		
+		return sqlSession.selectOne("managerMapper.selectDeclarationContentList",indictmentNo);
+	}
+
 
 	/** 체크된 회원 탈퇴
 	 * @param boardNo

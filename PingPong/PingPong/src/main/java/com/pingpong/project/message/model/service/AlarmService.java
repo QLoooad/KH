@@ -26,11 +26,14 @@ public interface AlarmService {
 	 */
 	int insertAlarm(Notice notice);
 
-//	/** 팔로우 여부 확인
-//	 * @param follow
-//	 * @return
-//	 */
-//	int followCheck(Follow follow);
+	
+	/** 최근 알람 20개 조회
+	 * @param memberNo
+	 * @return
+	 */
+	List<Notice> alarmList(int memberNo);
+	
+
 	
 	/** 팔로우 여부 확인
 	 * @param follow
@@ -45,16 +48,25 @@ public interface AlarmService {
 	int followFL(Follow follow);
 
 	/** 내가 팔로우 하는 사람들
-	 * @param follow
+	 * @param i
 	 * @return
 	 */
-	List<Follow> myfollowList(Map<String, Integer> follow);
+	List<Follow> myfollowList(int followerNo);
 
+	/** 내가 팔로우 하는 사람들 수 조회
+	 * @param memberNo
+	 * @return
+	 */
+	int myFollowCount(int memberNo);
+	
 	/** 나를 팔로우 하는 사람들
 	 * @param follow
 	 * @return
 	 */
-	List<Follow> mefollowList(Map<String, Integer> follow);
+	List<Follow> mefollowList(int followerNo);
+
+
+	
 
 	
 //	/** 팔로우 삽입
@@ -64,11 +76,11 @@ public interface AlarmService {
 //	int follow(Follow follow);
 //
 //
-//	/** 팔로우 취소
-//	 * @param follow
-//	 * @return
-//	 */
-//	int unfollow(Follow follow);
+	/** 팔로우 취소
+	 * @param follow
+	 * @return
+	 */
+	int unfollow2(Follow follow);
 
 
 

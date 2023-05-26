@@ -233,9 +233,23 @@ public class ManagerController {
 		
 		return "manager/manager1To1Inquiry";
 	}
+	// 1:1 문의 상세 내용 조회
+		@GetMapping("/1to1Content")
+		public String manager1To1Content(
+				@RequestParam("inquiryNo") int inquiryNo
+				,Model model
+				) {
+			Inquiry inquiry = service.selectInquiry(inquiryNo);
+			
+			model.addAttribute("inquiry",inquiry);
+			
+			
+			return "manager/manager1To1Content";
+		}
+	
 	//신고함
 	@GetMapping("/Report")
-	public String manager1To1Content(
+	public String managerReport(
 			Model model
 			,@RequestParam(value="cp", required=false, defaultValue="1") int cp
 			, @RequestParam Map<String, Object> paramMap
@@ -258,4 +272,17 @@ public class ManagerController {
 		return "manager/managerReport";
 	}
 	
+	// 신고함 상세 내역 조회
+	@GetMapping("/ReportContent")
+	public String managerReportContent(
+			Model model
+			,@RequestParam("indictmentNo") int indictmentNo
+			) {
+	
+		Declaration declaration = service.DeclarationContentList(indictmentNo);
+		
+		model.addAttribute("declaration",declaration);
+		
+		return "manager/managerReportContent";
+	}
 }

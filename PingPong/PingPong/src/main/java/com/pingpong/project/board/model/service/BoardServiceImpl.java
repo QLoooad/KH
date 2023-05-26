@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pingpong.project.board.model.dao.BoardDAO;
 import com.pingpong.project.board.model.dto.Board;
 import com.pingpong.project.board.model.dto.Comment;
+import com.pingpong.project.board.model.dto.Declaration;
 import com.pingpong.project.board.model.dto.Hashtag;
+import com.pingpong.project.common.utility.Util;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -28,7 +30,7 @@ public class BoardServiceImpl implements BoardService{
     // 좋아요 처리 서비스
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int like(Map<String, Integer> paramMap) {
+    public Board like(Map<String, Integer> paramMap) {
         int result = 0;
         if(paramMap.get("check") == 0) {
             result = dao.insertBoardLike(paramMap);
@@ -36,24 +38,26 @@ public class BoardServiceImpl implements BoardService{
             result = dao.deleteBoardLike(paramMap);
         }
         
-        if(result == 0) return -1;
-        
-        int count = dao.countBoardLike(paramMap.get("boardNo"));
-        return count;
+        if(result == 0) return null;
+        Board board = dao.select(paramMap.get("boardNo"));
+//        int count = dao.countBoardLike(paramMap.get("boardNo"));
+        return board;
     }
 
     // 북마크 테이블 삽입/삭제
 	@Override
-	public int boardMarkup(Map<String, Integer> paramMap) {
+	public Board boardMarkup(Map<String, Integer> paramMap) {
 		int result = 0;
         if(paramMap.get("check") == 0) {
             result = dao.insertBoardMarkup(paramMap);
-            System.out.println("테이블 삽입");
         } else {
             result = dao.deleteBoardMarkup(paramMap);
-            System.out.println("테이블 삭제");
         }
-        return result;
+        
+        if(result == 0) return null;
+        Board board = dao.select(paramMap.get("boardNo"));
+        
+        return board;
 	}
 
 	// 댓글 테이블 삽입
@@ -64,8 +68,17 @@ public class BoardServiceImpl implements BoardService{
 	
 	// 게시글 수정
 	@Override
-	public int boardEditing(Map<String, Object> paramMap) {
-		return dao.boardEditing(paramMap);
+	public Board boardEditing(Map<String, Object> paramMap) {
+		String newContent = Util.XSSHandling((String)paramMap.get("boardContent"));
+		paramMap.put("boardContent", newContent);
+		
+		int result = dao.boardEditing(paramMap);
+		Board board = null;
+		if(result>0) {
+			board = dao.select((Integer)paramMap.get("boardNo"));
+		}
+		
+		return board;
 	}
 
 	// 댓글 삭제
@@ -85,7 +98,13 @@ public class BoardServiceImpl implements BoardService{
 	public List<Hashtag> getHashtags(String hashtagName) {
 		return dao.getHashtags(hashtagName);
 	}
-	
+
+	// 해시태그 삭제
+	@Override
+	public int deleteHash(Map<String, Object> paramMap) {
+		return dao.deleteHash(paramMap);
+	}
+
 
 	
 }

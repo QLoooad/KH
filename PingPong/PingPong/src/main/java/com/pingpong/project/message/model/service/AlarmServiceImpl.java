@@ -36,12 +36,13 @@ public class AlarmServiceImpl implements AlarmService{
 		return dao.insertAlarm(notice);
 	}
 	
-//	// 팔로우 여부
-//	@Override
-//	public int followCheck(Follow follow) {
-//		return dao.followCheck(follow);
-//	}
 	
+	// 최근 알람 20개 조회
+	@Override
+	public List<Notice> alarmList(int memberNo) {
+		return dao.alarmList(memberNo);
+	}
+
 	// 팔로우 여부
 	@Override
 	public int followCheck(Map<String, Integer> follow) {
@@ -52,14 +53,20 @@ public class AlarmServiceImpl implements AlarmService{
 	
 	// 내가 팔로우 하는 사람들
 	@Override
-	public List<Follow> myfollowList(Map<String, Integer> follow) {
-		return dao.myfollowList(follow);
+	public List<Follow> myfollowList(int followerNo) {
+		return dao.myfollowList(followerNo);
+	}	
+	
+	// 내가 팔로우 하는 사람들 수 조회
+	@Override
+	public int myFollowCount(int memberNo) {
+		return dao.myFollowCount(memberNo);
 	}
-		
+
 	// 나를 팔로우 하는 사람들
 	@Override
-	public List<Follow> mefollowList(Map<String, Integer> follow) {
-		return dao.mefollowList(follow);
+	public List<Follow> mefollowList(int followerNo) {
+		return dao.mefollowList(followerNo);
 	}
 
 	// 팔로우 처리
@@ -88,11 +95,11 @@ public class AlarmServiceImpl implements AlarmService{
 //		return dao.follow(follow);
 //	}
 
-//	// 팔로우 취소
-//	@Override
-//	public int unfollow(Follow follow) {
-//		return dao.unfollow(follow);
-//	}
+	// 팔로우 취소
+	@Override
+	public int unfollow2(Follow follow) {
+		return dao.unfollow2(follow);
+	}
 
 
 	

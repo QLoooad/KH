@@ -78,7 +78,7 @@ public interface MypageService {
 	 * @param loginMember
 	 * @return result
 	 */
-	int updateProfile(MultipartFile profileImage, String reName, String webPath, String filePath, int memberNo) throws IllegalStateException, IOException ;
+	int updateProfile(MultipartFile profileImage, String reName, String webPath, String filePath, Member loginMember) throws IllegalStateException, IOException ;
 
 
 	/** 프로필 정보 수정
@@ -162,10 +162,10 @@ public interface MypageService {
 	List<SNS> seletCheckSNSList(int memberNo);
 
 	/** 선택된 SNSList 삽입
-	 * @param snsMap
+	 * @param s
 	 * @return
 	 */
-	int insertNewSnsList(Map<String, Object> snsMap);
+	int insertNewSnsList(SNS s);
 	
 	/** SNSList 전체 삭제 후 SNSList 삽입 진행
 	 * @param memberNo
@@ -179,9 +179,41 @@ public interface MypageService {
 	 */
 	List<SNS> selectCheckSNSImgList(int memberNo);
 
+	/** snsURL COUNT
+	 * @param memberNo
+	 * @return
+	 */
+	int selectSNSAddress(int memberNo);
+
+	/** snsURL UPDATE
+	 * @param selectedSnsAddress
+	 * @return
+	 */
+	int updateSNSAddress(Map<String, Object> snsAddressMap);
+
+	/** snsURL INSERT
+	 * @param snsAddressMap
+	 * @return
+	 */
+	int insertSNSAddress(Map<String, Object> snsAddressMap);
+
+	/** 선택한 snsList의 URL 주소 (링크)
+	 * @param memberNo
+	 * @return
+	 */
+	List<SNS> selectSNSAddressList(int memberNo);
+
+	/** 프로필 이미지 기본
+	 * @param memberNo
+	 * @return
+	 */
+	int updateBasicProfile(int memberNo);
 
 
 
+	
+	
+	
 	
 	
 	
