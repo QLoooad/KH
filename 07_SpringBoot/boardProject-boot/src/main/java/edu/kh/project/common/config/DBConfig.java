@@ -1,4 +1,4 @@
-package edu.kh.project.common.config.DBConfig;
+package edu.kh.project.common.config;
 
 import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
