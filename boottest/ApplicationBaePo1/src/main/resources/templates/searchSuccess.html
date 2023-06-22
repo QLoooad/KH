@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+    th{
+        border: 1px solid black;
+    }
+    table{
+        border: 1px solid black;  
+    }
+</style>
+</head>
+<body>
+
+    <H1>회원정보</H1>
+
+    <Table>
+        <tr>
+            <th>회원번호</th>
+            <th>회원아이디</th>
+            <th>회원이름</th>
+            <th>회원나이</th>
+        </tr>
+        <tr>
+
+            <th >ex 1</th>
+            <th >ex gd_hong</th>
+            <th >ex 홍길동</th>
+            <th >ex 20</th>
+        </tr>
+    </Table>
+    <th:block th:each="i : ${userList}">
+        <h1 th:text="${i}">ex 1</h1>
+    </th:block>
+</body>
+</html>
