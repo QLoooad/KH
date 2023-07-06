@@ -9,7 +9,8 @@ import './App.css';
 // import State1 from './components/R02_state1';
 // import State2 from './components/R03_state2';
 // import State3 from './components/R04_state3';
-import TodoList1 from './components/R05_todolist1';
+// import TodoList1 from './components/R05_todolist1';
+import ContextApi from './components/R06_context_api';
 
 
 function App() {
@@ -42,7 +43,10 @@ function App() {
       {/* <State3/> */}
 
       {/* R05_todolist1 */}
-      <TodoList1/>
+      {/* <TodoList1/> */}
+
+      {/* R06_context_api */}
+      <ContextApi/>
 
     </>
   );
